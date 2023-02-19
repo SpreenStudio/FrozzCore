@@ -163,6 +163,14 @@ public class ItemEvents implements Listener {
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent e){
+        if (!plugin.getConfig().getBoolean("modules.items")){
+            return;
+        }
+
+        if (!plugin.getUtils().isWorldProtected(e.getEntity().getWorld(), Modules.ITEMS)){
+            return;
+        }
+
         Entity proj = e.getEntity();
         if (proj instanceof Arrow){
             if (((Arrow) proj).getShooter() instanceof Player){
