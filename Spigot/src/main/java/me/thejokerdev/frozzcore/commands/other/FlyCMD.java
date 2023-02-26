@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +60,77 @@ public class FlyCMD extends CustomCMD {
             user.saveData(false);
             return true;
         }
+        if (args.length == 1){
+            if (!p.hasPermission(getPermission()+".others")){
+                getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
+                return true;
+            }
+            if (args[0].equals("@a") || args[0].equals("all")){
+                if (!p.hasPermission(getPermission()+".all")){
+                    getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
+                    return true;
+                }
+                for (Player target : plugin.getServer().getOnlinePlayers()){
+                    FUser targetUser = plugin.getClassManager().getPlayerManager().getUser(target);
+                    if (!plugin.getUtils().isWorldProtected(target.getWorld(), Modules.FLY)){
+                        plugin.getUtils().sendMessage(sender, "{prefix}&cNo puedes usar ese comando en el mundo.");
+                        return true;
+                    }
+                    if (targetUser.getAllowFlight() == ModifierStatus.ON){
+                        getPlugin().getClassManager().getUtils().sendMessage(sender, "commands.fly.deactivated");
+                        targetUser.setAllowFlight(ModifierStatus.OFF);
+                    } else {
+                        getPlugin().getClassManager().getUtils().sendMessage(sender, "commands.fly.activated");
+                        targetUser.setAllowFlight(ModifierStatus.ON);
+                        if (target.getAllowFlight()){
+                            target.setFlying(true);
+                        }
+                    }
+                    targetUser.saveData(false);
+                }
+                plugin.getUtils().sendMessage(sender, "{prefix}Activaste el modo de vuelo a &etodos&7.");
+                return true;
+            }
+            Player target = plugin.getServer().getPlayer(args[0]);
+            if (target == null){
+                getPlugin().getClassManager().getUtils().sendMessage(sender, "playerNotFound");
+                return true;
+            }
+            FUser targetUser = plugin.getClassManager().getPlayerManager().getUser(target);
+            if (!plugin.getUtils().isWorldProtected(target.getWorld(), Modules.FLY)){
+                plugin.getUtils().sendMessage(sender, "{prefix}&cNo puedes usar ese comando en el mundo.");
+                return true;
+            }
+            if (targetUser.getAllowFlight() == ModifierStatus.ON){
+                getPlugin().getClassManager().getUtils().sendMessage(sender, "commands.fly.deactivated");
+                targetUser.setAllowFlight(ModifierStatus.OFF);
+            } else {
+                getPlugin().getClassManager().getUtils().sendMessage(sender, "commands.fly.activated");
+                targetUser.setAllowFlight(ModifierStatus.ON);
+                if (target.getAllowFlight()){
+                    target.setFlying(true);
+                }
+            }
+            targetUser.saveData(false);
+            plugin.getUtils().sendMessage(target, "{prefix}Activaste el modo de vuelo a &e"+target.getName()+"&7.");
+            return true;
+        }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1 && sender.hasPermission(getPermission()+".others")){
+            List<String> list = new ArrayList<>();
+            for (Player target : plugin.getServer().getOnlinePlayers()){
+                list.add(target.getName());
+            }
+            if (sender.hasPermission(getPermission()+".all")){
+                list.add("@a");
+                list.add("all");
+            }
+            return StringUtil.copyPartialMatches(args[0], list, new ArrayList<>());
+        }
         return new ArrayList<>();
     }
 }

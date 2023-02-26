@@ -196,9 +196,10 @@ public class ItemEvents implements Listener {
 
     public void task(Arrow arrow){
         new BukkitRunnable() {
+            int i = 500;
             @Override
             public void run() {
-                if (arrow.isDead()){
+                if (arrow.isDead() || i <= 0){
                     cancel();
                     return;
                 }
@@ -214,6 +215,7 @@ public class ItemEvents implements Listener {
                 }
                 Location loc = arrow.getLocation();
                 loc.getWorld().playEffect(loc, Effect.HAPPY_VILLAGER, 1);
+                i--;
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }

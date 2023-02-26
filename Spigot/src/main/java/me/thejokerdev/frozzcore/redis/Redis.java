@@ -8,8 +8,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -21,6 +19,8 @@ public class Redis {
     public Redis(SpigotMain plugin) {
         this.plugin = plugin;
     }
+
+    private String database;
 
     public void connect() {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("redis");
@@ -39,6 +39,8 @@ public class Redis {
             this.active = false;
         }
 
+        database = section.getString("database", "bcore_data");
+
     }
 
     public void stablishConnection(ConfigurationSection section, final Consumer<JedisPool> consumer) {
@@ -53,7 +55,7 @@ public class Redis {
     }
 
     public void write(String json) {
-        this.write("bcore_data", json);
+        this.write(database, json);
     }
 
     public void addServer(String name, String ip, String port){

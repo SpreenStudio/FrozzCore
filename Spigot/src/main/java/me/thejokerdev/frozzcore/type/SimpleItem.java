@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.api.utils.MinecraftVersion;
 import me.thejokerdev.frozzcore.api.utils.SkullUtils;
 import me.thejokerdev.frozzcore.api.utils.Utils;
 import me.thejokerdev.frozzcore.managers.ItemsManager;
@@ -448,7 +449,9 @@ public class SimpleItem {
         item.setAmount(this.getAmount());
         if (unbreakable){
             ItemMeta meta1 = item.getItemMeta();
-            meta1.spigot().setUnbreakable(unbreakable);
+            if (!MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_18_R2)){
+                meta1.spigot().setUnbreakable(unbreakable);
+            }
             item.setItemMeta(meta1);
         }
         return ItemsManager.setPlaceHolders(item, player);
