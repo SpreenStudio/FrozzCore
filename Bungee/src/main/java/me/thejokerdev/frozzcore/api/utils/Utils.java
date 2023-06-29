@@ -91,7 +91,7 @@ public class Utils {
 
         msg = getMSG(sender, msg);
 
-        BaseComponent component = new TextComponent(msg);
+        BaseComponent component = TextComponent.fromLegacyText(msg)[0];
 
         if (component.toPlainText().equals("") || component.toPlainText().isEmpty()){
             return;

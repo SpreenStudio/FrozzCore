@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.hooks;
 
+import cloud.timo.TimoCloud.api.objects.ServerObject;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.thejokerdev.frozzcore.SpigotMain;
@@ -76,8 +77,19 @@ public class PAPI extends PlaceholderExpansion {
                 return user.getSpeed().name();
             }
         }
-        if (params.equals("server_id")){
-            return plugin.getId();
+        if (params.equals("server-id")) {
+            if (plugin.getServerManager() != null) {
+                ServerObject server = plugin.getServerManager().getActualServer();
+                String str = server.getName();
+                int i = 1;
+                try {
+                    String[] split = str.split("-");
+                    i = Integer.parseInt(split[split.length - 1]);
+                } catch (NumberFormatException ignored) {
+                }
+                return String.valueOf(i);
+            }
+            return plugin.getServerName();
         }
         if (params.equals("jump")){
             FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
@@ -107,7 +119,123 @@ public class PAPI extends PlaceholderExpansion {
                 }
             }
         }
+        if (params.equals("visibility_type")){
+            if (player != null){
+                FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
+                if (user != null){
+                    return user.getVisibilityType().name();
+                }
+            }
+        }
         String[] split = params.split("_");
+        if (split.length == 2){
+            String key = split[0];
+            String group = split[1];
+            if (plugin.getServerManager() == null){
+                return PlaceholderAPI.setPlaceholders(player, plugin.getClassManager().getUtils().getMSG("error"));
+            }
+
+            boolean multiple = group.contains(",");
+            String str = plugin.getClassManager().getUtils().getLangMSG(player, "lobby@general.offline");
+            str =  plugin.getClassManager().getUtils().formatMSG(player, str == null ? "&cOffline" : str);
+
+            if (key.equalsIgnoreCase("online")){
+                if (multiple){
+                    String[] groups = group.split(",");
+                    int amount = 0;
+                    for (String g : groups){
+                        if (plugin.getServerManager().getGroup(g) == null){
+                            return str;
+                        }
+                        amount += plugin.getServerManager().getGroupOnlineAmount(g);
+                    }
+                    return amount+"";
+                }
+                if (plugin.getServerManager().getGroup(group) == null){
+                    return str;
+                }
+                return plugin.getServerManager().getGroupOnlineAmount(group)+"";
+            }
+
+            if (key.equalsIgnoreCase("max")){
+                if (multiple){
+                    String[] groups = group.split(",");
+                    int amount = 0;
+                    for (String g : groups){
+                        if (plugin.getServerManager().getGroup(g) == null){
+                            return str;
+                        }
+                        amount += plugin.getServerManager().getGroupMaxPlayerAmount(g);
+                    }
+                    return amount+"";
+                }
+                if (plugin.getServerManager().getGroup(group) == null){
+                    return str;
+                }
+                return plugin.getServerManager().getGroupMaxPlayerAmount(group)+"";
+            }
+
+            if (key.equalsIgnoreCase("status")){
+                if (multiple){
+                    String[] groups = group.split(",");
+                    List<String> list = new ArrayList<>();
+                    for (String g : groups){
+                        if (plugin.getServerManager().getGroup(g) == null){
+                            return str;
+                        }
+                        list.add(plugin.getServerManager().getTranslatedStatus(player != null ? plugin.getClassManager().getPlayerManager().getUser(player) : null, g));
+                    }
+                    return String.join(", ", list);
+                }
+                if (plugin.getServerManager().getGroup(group) == null){
+                    return str;
+                }
+                return plugin.getServerManager().getTranslatedStatus(player != null ? plugin.getClassManager().getPlayerManager().getUser(player) : null, group);
+            }
+
+            if (key.equalsIgnoreCase("bar")){
+                boolean offline = false;
+                int online = 0;
+                int max = 0;
+                if (multiple){
+                    String[] groups = group.split(",");
+                    for (String g : groups){
+                        if (!offline && plugin.getServerManager().getGroup(g) == null){
+                            offline = true;
+                            continue;
+                        }
+                        online += plugin.getServerManager().getGroupOnlineAmount(g);
+                        max += plugin.getServerManager().getGroupMaxPlayerAmount(g);
+                    }
+                }else{
+                    if (plugin.getServerManager().getGroup(group) != null){
+                        offline = true;
+                    }
+                }
+
+                String defaultColor = "&7";
+                String onlineColor = "&b";
+                String symbol = "■";
+
+                if (offline){
+                    return str;
+                }
+
+                double percent = 0;
+                if (online > 0 && max > 0){
+                    percent = (double) online / (double) max;
+                }
+                StringBuilder out = new StringBuilder();
+                for (int i = 0; i < 10; i++){
+                    if (i < percent * 10){
+                        out.append(plugin.getClassManager().getUtils().formatMSG(player, onlineColor+symbol));
+                    }else{
+                        out.append(plugin.getClassManager().getUtils().formatMSG(player, defaultColor+symbol));
+                    }
+                }
+                return out.toString();
+            }
+        }
         if (split.length == 1 || split.length >= 4) {
             String arg1 = split[0];
             if (arg1.equalsIgnoreCase("wave")) {
@@ -171,6 +299,6 @@ public class PAPI extends PlaceholderExpansion {
             return PlaceholderAPI.setPlaceholders(player, plugin.getClassManager().getUtils().getMSG("keyNotFound").replace("{key}", key));
         }
 
-        return PlaceholderAPI.setPlaceholders(player, language.getFile().getString(key));
+        return plugin.getUtils().formatMSG(player, language.getFile().getString(key));
     }
 }

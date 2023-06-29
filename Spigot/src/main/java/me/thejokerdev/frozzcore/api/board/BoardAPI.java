@@ -12,81 +12,81 @@ import java.util.LinkedList;
 
 public class BoardAPI {
 
-    public void scoredSidebar(Player var0, String var1, LinkedHashMap<String, Integer> var2) {
-        if (var1 == null) {
-            var1 = "Unamed board";
+    public void scoredSidebar(Player player, String title, LinkedHashMap<String, Integer> lines) {
+        if (title == null) {
+            title = "Unamed board";
         }
 
-        if (var1.length() > 32) {
-            var1 = var1.substring(0, 32);
+        if (title.length() > 32) {
+            title = title.substring(0, 32);
         }
 
-        String var4;
+        String lineStr;
         label39:
-        for(; var2.size() > 16; var2.remove(var4)) {
-            var4 = (String)var2.keySet().toArray()[0];
-            int var5 = var2.get(var4);
-            Iterator<String> var6 = var2.keySet().iterator();
+        for(; lines.size() > 16; lines.remove(lineStr)) {
+            lineStr = (String)lines.keySet().toArray()[0];
+            int slot = lines.get(lineStr);
+            Iterator<String> linesIterator = lines.keySet().iterator();
 
             while(true) {
-                String var7;
+                String str;
                 do {
-                    if (!var6.hasNext()) {
+                    if (!linesIterator.hasNext()) {
                         continue label39;
                     }
 
-                    var7 = var6.next();
-                } while(var2.get(var7) >= var5 && (var2.get(var7) != var5 || var7.compareTo(var4) >= 0));
+                    str = linesIterator.next();
+                } while(lines.get(str) >= slot && (lines.get(str) != slot || str.compareTo(lineStr) >= 0));
 
-                var4 = var7;
-                var5 = var2.get(var7);
+                lineStr = str;
+                slot = lines.get(str);
             }
         }
 
-        String finalVar = var1;
+        String finalTitle = title;
         Bukkit.getScheduler().runTask(SpigotMain.getPlugin(), () -> {
-            if (var0 != null && var0.isOnline()) {
-                if (Bukkit.getScoreboardManager().getMainScoreboard() != null && Bukkit.getScoreboardManager().getMainScoreboard() == var0.getScoreboard()) {
-                    var0.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            if (player != null && player.isOnline()) {
+                if (Bukkit.getScoreboardManager().getMainScoreboard() != null && Bukkit.getScoreboardManager().getMainScoreboard() == player.getScoreboard()) {
+                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                 }
 
-                if (var0.getScoreboard() == null) {
-                    var0.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                if (player.getScoreboard() == null) {
+                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                 }
 
                 Bukkit.getScheduler().runTaskAsynchronously(SpigotMain.getPlugin(), () -> {
-                    Objective var3 = var0.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
-                    if (var3 == null) {
-                        var3 = var0.getScoreboard().registerNewObjective(finalVar.length() > 16 ? finalVar.substring(0, 15) : finalVar, "dummy");
+                    Objective scoreboard = player.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
+                    if (scoreboard == null) {
+                        scoreboard = player.getScoreboard().registerNewObjective(finalTitle.length() > 16 ? finalTitle.substring(0, 15) : finalTitle, "dummy");
                     }
 
-                    var3.setDisplayName(finalVar);
-                    if (var3.getDisplaySlot() == null || var3.getDisplaySlot() != DisplaySlot.SIDEBAR) {
-                        var3.setDisplaySlot(DisplaySlot.SIDEBAR);
+                    scoreboard.setDisplayName(finalTitle);
+                    if (scoreboard.getDisplaySlot() == null || scoreboard.getDisplaySlot() != DisplaySlot.SIDEBAR) {
+                        scoreboard.setDisplaySlot(DisplaySlot.SIDEBAR);
                     }
 
-                    Iterator<String> var14 = var2.keySet().iterator();
+                    Iterator<String> linesIterator = lines.keySet().iterator();
 
                     while(true) {
-                        String var5;
+                        String str;
                         do {
-                            if (!var14.hasNext()) {
-                                var14 = var0.getScoreboard().getEntries().iterator();
+                            if (!linesIterator.hasNext()) {
+                                linesIterator = player.getScoreboard().getEntries().iterator();
 
-                                while(var14.hasNext()) {
-                                    var5 = var14.next();
-                                    if (var3.getScore(var5).isScoreSet() && !var2.containsKey(var5)) {
-                                        var0.getScoreboard().resetScores(var5);
+                                while(linesIterator.hasNext()) {
+                                    str = linesIterator.next();
+                                    if (scoreboard.getScore(str).isScoreSet() && !lines.containsKey(str)) {
+                                        player.getScoreboard().resetScores(str);
                                     }
                                 }
 
                                 return;
                             }
 
-                            var5 = var14.next();
-                        } while(var3.getScore(var5).isScoreSet() && var3.getScore(var5).getScore() == var2.get(var5));
+                            str = linesIterator.next();
+                        } while(scoreboard.getScore(str).isScoreSet() && scoreboard.getScore(str).getScore() == lines.get(str));
 
-                        var3.getScore(var5).setScore(var2.get(var5));
+                        scoreboard.getScore(str).setScore(lines.get(str));
                     }
                 });
             }
@@ -103,15 +103,15 @@ public class BoardAPI {
         return hashMap;
     }
 
-    private String fixDuplicates(LinkedHashMap<String, Integer> var0, String var1) {
-        while(var0.containsKey(var1)) {
-            var1 = var1 + "§r";
+    private String fixDuplicates(LinkedHashMap<String, Integer> linesHashmap, String line) {
+        while(linesHashmap.containsKey(line)) {
+            line = line + "§r";
         }
 
-        if (var1.length() > 40) {
-            var1 = var1.substring(0, 39);
+        if (line.length() > 40) {
+            line = line.substring(0, 39);
         }
 
-        return var1;
+        return line;
     }
 }

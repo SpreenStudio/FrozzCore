@@ -201,5 +201,12 @@
             <artifactId>XSeries</artifactId>
             <version>9.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>cloud.timo</groupId>
+            <artifactId>TimoCloud</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/TimoCloud-API-6.4.3.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

@@ -29,6 +29,7 @@ public class ClassManager {
     private NametagHandler nametagHandler;
 
     private LoginListener loginListener;
+    private ScoreBoard scoreBoard;
 
     /* Utils */
     private Utils utils;
@@ -65,7 +66,7 @@ public class ClassManager {
 
         utils = new Utils(plugin);
 
-        new ScoreBoard(plugin);
+        scoreBoard = new ScoreBoard(plugin);
         loginListener = new LoginListener(plugin);
 
         listener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin));
@@ -77,6 +78,9 @@ public class ClassManager {
         }
         if (nametagManager != null){
             nametagManager.init();
+        }
+        if (plugin.getConfig().getBoolean("modules.scoreboard")){
+            scoreBoard.loadAll();
         }
     }
 

@@ -8,8 +8,10 @@ import me.thejokerdev.frozzcore.api.hooks.PAPI;
 import me.thejokerdev.frozzcore.api.hooks.SR;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.api.utils.LocationUtil;
+import me.thejokerdev.frozzcore.api.utils.PluginMessageManager;
 import me.thejokerdev.frozzcore.api.utils.Utils;
 import me.thejokerdev.frozzcore.managers.ClassManager;
+import me.thejokerdev.frozzcore.managers.ServerManager;
 import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.type.FUser;
 import org.bukkit.Bukkit;
@@ -26,6 +28,7 @@ public final class SpigotMain extends JavaPlugin {
     private static SpigotMain plugin;
     private ClassManager classManager;
     private ItemsCache itemsCache;
+    private PluginMessageManager pluginMessageManager;
 
     private LP lp = null;
     private SR sr = null;
@@ -40,6 +43,8 @@ public final class SpigotMain extends JavaPlugin {
     private String id;
     private String serverName;
     int tries = 0;
+
+    private ServerManager serverManager;
 
     @Override
     public void onEnable() {
@@ -65,9 +70,10 @@ public final class SpigotMain extends JavaPlugin {
         }
 
         plugin.getClassManager().getUtils().startTab(false);
+        pluginMessageManager = new PluginMessageManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        boolean redisEnabled = getConfig().getBoolean("redis.enabled", true);
+        boolean redisEnabled = getConfig().getBoolean("redis.enabled", false);
 
         if (redisEnabled) {
             redis = new Redis(this);
@@ -95,6 +101,27 @@ public final class SpigotMain extends JavaPlugin {
                 }
             }.runTaskLater(this, 20L*5);
         } else {
+            try {
+                serverName = getServer().getServerName();
+                if (serverManager != null) {
+                    serverName = getServerManager().getActualServer().getName();
+                }
+                if (serverName.contains("-") || serverName.contains(" ")) {
+                    serverName = serverName.replace("-", "_");
+                    serverName = serverName.replace(" ", "_");
+
+                    String[] split = serverName.split("_");
+                    try {
+                        Integer.parseInt(split[1]);
+                        id = split[1];
+                    } catch (Exception e) {
+                        id = 1 + "";
+                    }
+                }
+            } catch (NoSuchMethodError e) {
+                serverName = "lobby";
+                id = "1";
+            }
             loaded = true;
         }
     }
@@ -126,6 +153,8 @@ public final class SpigotMain extends JavaPlugin {
         console("{prefix}&7Server connected to proxy and load server: "+info+"&7.");
     }
 
+    private PAPI papi;
+
     public boolean checkDependencies(){
         PluginManager pm = getServer().getPluginManager();
         if (!pm.isPluginEnabled("PlaceholderAPI")){
@@ -133,7 +162,8 @@ public final class SpigotMain extends JavaPlugin {
             return false;
         } else {
             console("&aPlaceholderAPI found!");
-            new PAPI(this).register();
+            papi = new PAPI(this);
+            papi.register();
             console("&fPlaceholderAPI hooked!");
         }
 
@@ -145,6 +175,11 @@ public final class SpigotMain extends JavaPlugin {
         if (pm.isPluginEnabled("SkinsRestorer")){
             console("&aSkinsRestorer found!");
             sr = new SR(this);
+        }
+
+        if (pm.isPluginEnabled("TimoCloud")){
+            console("&aTimoCloud found!");
+            serverManager = new ServerManager(this);
         }
 
         return true;
@@ -203,6 +238,9 @@ public final class SpigotMain extends JavaPlugin {
         }
         if (redis.isActive() && serverName != null){
             redis.removeServer(serverName);
+        }
+        if (papi != null){
+            papi.unregister();
         }
     }
 }

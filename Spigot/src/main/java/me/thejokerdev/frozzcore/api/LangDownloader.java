@@ -63,12 +63,13 @@ public class LangDownloader {
             }
             return si;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            plugin.console("{prefix}&cError al descargar los archivos de idioma.");
             return false;
         }
     }
 
     public void downloadUsingCommons(String url, File file) throws IOException {
+        plugin.console("{prefix}Downloaded file: "+file.toString());
         org.apache.commons.io.FileUtils.copyURLToFile(new URL(url), file);
     }
 
@@ -80,7 +81,7 @@ public class LangDownloader {
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
                 readWithInputStreamCache.put(url, new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining()));
             }catch (IOException ex){
-                ex.printStackTrace();
+                plugin.console("{prefix}&cNo se pudo descargar el archivo: "+url);
                 return null;
             }
         }

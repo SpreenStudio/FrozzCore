@@ -124,10 +124,14 @@ public class FUser {
         if (modifier != this.jump){
             saveData(false);
         }
-        if (modifier == ModifierStatus.ON){
-            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE, 1, true, false), true);
-        } else {
-            getPlayer().removePotionEffect(PotionEffectType.JUMP);
+        if (getPlayer() != null) {
+            if (modifier == ModifierStatus.ON) {
+                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, true, false), true);
+            } else {
+                if (getPlayer().hasPotionEffect(PotionEffectType.JUMP)) {
+                    getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                }
+            }
         }
         this.jump = modifier;
     }

@@ -63,6 +63,10 @@ public class ScoreBoard implements Listener {
         create(event.getPlayer());
     }
 
+    public void loadAll(){
+        plugin.getServer().getOnlinePlayers().forEach(this::create);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerQuit(PlayerQuitEvent event) {
         if (!plugin.getConfig().getBoolean("modules.scoreboard")){

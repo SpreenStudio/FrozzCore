@@ -1,10 +1,7 @@
 package me.thejokerdev.frozzcore.managers;
 
 import me.thejokerdev.frozzcore.SpigotMain;
-import me.thejokerdev.frozzcore.commands.admin.JumppadsCMD;
-import me.thejokerdev.frozzcore.commands.admin.ReloadCMD;
-import me.thejokerdev.frozzcore.commands.admin.SetLobbyCMD;
-import me.thejokerdev.frozzcore.commands.admin.WorldsCMD;
+import me.thejokerdev.frozzcore.commands.admin.*;
 import me.thejokerdev.frozzcore.commands.other.*;
 import me.thejokerdev.frozzcore.commands.user.LangCMD;
 import me.thejokerdev.frozzcore.commands.user.OpenCMD;
@@ -45,6 +42,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         commands.add(new OpenCMD(plugin));
         commands.add(new WorldsCMD(plugin));
         commands.add(new JumppadsCMD(plugin));
+        commands.add(new SendPlayerCMD(plugin));
 
         customCommands.put("fly", new FlyCMD(plugin));
         customCommands.put("gamemode", new GamemodeCMD(plugin));

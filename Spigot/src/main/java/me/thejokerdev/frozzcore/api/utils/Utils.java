@@ -41,7 +41,7 @@ public class Utils {
     /* String utils*/
     public static String ct(String msg){
         if (MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_16_R1)){
-            return ChatColor.translateAlternateColorCodes('&',msg);
+            return Utils16.colorize(msg);
         }
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
@@ -216,9 +216,11 @@ public class Utils {
                     String footer = plugin.getConfig().getString("tab.footer");
 
                     for (Player p : Bukkit.getOnlinePlayers()){
-                        World w = plugin.getSpawn().getWorld();
-                        if (w == null){
+                        World w;
+                        if (plugin.getSpawn() == null){
                             w = p.getWorld();
+                        } else {
+                            w = plugin.getSpawn().getWorld();
                         }
                         if (!isWorldProtected(w, Modules.TAB)){
                             continue;
@@ -274,6 +276,10 @@ public class Utils {
             }
             if (s.startsWith("[server]")){
                 sendPlayer(p, s.replace("[server]", ""));
+                continue;
+            }
+            if (s.startsWith("[balancer]")){
+                plugin.getPluginMessageManager().connectPlayer(p, s.replace("[balancer]", ""));
                 continue;
             }
             if (s.startsWith("[cmd]")){

@@ -2,6 +2,7 @@ package me.thejokerdev.frozzcore.managers;
 
 import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.menus.LobbyMenu;
 import me.thejokerdev.frozzcore.menus.custom.CustomMenu;
 import me.thejokerdev.frozzcore.type.Menu;
 import org.bukkit.Bukkit;
@@ -38,11 +39,15 @@ public class MenusManager implements Listener {
     public void loadMenus(Player p){
         plugin.debug("Loading menus for "+p.getName());
         File customs = new File(folder+"/customs");
+        boolean cloud = plugin.getServerManager()!=null;
         if (customs.exists()){
             if (customs.listFiles().length != 0){
                 File[] files = customs.listFiles();
                 for (File f : files){
                     if (!f.getName().endsWith(".yml")){
+                        continue;
+                    }
+                    if (cloud && (f.getName().toLowerCase().contains("lobbi") || f.getName().toLowerCase().contains("hub") || f.getName().toLowerCase().contains("spawn") || f.getName().toLowerCase().contains("lobby"))){
                         continue;
                     }
                     String name = f.getName().replace(".yml", "");
@@ -55,7 +60,9 @@ public class MenusManager implements Listener {
         } else {
             plugin.debug("Customs menu folder doesn't exist!");
         }
-
+        if (cloud){
+            new LobbyMenu(plugin, p);
+        }
     }
 
     public HashMap<String, Menu> getPlayerMenus(Player var0) {

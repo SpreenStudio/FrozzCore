@@ -30,7 +30,7 @@ hooks:
   skinsrestorer: true
 
 redis:
-  enabled: true
+  enabled: false
   host: "localhost"
   port: 6379
   config:

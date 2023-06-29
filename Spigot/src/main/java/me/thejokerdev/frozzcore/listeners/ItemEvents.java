@@ -70,7 +70,7 @@ public class ItemEvents implements Listener {
             if (!b.canView()){
                 continue;
             }
-            if (b.getItem().build(p).isSimilar(item)) {
+            if (b.getItem().isSimilar(p, item)) {
                 if (item.getType() == Material.ENDER_PEARL){
                     e.setCancelled(true);
                 }
@@ -147,7 +147,7 @@ public class ItemEvents implements Listener {
             return;
         }
         for (Button b : user.getItemsManager().getItems().values()) {
-            if (b.getItem().build(p).isSimilar(item)) {
+            if (b.getItem().isSimilar(p, item)) {
                 if (b.canInteract()){
                     e.setCancelled(false);
                     continue;
@@ -289,7 +289,7 @@ public class ItemEvents implements Listener {
             return;
         }
         for (Button b : user.getItemsManager().getItems().values()) {
-            if (b.getItem().build(e.getPlayer()).isSimilar(item)) {
+            if (b.getItem().isSimilar(e.getPlayer(), item)) {
                 e.setCancelled(true);
             }
         }
@@ -322,7 +322,7 @@ public class ItemEvents implements Listener {
             return;
         }
         for (Button b : user.getItemsManager().getItems().values()) {
-            if (b.getItem().build(e.getPlayer()).isSimilar(item)) {
+            if (b.getItem().isSimilar(e.getPlayer(), item)) {
                 e.setCancelled(true);
             }
         }

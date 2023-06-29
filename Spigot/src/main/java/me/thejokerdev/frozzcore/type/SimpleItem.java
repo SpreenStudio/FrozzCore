@@ -44,6 +44,7 @@ public class SimpleItem {
     private ItemStack item = null;
     private boolean glowing;
     private String metaData;
+    private String info;
 
     public ItemStack getItem() {
         return item;
@@ -455,6 +456,25 @@ public class SimpleItem {
             item.setItemMeta(meta1);
         }
         return ItemsManager.setPlaceHolders(item, player);
+    }
+
+    public boolean isSimilar(Player toBuild, ItemStack itemStack){
+        ItemStack item = build(toBuild);
+        return compareItems(item, itemStack);
+    }
+
+    public boolean compareItems(ItemStack item1, ItemStack item2) {
+        boolean bool = false;
+        if (item1 != null &&item2 != null && item1.getType() != XMaterial.AIR.parseMaterial()) {
+            if (item1.getType() == item2.getType() && item1.getAmount() == item2.getAmount()) {
+                if (item1.hasItemMeta() && item1.getItemMeta().hasDisplayName()) {
+                    if (item1.getItemMeta().getDisplayName().equalsIgnoreCase(item2.getItemMeta().getDisplayName())) {
+                        bool = true;
+                    }
+                }
+            }
+        }
+        return bool;
     }
 
 

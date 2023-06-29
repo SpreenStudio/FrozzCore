@@ -37,13 +37,18 @@ public class ChatListener implements Listener {
         String name = plugin.getConfig().getString("chat.format.name");
         String suffix = plugin.getConfig().getString("chat.format.suffix");
         String message = plugin.getConfig().getString("chat.format.message");
-        message = message.replace("{color}", getColor(p))+e.getMessage();
+        message = message.replace("{color}", Utils.ct(getColor(p)))+e.getMessage();
 
-        String format = prefix+name+suffix+message;
+        String format = prefix+name+suffix;
         format = PlaceholderAPI.setPlaceholders(p, format);
         format = Utils.ct(format);
+        format += message;
+        if (p.hasPermission("core.colorchat")){
+            format = Utils.ct(format);
+        }
 
-        e.setFormat(format);
+
+        e.setFormat(format.replace("%", "%%"));
 
         if (plugin.getConfig().getBoolean("settings.perWorld")){
             for (Player var5 : Bukkit.getServer().getOnlinePlayers()) {
