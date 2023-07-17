@@ -65,12 +65,6 @@ public class ClassManager {
             nametagHandler = new NametagHandler(plugin);
         }
 
-        if(plugin.getConfig().getBoolean("modules.linked-chat")){
-            linkedChatManager = new LinkedChatManager(plugin);
-        }else{
-            plugin.getLogger().severe("disabled linkedchat");
-        }
-
         utils = new Utils(plugin);
 
         scoreBoard = new ScoreBoard(plugin);
@@ -89,10 +83,20 @@ public class ClassManager {
         if (plugin.getConfig().getBoolean("modules.scoreboard")){
             scoreBoard.loadAll();
         }
-        if(linkedChatManager != null){
-            linkedChatManager.init();
-        }else{
-            plugin.getLogger().severe("no init linkedchat");
+    }
+
+    public void initAfterStart(){
+        if (plugin.getRedis() != null) {
+            if (plugin.getConfig().getBoolean("modules.linked-chat")) {
+                linkedChatManager = new LinkedChatManager(plugin);
+            } else {
+                plugin.getLogger().severe("disabled linkedchat");
+            }
+            if (linkedChatManager != null) {
+                linkedChatManager.init();
+            } else {
+                plugin.getLogger().severe("no init linkedchat");
+            }
         }
     }
 

@@ -84,6 +84,7 @@ public final class SpigotMain extends JavaPlugin {
                     }
                     if (redis.isActive()){
                         init();
+                        classManager.initAfterStart();
                     } else {
                         getServer().getScheduler().runTaskLater(SpigotMain.this, this, 20);
                         tries++;
@@ -129,6 +130,11 @@ public final class SpigotMain extends JavaPlugin {
             saveResource("server.yml", false);
         }
         FileUtils fileUtils = new FileUtils(file);
+        boolean enabled = fileUtils.getBoolean("enabled", false);
+        if (!enabled){
+            console("{prefix}&cServer not enabled in server.yml to add with Redis.");
+            return;
+        }
         String serverName = fileUtils.getString("server-name");
         String serverIp = fileUtils.getString("server-ip", getServer().getIp());
         serverIp = serverIp.replace("{server-ip}", getServer().getIp());

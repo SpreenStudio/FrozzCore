@@ -1,7 +1,8 @@
 package me.thejokerdev.frozzcore.redis;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
-import me.thejokerdev.frozzcore.redis.payload.Payload;
+import me.thejokerdev.frozzcore.redis.payload.RedisKey;
 import org.bukkit.configuration.ConfigurationSection;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -15,9 +16,13 @@ public class Redis {
     private JedisPool pool;
     private boolean active = false;
     private final SpigotMain plugin;
+    @Getter private final RedisManager redisManager;
+    @Getter private final RedisMessaging redisMessaging;
 
     public Redis(SpigotMain plugin) {
         this.plugin = plugin;
+        this.redisManager = new RedisManager(plugin);
+        this.redisMessaging = new RedisMessaging(plugin);
     }
 
     private String database;
@@ -41,7 +46,6 @@ public class Redis {
 
         database = section.getString("database", "bcore_data");
         if(active && plugin.getClassManager().getLinkedChatManager() != null){
-            plugin.getClassManager().getLinkedChatManager().connect(pool);
             plugin.getLogger().severe("redis linkedchat");
         }else{
             plugin.getLogger().severe("else linkedchat "+active);
@@ -72,12 +76,12 @@ public class Redis {
     }
 
     public void addServer(String name, String ip, String port){
-        String msg = (new RedisMessage(plugin, Payload.SERVER_ADD)).setParam("name", name).setParam("ip", ip).setParam("port", port).toJSON();
+        String msg = (new RedisMessage(plugin, RedisKey.SERVER_ADD)).setParam("name", name).setParam("ip", ip).setParam("port", port).toJSON();
         write(msg);
     }
 
     public void removeServer(String name){
-        String msg = (new RedisMessage(plugin, Payload.SERVER_REMOVE)).setParam("name", name).toJSON();
+        String msg = (new RedisMessage(plugin, RedisKey.SERVER_REMOVE)).setParam("name", name).toJSON();
         write(msg);
     }
 

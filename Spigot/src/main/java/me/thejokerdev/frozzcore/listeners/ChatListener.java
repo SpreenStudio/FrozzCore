@@ -58,7 +58,7 @@ public class ChatListener implements Listener {
             }
         }
 
-        if(plugin.getClassManager().getLinkedChatManager() != null)
+        if(plugin.getRedis() != null && plugin.getClassManager().getLinkedChatManager() != null)
             plugin.getClassManager().getLinkedChatManager().sendMessage(e.getPlayer(), e.getFormat(), e.getMessage());
     }
 

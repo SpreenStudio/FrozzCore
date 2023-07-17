@@ -2,6 +2,8 @@ package me.thejokerdev.frozzcore.managers;
 
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
+import me.thejokerdev.frozzcore.redis.Redis;
+import me.thejokerdev.frozzcore.redis.payload.RedisKey;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
@@ -17,8 +19,6 @@ import java.util.List;
 public class LinkedChatManager {
 
     SpigotMain plugin;
-    private JedisPubSub jedisPubSub;
-    private JedisPool pool;
     private FileUtils file;
 
     public LinkedChatManager(SpigotMain plugin){
@@ -26,15 +26,15 @@ public class LinkedChatManager {
     }
 
     public void init(){
+        registerChannel();
         plugin.getLogger().severe("init linkedchat");
         file = plugin.getClassManager().getUtils().getFile("linkedchat.yml");
     }
 
     public void sendMessage(Player player, String format, String message){
         List<String> groupList = file.getStringList("to-send-groups", new ArrayList<>());
-        plugin.getLogger().severe("try send to: "+groupList+" "+(pool != null));
 
-        if(groupList.isEmpty() || pool == null)
+        if(groupList.isEmpty())
             return;
 
         JSONArray groupListArray = new JSONArray(groupList);
@@ -45,40 +45,32 @@ public class LinkedChatManager {
         jsonObject.put("message", message);
         jsonObject.put("server-groups", groupListArray);
 
-        try (Jedis jedis = pool.getResource()) {
-            jedis.publish("linked-chat", jsonObject.toString());
-        }
-        plugin.getLogger().info("sended: linked-chat "+ jsonObject);
+        plugin.getRedis().getRedisManager().setWithExpire(jsonObject.toString(), new JSONObject().toString(), RedisKey.LINKED_CHAT.getExpire());
+        plugin.getRedis().getRedisManager().publish(RedisKey.LINKED_CHAT.getID(), jsonObject.toString());
+        plugin.debug("sended: linked-chat "+ jsonObject);
     }
 
-    public void connect(JedisPool pool){
-        this.pool = pool;
-        jedisPubSub = new JedisPubSub() {
-            @Override
-            public void onMessage(String channel, String message) {
-                JSONObject jsonMessage = new JSONObject(message);
-                plugin.getLogger().info("received: "+channel+" "+ jsonMessage);
-                if(jsonMessage == null || !channel.equalsIgnoreCase("linked-chat"))
-                    return;
+    public void registerChannel(){
+        plugin.getRedis().getRedisMessaging().subscribe(RedisKey.LINKED_CHAT.getID(), (message) ->
+        {
+            JSONObject jsonMessage = new JSONObject(message);
+            plugin.debug("received: linked-chat "+ jsonMessage);
+            String from = jsonMessage.getString("from");
+            //String playerName = jsonMessage.getString("player");
+            String format = jsonMessage.getString("format");
+            String playerMessage = jsonMessage.getString("message");
+            JSONArray serverGroupsArray = jsonMessage.getJSONArray("server-groups");
+            List<String> serverGroupsList = new ArrayList<>();
 
-                String from = jsonMessage.getString("from-server");
-                //String playerName = jsonMessage.getString("player");
-                //String format = jsonMessage.getString("format");
-                String playerMessage = jsonMessage.getString("message");
-                JSONArray serverGroupsArray = jsonMessage.getJSONArray("server-groups");
-                List<String> serverGroupsList = new ArrayList<>();
-
-                for(int i = 0; i < serverGroupsArray.length(); i++)
-                    serverGroupsList.add(serverGroupsArray.get(i).toString());
-
-                if(from.equalsIgnoreCase(getServerName()) || !serverGroupsList.contains(getServerGroupname()))
-                    return;
-
-                for(Player player : Bukkit.getOnlinePlayers())
-                    player.sendMessage(playerMessage);
+            for(int i = 0; i < serverGroupsArray.length(); i++) {
+                serverGroupsList.add(serverGroupsArray.get(i).toString());
             }
-        };
-        pool.getResource().subscribe(jedisPubSub);
+
+            if(from.equalsIgnoreCase(getServerName()) || !serverGroupsList.contains(getServerGroupname())) return;
+
+            for(Player player : Bukkit.getOnlinePlayers())
+                player.sendMessage(format);
+        });
     }
 
     private String getServerName(){
@@ -87,10 +79,5 @@ public class LinkedChatManager {
 
     private String getServerGroupname(){
         return CloudAPI.getUniversalAPI().getServer(getServerName()).getGroup().getName();
-    }
-
-    public void disconnect(){
-        if(jedisPubSub != null)
-            jedisPubSub.unsubscribe();
     }
 }
