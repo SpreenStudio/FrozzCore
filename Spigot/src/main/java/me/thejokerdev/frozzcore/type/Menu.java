@@ -1,6 +1,7 @@
 package me.thejokerdev.frozzcore.type;
 
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.api.utils.Utils;
@@ -55,7 +56,9 @@ public abstract class Menu {
         this.custom = custom;
         this.player = var1;
         this.menuId = var2;
-        this.title = Utils.ct(getConfig().getString("settings.title"));
+        this.title = getConfig().getString("settings.title");
+        title = PlaceholderAPI.setPlaceholders(var1, title);
+        title = Utils.ct(title);
         this.inv = Bukkit.createInventory(null, getConfig().getInt("settings.rows") * 9,title);
         this.setBack("none");
         buttons = new ArrayList<>();

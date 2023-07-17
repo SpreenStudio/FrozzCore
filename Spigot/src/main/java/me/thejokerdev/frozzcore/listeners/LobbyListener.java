@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -103,6 +104,9 @@ public class LobbyListener implements Listener {
     public void onInteract(PlayerInteractEvent e){
         Player p = e.getPlayer();
         World w = p.getWorld();
+        if (e.getAction() == Action.PHYSICAL) {
+            return;
+        }
         if (plugin.getUtils().isWorldProtected(w, Modules.LOBBY) && plugin.getConfig().getBoolean("lobby.disableInteract")){
             if (p.hasPermission("core.admin.build") && p.getGameMode() == GameMode.CREATIVE){
                 return;

@@ -143,7 +143,7 @@ public class ItemEvents implements Listener {
         if (item == null) {
             return;
         }
-        if (p.getGameMode() == GameMode.CREATIVE) {
+        if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.ADVENTURE) {
             return;
         }
         for (Button b : user.getItemsManager().getItems().values()) {
@@ -155,7 +155,7 @@ public class ItemEvents implements Listener {
                 e.setCancelled(true);
             }
         }
-        if (p.getGameMode() == GameMode.CREATIVE) {
+        if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.ADVENTURE) {
             return;
         }
         e.setCancelled(true);

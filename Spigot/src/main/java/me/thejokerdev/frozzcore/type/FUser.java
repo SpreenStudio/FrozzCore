@@ -4,11 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.api.events.EconomyChangeEvent;
 import me.thejokerdev.frozzcore.api.events.PlayerChangeLangEvent;
+import me.thejokerdev.frozzcore.enums.EconomyAction;
 import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.VisibilityType;
 import me.thejokerdev.frozzcore.managers.ItemsManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -32,10 +35,13 @@ public class FUser {
     private ItemsManager itemsManager;
 
     private VisibilityType visibilityType = VisibilityType.ALL;
+    private double money = 0.0;
 
     public FUser(Player p){
         this(p.getName(), p.getUniqueId());
     }
+
+
 
     public FUser(String var1, UUID var2){
         this.name = var1;
@@ -75,6 +81,36 @@ public class FUser {
         getPlayer().setAllowFlight(modifier == ModifierStatus.ON);
     }
 
+    public void addMoney(double money){
+        this.money += money;
+        saveData(false);
+
+        EconomyChangeEvent event = new EconomyChangeEvent(this, EconomyAction.ADD, money);
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public void removeMoney(double money){
+        this.money -= money;
+        saveData(false);
+
+        EconomyChangeEvent event = new EconomyChangeEvent(this, EconomyAction.REMOVE, money);
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public void setMoney(double money) {
+        setMoney(money, false);
+    }
+
+    public void setMoney(double money, boolean command){
+        this.money = money;
+        if (command) {
+            saveData(false);
+
+            EconomyChangeEvent event = new EconomyChangeEvent(this, EconomyAction.SET, money);
+            Bukkit.getPluginManager().callEvent(event);
+        }
+    }
+
     public String getLang() {
         return lang == null ? SpigotMain.getPlugin().getClassManager().getLangManager().getDefault() : lang;
     }
@@ -99,6 +135,14 @@ public class FUser {
         }
         boolean allow = modifier == ModifierStatus.ON;
         getPlayer().setAllowFlight(allow);
+    }
+
+    public void sendMSGWithObjets(String str, Object... objects) {
+        if (getPlayer() == null) return;
+        str = PlaceholderAPI.setPlaceholders(getPlayer(), str);
+        str = String.format(str, objects);
+        str = ChatColor.translateAlternateColorCodes('&', str);
+        SpigotMain.getPlugin().getUtils().sendMessage(getPlayer(), str);
     }
 
     public void setLang(String lang, boolean isJoin, boolean bungee) {

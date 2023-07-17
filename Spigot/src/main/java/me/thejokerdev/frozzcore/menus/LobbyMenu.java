@@ -1,9 +1,8 @@
 package me.thejokerdev.frozzcore.menus;
 
-import cloud.timo.TimoCloud.api.objects.ServerObject;
-import cloud.timo.TimoCloud.core.objects.ServerGroup;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ItemType;
 import me.thejokerdev.frozzcore.type.Button;
@@ -17,6 +16,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import studio.spreen.cloud.api.objects.ServerObject;
 
 import java.util.*;
 
@@ -214,7 +214,8 @@ public class LobbyMenu extends Menu {
 
     @Override
     public void updateLang() {
-        setTitle(getConfig().getString("settings.title"));
+        String title = getConfig().getString("settings.title");
+        setTitle(PlaceholderAPI.setPlaceholders(getPlayer(), title));
         buttons.clear();
         if (getConfig().get("extra-items")!=null){
             for (String key : getConfig().getSection("extra-items").getKeys(false)){

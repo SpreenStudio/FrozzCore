@@ -37,6 +37,7 @@ public class MenusManager implements Listener {
     }
 
     public void loadMenus(Player p){
+        p.closeInventory();
         plugin.debug("Loading menus for "+p.getName());
         File customs = new File(folder+"/customs");
         boolean cloud = plugin.getServerManager()!=null;
@@ -54,14 +55,14 @@ public class MenusManager implements Listener {
                     new CustomMenu(plugin, p, name);
                     plugin.debug("Loaded menu: "+name+ "for "+p.getName());
                 }
+                if (cloud){
+                    new LobbyMenu(plugin, p);
+                }
             } else {
                 plugin.debug("Customs menu folder is empty!");
             }
         } else {
             plugin.debug("Customs menu folder doesn't exist!");
-        }
-        if (cloud){
-            new LobbyMenu(plugin, p);
         }
     }
 

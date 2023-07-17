@@ -53,6 +53,7 @@ public class MongoDB extends Data {
             document.put("doubleJump", ModifierStatus.OFF.name());
             document.put("fly", ModifierStatus.OFF.name());
             document.put("speed", ModifierStatus.OFF.name());
+            document.put("money", 0.0d);
             collection.insertOne(document);
             return;
         }
@@ -67,6 +68,7 @@ public class MongoDB extends Data {
         document.put("doubleJump", var.getDoubleJump().name());
         document.put("fly", var.getAllowFlight().name());
         document.put("speed", var.getSpeed().name());
+        document.put("money", var.getMoney());
         collection.replaceOne(found, document);
     }
 
@@ -86,6 +88,7 @@ public class MongoDB extends Data {
             document.put("doubleJump", ModifierStatus.OFF.name());
             document.put("fly", ModifierStatus.OFF.name());
             document.put("speed", ModifierStatus.OFF.name());
+            document.put("money", 0.0d);
             collection.insertOne(document);
             return;
         }
@@ -94,6 +97,7 @@ public class MongoDB extends Data {
         var.setVisibilityType(VisibilityType.valueOf(found.getString("visibility").toUpperCase()));
         var.setFirstJoin(found.getBoolean("firstJoin"));
         var.setHype(found.getInteger("hype"));
+        var.setMoney(found.getDouble("money") == null ? 0.0d : found.getDouble("money"));
         try {
             var.setJump(ModifierStatus.valueOf(found.getString("jump").toUpperCase()));
             var.setDoubleJump(ModifierStatus.valueOf(found.getString("doubleJump").toUpperCase()));

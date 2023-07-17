@@ -1,6 +1,5 @@
 package me.thejokerdev.frozzcore.api.hooks;
 
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.thejokerdev.frozzcore.SpigotMain;
@@ -8,9 +7,9 @@ import me.thejokerdev.frozzcore.api.visual.Animation;
 import me.thejokerdev.frozzcore.api.visual.Color;
 import me.thejokerdev.frozzcore.type.FUser;
 import me.thejokerdev.frozzcore.type.Lang;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import studio.spreen.cloud.api.objects.ServerObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -111,6 +110,16 @@ public class PAPI extends PlaceholderExpansion {
                 }
             }
         }
+        if (params.equals("money") || params.equals("coins")){
+            if (player != null){
+                FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
+                if (user != null){
+                    double coins = user.getMoney();
+                    //format into 0.0f format
+                    return String.format("%.1f", coins);
+                }
+            }
+        }
         if (params.equals("visibility")){
             if (player != null){
                 FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
@@ -128,12 +137,9 @@ public class PAPI extends PlaceholderExpansion {
             }
         }
         String[] split = params.split("_");
-        if (split.length == 2){
+        if (split.length == 2 && plugin.getServerManager() != null){
             String key = split[0];
             String group = split[1];
-            if (plugin.getServerManager() == null){
-                return PlaceholderAPI.setPlaceholders(player, plugin.getClassManager().getUtils().getMSG("error"));
-            }
 
             boolean multiple = group.contains(",");
             String str = plugin.getClassManager().getUtils().getLangMSG(player, "lobby@general.offline");

@@ -69,7 +69,7 @@ public class ClassManager {
         scoreBoard = new ScoreBoard(plugin);
         loginListener = new LoginListener(plugin);
 
-        listener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin));
+        listener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin), new PluginListener(plugin));
     }
 
     public void init() {

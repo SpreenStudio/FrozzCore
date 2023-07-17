@@ -51,6 +51,9 @@ public abstract class Data {
                 if (var4.getBoolean("firstJoin")) {
                     var2.setFirstJoin(false);
                 }
+                if (var4.getDouble("money") != 0.0D) {
+                    var2.setMoney(var4.getDouble("money"));
+                }
                 var2.setHype(var4.getInt("hype"));
             } else {
                 var4.close();
@@ -73,13 +76,14 @@ public abstract class Data {
         PreparedStatement var3 = null;
 
         try {
-            var3 = var1.prepareStatement(String.format("UPDATE %s SET lang=?, firstJoin=?, hype=?, visibility=? WHERE uuid=? OR (uuid IS NULL AND username=?)", this.TABLE_DATA));
+            var3 = var1.prepareStatement(String.format("UPDATE %s SET lang=?, firstJoin=?, hype=?, visibility=?, money=? WHERE uuid=? OR (uuid IS NULL AND username=?)", this.TABLE_DATA));
             var3.setString(1, var2.getLang() == null ? plugin.getClassManager().getLangManager().getDefault() : var2.getLang());
             var3.setBoolean(2, var2.isFirstJoin());
             var3.setInt(3, var2.getHype());
             var3.setString(4, var2.getVisibilityType().name().toLowerCase());
-            var3.setString(5, var2.getUniqueID().toString());
-            var3.setString(6, var2.getName());
+            var3.setDouble(5, var2.getMoney());
+            var3.setString(6, var2.getUniqueID().toString());
+            var3.setString(7, var2.getName());
             var3.executeUpdate();
         } catch (SQLException var8) {
             var8.printStackTrace();

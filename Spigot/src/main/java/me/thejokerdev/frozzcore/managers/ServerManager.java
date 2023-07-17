@@ -1,12 +1,12 @@
 package me.thejokerdev.frozzcore.managers;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.ProxyObject;
-import cloud.timo.TimoCloud.api.objects.ServerGroupObject;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.BalanceType;
 import me.thejokerdev.frozzcore.type.FUser;
+import studio.spreen.cloud.api.CloudAPI;
+import studio.spreen.cloud.api.objects.ProxyObject;
+import studio.spreen.cloud.api.objects.ServerGroupObject;
+import studio.spreen.cloud.api.objects.ServerObject;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -19,10 +19,10 @@ public class ServerManager {
     }
 
     public int getGlobalCount() {
-        return TimoCloudAPI.getUniversalAPI().getProxies().stream().mapToInt(ProxyObject::getOnlinePlayerCount).sum();
+        return CloudAPI.getUniversalAPI().getProxies().stream().mapToInt(ProxyObject::getOnlinePlayerCount).sum();
     }
     public ServerObject getServer(String name) {
-        if (Objects.isNull(TimoCloudAPI.getUniversalAPI().getServer(name))) {
+        if (Objects.isNull(CloudAPI.getUniversalAPI().getServer(name))) {
             return null;
         }
 
@@ -30,20 +30,20 @@ public class ServerManager {
     }
 
     public ServerObject getActualServer(){
-        return TimoCloudAPI.getBukkitAPI().getThisServer();
+        return CloudAPI.getBukkitAPI().getThisServer();
     }
 
     public ServerGroupObject getActualGroup(){
         return getActualServer().getGroup();
     }
     public ServerObject getNullableServer(String name) {
-        return TimoCloudAPI.getUniversalAPI().getServer(name);
+        return CloudAPI.getUniversalAPI().getServer(name);
     }
     public ServerGroupObject getNullableServerGroup(String name) {
-        return TimoCloudAPI.getUniversalAPI().getServerGroup(name);
+        return CloudAPI.getUniversalAPI().getServerGroup(name);
     }
     public ServerGroupObject getServerGroup(String name) {
-        ServerGroupObject serverGroupObject = TimoCloudAPI.getUniversalAPI().getServerGroup(name);
+        ServerGroupObject serverGroupObject = CloudAPI.getUniversalAPI().getServerGroup(name);
 
         if (Objects.isNull(serverGroupObject)) {
             return null;
@@ -85,14 +85,20 @@ public class ServerManager {
         return getNullableServer(name).getMaxPlayerCount();
     }
     public int getGroupOnlineAmount(String name) {
-        return TimoCloudAPI.getUniversalAPI().getServerGroup(name).getServers().stream().filter(serverObject -> serverObject.getGroup().getName().equalsIgnoreCase(name)).mapToInt(ServerObject::getOnlinePlayerCount).sum();
+        if (Objects.isNull(getServerGroup(name))) {
+            return 0;
+        }
+        return CloudAPI.getUniversalAPI().getServerGroup(name).getServers().stream().filter(serverObject -> serverObject.getGroup().getName().equalsIgnoreCase(name)).mapToInt(ServerObject::getOnlinePlayerCount).sum();
     }
     public int getGroupMaxAmount(String name) {
-        return TimoCloudAPI.getUniversalAPI().getServerGroup(name).getMaxAmount();
+        if (Objects.isNull(getServerGroup(name))) {
+            return 0;
+        }
+        return CloudAPI.getUniversalAPI().getServerGroup(name).getMaxAmount();
     }
 
     public ServerGroupObject getGroup(String name) {
-        return TimoCloudAPI.getUniversalAPI().getServerGroup(name);
+        return CloudAPI.getUniversalAPI().getServerGroup(name);
     }
 
     public int getGroupMaxPlayerAmount(String name) {

@@ -135,10 +135,13 @@ public class Utils {
         }
     }
 
-    public void sendMessage(CommandSender sender, String msg){
+    public void sendMessage(CommandSender sender, String msg) {
         sendMessage(sender, msg, true);
     }
     public void sendMessage(CommandSender sender, String msg, boolean haveKey){
+        sendMessage(sender, msg, haveKey, null);
+    }
+    public void sendMessage(CommandSender sender, String msg, boolean haveKey, Object... placeholders){
         boolean isBroadcast = msg.contains("{broadcast}");
 
         if (!msg.contains(" ") && haveKey){
@@ -160,6 +163,10 @@ public class Utils {
         msg = sender instanceof Player ? PlaceholderAPI.setPlaceholders((Player)sender, msg) : PlaceholderAPI.setPlaceholders(null, msg);
 
         msg = getMessage(msg);
+
+        if (placeholders != null && placeholders.length > 0){
+            msg = String.format(msg, placeholders);
+        }
 
         if (isBroadcast){
             String finalMsg = msg.replace("{broadcast}", "");

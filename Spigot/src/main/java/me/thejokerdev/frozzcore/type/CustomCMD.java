@@ -68,4 +68,8 @@ public class CustomCMD implements CommandExecutor, TabCompleter {
     public void register(){
         plugin.getClassManager().getCmdManager().registerCommand(this);
     }
+
+    public void unregister(){
+        plugin.getClassManager().getCmdManager().unregisterCommand(this);
+    }
 }

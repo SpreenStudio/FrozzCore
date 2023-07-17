@@ -43,6 +43,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         commands.add(new WorldsCMD(plugin));
         commands.add(new JumppadsCMD(plugin));
         commands.add(new SendPlayerCMD(plugin));
+        commands.add(new MoneyCMD(plugin));
 
         customCommands.put("fly", new FlyCMD(plugin));
         customCommands.put("gamemode", new GamemodeCMD(plugin));
@@ -50,6 +51,8 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         customCommands.put("gms", new GmsCMD(plugin));
         customCommands.put("gma", new GmaCMD(plugin));
         customCommands.put("gmsp", new GmspCMD(plugin));
+        //customCommands.put("coins", new CoinsCMD(plugin));
+
 
         customCommands.values().forEach(CustomCMD::register);
     }
@@ -151,6 +154,21 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             }
             plugin.console("{prefix}&fLoaded command: &a" + cmd.getName());
             return true;
+        }
+        return false;
+    }
+
+    public boolean unregisterCommand(CustomCMD cmd) {
+        if (plugin.getCommand(cmd.getName()) != null) {
+            try {
+                boolean result = getCommandMap().getCommand(cmd.getName()).unregister(getCommandMap());
+                if (result) {
+                    plugin.console("{prefix}&fUnloaded command: &c" + cmd.getName());
+                    return true;
+                }
+            } catch (Exception e) {
+                return false;
+            }
         }
         return false;
     }

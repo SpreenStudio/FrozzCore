@@ -251,8 +251,15 @@ public class ItemsManager {
         if (meta.hasLore()) {
             lore = new ArrayList<>();
             for (String s : meta.getLore()) {
-                lore.add(PlaceholderAPI.setPlaceholders(p, s));
+                s = PlaceholderAPI.setPlaceholders(p, s);
+                s = s.replace("\\n", "\n");
+                if (s.contains("\n")){
+                    lore.addAll(Arrays.asList(s.split("\n")));
+                } else {
+                    lore.add(s);
+                }
             }
+            meta.setLore(lore);
         }
         item.setItemMeta(meta);
         return item;
@@ -268,7 +275,13 @@ public class ItemsManager {
             if (simpleItem.hasLore()) {
                 lore = new ArrayList<>();
                 for (String s : simpleItem.getLore()) {
-                    lore.add(PlaceholderAPI.setPlaceholders(p, s));
+                    s = PlaceholderAPI.setPlaceholders(p, s);
+                    s = s.replace("\\n", "\n");
+                    if (s.contains("\n")) {
+                        lore.addAll(Arrays.asList(s.split("\n")));
+                    } else {
+                        lore.add(s);
+                    }
                 }
                 simpleItem.setLore(lore);
             }

@@ -1,8 +1,10 @@
 package me.thejokerdev.frozzcore.menus.custom;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ItemType;
 import me.thejokerdev.frozzcore.type.Button;
+import me.thejokerdev.frozzcore.type.CustomCMD;
 import me.thejokerdev.frozzcore.type.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,11 +15,19 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class CustomMenu extends Menu {
 
+    private MenuCMD cmd;
     public CustomMenu(SpigotMain plugin, Player player, String id){
         super(plugin, player, id, true);
 
         updateLang();
         update();
+
+        if (getConfig().get("settings.command")==null){
+            return;
+        }
+
+        cmd = new MenuCMD(plugin, getConfig().getSection("settings.command"), this);
+        cmd.register();
     }
     @Override
     public void onOpen(InventoryOpenEvent var1) {
@@ -79,13 +89,25 @@ public class CustomMenu extends Menu {
 
     @Override
     public void updateLang() {
-        setTitle(getConfig().getString("settings.title"));
+        String title = getConfig().getString("settings.title");
+        setTitle(PlaceholderAPI.setPlaceholders(getPlayer(), title));
         buttons.clear();
         if (getConfig().get("extra-items")!=null){
             for (String key : getConfig().getSection("extra-items").getKeys(false)){
                 key = "extra-items."+key;
                 buttons.add(new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), key, ItemType.MENU, getMenuId()));
             }
+        }
+        if (getConfig().get("settings.command")==null && cmd != null){
+            cmd.unregister();
+            cmd = null;
+            return;
+        } else if (getConfig().get("settings.command")!=null){
+            if (cmd != null){
+                cmd.unregister();
+            }
+            cmd = new MenuCMD(plugin, getConfig().getSection("settings.command"), this);
+            cmd.register();
         }
     }
 }

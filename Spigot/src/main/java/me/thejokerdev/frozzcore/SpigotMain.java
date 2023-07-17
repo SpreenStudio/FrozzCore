@@ -48,10 +48,6 @@ public final class SpigotMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        /*if (!new AdvancedLicense(getConfig().getString("key"), "https://www.hievents.net/licenses/verify.php", this).register()){
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }*/
         plugin = this;
         saveDefaultConfig();
 
@@ -177,8 +173,8 @@ public final class SpigotMain extends JavaPlugin {
             sr = new SR(this);
         }
 
-        if (pm.isPluginEnabled("TimoCloud")){
-            console("&aTimoCloud found!");
+        if (pm.isPluginEnabled("Cloud")){
+            console("&aCloud found!");
             serverManager = new ServerManager(this);
         }
 

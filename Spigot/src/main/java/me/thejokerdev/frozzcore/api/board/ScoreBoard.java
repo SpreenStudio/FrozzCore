@@ -119,6 +119,7 @@ public class ScoreBoard implements Listener {
         for (String value : list) {
             value = Utils.ct(value);
             value = PlaceholderAPI.setPlaceholders(var0.getPlayer(), value);
+            value = Utils.ct(value);
             if (value.contains("\\n")) {
                 Collections.addAll(finalList, value.split("\\n"));
                 continue;
