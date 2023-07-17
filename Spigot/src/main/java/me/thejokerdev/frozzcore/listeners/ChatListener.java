@@ -57,6 +57,9 @@ public class ChatListener implements Listener {
                 }
             }
         }
+
+        if(plugin.getClassManager().getLinkedChatManager() != null)
+            plugin.getClassManager().getLinkedChatManager().sendMessage(e.getPlayer(), e.getFormat(), e.getMessage());
     }
 
     public String getColor(Player p){

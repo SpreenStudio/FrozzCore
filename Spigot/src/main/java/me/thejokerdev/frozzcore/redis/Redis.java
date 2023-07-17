@@ -40,6 +40,12 @@ public class Redis {
         }
 
         database = section.getString("database", "bcore_data");
+        if(active && plugin.getClassManager().getLinkedChatManager() != null){
+            plugin.getClassManager().getLinkedChatManager().connect(pool);
+            plugin.getLogger().severe("redis linkedchat");
+        }else{
+            plugin.getLogger().severe("else linkedchat "+active);
+        }
 
     }
 

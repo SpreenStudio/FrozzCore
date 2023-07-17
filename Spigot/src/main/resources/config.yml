@@ -6,6 +6,7 @@ modules:
   tab: true
   items: true
   nametags: true
+  linked-chat: true
   whitelist:
     enabled: false
     worlds:
