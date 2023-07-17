@@ -6,6 +6,7 @@ import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.redis.payload.RedisKey;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
@@ -27,38 +28,40 @@ public class LinkedChatManager {
 
     public void init(){
         registerChannel();
-        plugin.getLogger().severe("init linkedchat");
         file = plugin.getClassManager().getUtils().getFile("linkedchat.yml");
     }
 
     public void sendMessage(Player player, String format, String message){
-        List<String> groupList = file.getStringList("to-send-groups", new ArrayList<>());
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                List<String> groupList = file.getStringList("to-send-groups", new ArrayList<>());
 
-        if(groupList.isEmpty())
-            return;
+                if(groupList.isEmpty())
+                    return;
 
-        JSONArray groupListArray = new JSONArray(groupList);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("from", getServerName());
-        jsonObject.put("player", player.getName());
-        jsonObject.put("format", format);
-        jsonObject.put("message", message);
-        jsonObject.put("server-groups", groupListArray);
+                JSONArray groupListArray = new JSONArray(groupList);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("from", getServerName());
+                jsonObject.put("player", player.getName());
+                jsonObject.put("format", format);
+                jsonObject.put("message", message);
+                jsonObject.put("server-groups", groupListArray);
 
-        plugin.getRedis().getRedisManager().setWithExpire(jsonObject.toString(), new JSONObject().toString(), RedisKey.LINKED_CHAT.getExpire());
-        plugin.getRedis().getRedisManager().publish(RedisKey.LINKED_CHAT.getID(), jsonObject.toString());
-        plugin.debug("sended: linked-chat "+ jsonObject);
+                plugin.getRedis().getRedisManager().setWithExpire(jsonObject.toString(), new JSONObject().toString(), RedisKey.LINKED_CHAT.getExpire());
+                plugin.getRedis().getRedisManager().publish(RedisKey.LINKED_CHAT.getID(), jsonObject.toString());
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     public void registerChannel(){
         plugin.getRedis().getRedisMessaging().subscribe(RedisKey.LINKED_CHAT.getID(), (message) ->
         {
             JSONObject jsonMessage = new JSONObject(message);
-            plugin.debug("received: linked-chat "+ jsonMessage);
             String from = jsonMessage.getString("from");
             //String playerName = jsonMessage.getString("player");
             String format = jsonMessage.getString("format");
-            String playerMessage = jsonMessage.getString("message");
+            //String playerMessage = jsonMessage.getString("message");
             JSONArray serverGroupsArray = jsonMessage.getJSONArray("server-groups");
             List<String> serverGroupsList = new ArrayList<>();
 

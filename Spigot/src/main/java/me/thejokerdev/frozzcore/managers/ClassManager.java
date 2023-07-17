@@ -94,8 +94,6 @@ public class ClassManager {
             }
             if (linkedChatManager != null) {
                 linkedChatManager.init();
-            } else {
-                plugin.getLogger().severe("no init linkedchat");
             }
         }
     }
