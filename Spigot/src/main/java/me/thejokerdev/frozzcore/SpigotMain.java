@@ -3,6 +3,7 @@ package me.thejokerdev.frozzcore;
 import lombok.Getter;
 import lombok.Setter;
 import me.thejokerdev.frozzcore.api.cache.ItemsCache;
+import me.thejokerdev.frozzcore.api.events.RedisInitEvent;
 import me.thejokerdev.frozzcore.api.hooks.LP;
 import me.thejokerdev.frozzcore.api.hooks.PAPI;
 import me.thejokerdev.frozzcore.api.hooks.SR;
@@ -85,6 +86,8 @@ public final class SpigotMain extends JavaPlugin {
                     if (redis.isActive()){
                         init();
                         classManager.initAfterStart();
+                        RedisInitEvent event = new RedisInitEvent(plugin, redis);
+                        Bukkit.getPluginManager().callEvent(event);
                     } else {
                         getServer().getScheduler().runTaskLater(SpigotMain.this, this, 20);
                         tries++;
