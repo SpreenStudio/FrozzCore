@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import studio.spreen.statsspigot.StatsSpigot;
 import xyz.haoshoku.nick.api.NickAPI;
 
 import java.util.concurrent.CompletableFuture;
@@ -55,6 +56,10 @@ public class NickData {
         NickAPI.resetGameProfileName(player);
         NickAPI.refreshPlayer(player);
 
+        boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+
+        if (!isGame) return;
+
         stopNickTask();
     }
 
@@ -74,6 +79,9 @@ public class NickData {
 
         player.setPlayerListName(name);
 
+        boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+
+        if (!isGame) return;
         startNickTask();
     }
 

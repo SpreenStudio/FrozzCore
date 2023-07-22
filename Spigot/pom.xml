@@ -189,13 +189,19 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/Cloud-API-1.0.0.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>hola.ejje</groupId>
             <artifactId>PacketWrapper</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/NickAPI-v6.5.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>studio.spreen</groupId>
+            <artifactId>statsspigot</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/StatsSpigot.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
