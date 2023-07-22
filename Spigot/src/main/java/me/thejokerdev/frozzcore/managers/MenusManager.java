@@ -53,7 +53,7 @@ public class MenusManager implements Listener {
                     }
                     String name = f.getName().replace(".yml", "");
                     new CustomMenu(plugin, p, name);
-                    plugin.debug("Loaded menu: "+name+ "for "+p.getName());
+                    plugin.debug("Loaded menu: "+name+ " for "+p.getName());
                 }
                 if (cloud){
                     new LobbyMenu(plugin, p);

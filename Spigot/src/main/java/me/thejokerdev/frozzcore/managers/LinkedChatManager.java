@@ -71,6 +71,7 @@ public class LinkedChatManager {
 
             if(from.equalsIgnoreCase(getServerName()) || !serverGroupsList.contains(getServerGroupname())) return;
 
+            plugin.getServer().getConsoleSender().sendMessage(format);
             for(Player player : Bukkit.getOnlinePlayers())
                 player.sendMessage(format);
         });

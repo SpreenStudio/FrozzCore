@@ -51,6 +51,13 @@ public class PAPI extends PlaceholderExpansion {
                 }
             }
         }
+        if (params.equals("name")){
+            FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
+            if (user.isNicked()){
+                return user.getNickData().getName();
+            }
+            return player.getName();
+        }
         if (params.equals("chatcolor")){
             LinkedList<String> list = new LinkedList<>(plugin.getConfig().getConfigurationSection("chat.colors").getKeys(false));
             String out = plugin.getConfig().getString("chat.colors.default");

@@ -39,45 +39,9 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>FrozzCore</finalName>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>com.cryptomorin.xseries</pattern>
-                            <!-- Be sure to change the package below -->
-                            <shadedPattern>me.thejokerdev.frozzcore.api.utils</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <!-- Here you can remove the classes you don't use. -->
-                    <!-- These are some examples. -->
-                    <!-- The "unused" package and SkullCacheListener are excluded by default. -->
-                    <!-- Some utilities such a XItemStack depend on more than 3 other classes, so watch out. -->
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>com/cryptomorin/xseries/XBiome*</exclude>
-                                <exclude>com/cryptomorin/xseries/NMSExtras*</exclude>
-                                <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
-                                <exclude>com/cryptomorin/xseries/SkullCacheListener*</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -110,6 +74,10 @@
         <repository>
             <id>codemc-releases</id>
             <url>https://repo.codemc.org/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
     </repositories>
 
@@ -149,6 +117,7 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
@@ -160,16 +129,19 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.4.5</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>3.0.4</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>3.12.11</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
@@ -194,12 +166,21 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>5.0.0-beta2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>9.2.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>studio.spreen</groupId>
@@ -207,6 +188,14 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/Cloud-API-1.0.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>hola.ejje</groupId>
+            <artifactId>PacketWrapper</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/NickAPI-v6.5.3.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

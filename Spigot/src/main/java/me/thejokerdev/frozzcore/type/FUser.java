@@ -1,11 +1,13 @@
 package me.thejokerdev.frozzcore.type;
 
+import com.cryptomorin.xseries.messages.ActionBar;
 import lombok.Getter;
 import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.events.EconomyChangeEvent;
 import me.thejokerdev.frozzcore.api.events.PlayerChangeLangEvent;
+import me.thejokerdev.frozzcore.api.events.PlayerNickEvent;
 import me.thejokerdev.frozzcore.enums.EconomyAction;
 import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.VisibilityType;
@@ -16,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.UUID;
 
@@ -37,11 +40,16 @@ public class FUser {
     private VisibilityType visibilityType = VisibilityType.ALL;
     private double money = 0.0;
 
+    private boolean nicked = false;
+    private NickData nickData;
+
     public FUser(Player p){
         this(p.getName(), p.getUniqueId());
     }
 
-
+    public void setNickData(NickData nickData) {
+        this.nickData = nickData;
+    }
 
     public FUser(String var1, UUID var2){
         this.name = var1;
@@ -213,6 +221,12 @@ public class FUser {
         }
         str = PlaceholderAPI.setPlaceholders(getPlayer(), str);
         return SpigotMain.getPlugin().getClassManager().getUtils().getMessage(str);
+    }
+
+    public void setNicked(boolean nicked) {
+        this.nicked = nicked;
+        PlayerNickEvent event = new PlayerNickEvent(this, nicked ? PlayerNickEvent.Cause.NICK : PlayerNickEvent.Cause.UNNICK);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override

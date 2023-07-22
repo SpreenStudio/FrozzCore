@@ -4,8 +4,10 @@ import com.cryptomorin.xseries.XSound;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.events.EconomyChangeEvent;
 import me.thejokerdev.frozzcore.api.events.PlayerChangeLangEvent;
+import me.thejokerdev.frozzcore.api.events.PlayerNickEvent;
 import me.thejokerdev.frozzcore.enums.EconomyAction;
 import me.thejokerdev.frozzcore.type.FUser;
+import me.thejokerdev.frozzcore.type.NickData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,5 +48,24 @@ public class PluginListener implements Listener {
         plugin.getClassManager().getMenusManager().loadMenus(player);
         user.sendMSGWithObjets("%core_general_language.changed%", event.getNewLang());
         XSound.BLOCK_NOTE_BLOCK_PLING.play(user.getPlayer(), 1f, 2f);
+    }
+
+    @EventHandler
+    public void onPlayerNickEvent(PlayerNickEvent event){
+        FUser user = event.getUser();
+        PlayerNickEvent.Cause cause = event.getCause();
+        NickData nickData = user.getNickData();
+        if (cause == PlayerNickEvent.Cause.NICK){
+            if (nickData.getSkin() == null){
+                nickData.loadAndApplySkin();
+            } else {
+                nickData.applySkin();
+            }
+            XSound.BLOCK_NOTE_BLOCK_PLING.play(user.getPlayer(), 1f, 2f);
+        } else if (cause == PlayerNickEvent.Cause.UNNICK){
+            nickData.resetSkin();
+            XSound.ENTITY_ENDERMAN_TELEPORT.play(user.getPlayer(), 1f, 0.5f);
+        }
+        user.saveData(false);
     }
 }

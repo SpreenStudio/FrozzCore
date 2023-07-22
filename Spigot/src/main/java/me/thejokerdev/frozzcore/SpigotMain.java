@@ -48,6 +48,8 @@ public final class SpigotMain extends JavaPlugin {
 
     private ServerManager serverManager;
 
+    private boolean nickAPI = false;
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -55,13 +57,16 @@ public final class SpigotMain extends JavaPlugin {
 
         classManager = new ClassManager(this);
         classManager.init();
-        classManager.getCmdManager().initCMDs();
         utils = classManager.getUtils();
         itemsCache = new ItemsCache(this);
 
         if (!checkDependencies()){
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        getServer().getOnlinePlayers().forEach(p-> getClassManager().getPlayerManager().getUser(p));
+
+        classManager.getCmdManager().initCMDs();
 
         if (getConfig().get("lobby.spawn")!=null){
             spawn = LocationUtil.getLocation(getConfig().getString("lobby.spawn"));
@@ -171,6 +176,18 @@ public final class SpigotMain extends JavaPlugin {
             papi = new PAPI(this);
             papi.register();
             console("&fPlaceholderAPI hooked!");
+        }
+
+        if (!pm.isPluginEnabled("ProtocolLib")){
+            console("&4&lERROR: &cProtocolLib doesn't found!");
+            return false;
+        } else {
+            console("&aProtocolLib found!");
+        }
+
+        if (pm.isPluginEnabled("NickAPI")){
+            console("&aNickAPI found!");
+            setNickAPI(true);
         }
 
         if (pm.isPluginEnabled("LuckPerms")){

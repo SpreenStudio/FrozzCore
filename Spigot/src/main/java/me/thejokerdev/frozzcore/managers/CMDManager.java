@@ -51,6 +51,9 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         customCommands.put("gms", new GmsCMD(plugin));
         customCommands.put("gma", new GmaCMD(plugin));
         customCommands.put("gmsp", new GmspCMD(plugin));
+        if (plugin.isNickAPI()){
+            customCommands.put("nick", new NickCMD(plugin));
+        }
         //customCommands.put("coins", new CoinsCMD(plugin));
 
 

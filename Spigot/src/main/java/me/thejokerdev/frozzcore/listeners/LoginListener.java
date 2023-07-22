@@ -37,7 +37,7 @@ public class LoginListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
         e.setJoinMessage(null);
@@ -85,19 +85,12 @@ public class LoginListener implements Listener {
         }
 
         checkVisibility(p);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                plugin.getClassManager().getMenusManager().loadMenus(p);
-            }
-        }.runTaskAsynchronously(plugin);
-
+        plugin.getClassManager().getMenusManager().loadMenus(p);
     }
 
     public void checkVisibility(Player p){
         boolean bol = plugin.getUtils().isWorldProtected(p.getWorld(), Modules.VISIBILITY);
-        plugin.debug("World: "+p.getWorld()+" is " + (bol ? "protected" : "not protected")+" of visibility module.");
+        plugin.debug("World: "+p.getWorld().getName()+" is " + (bol ? "protected" : "not protected")+" of visibility module.");
         if (bol) {
             plugin.debug("Visibility: Executing method to world "+p.getWorld().getName());
             for (Player t : Bukkit.getOnlinePlayers()) {

@@ -13,7 +13,7 @@
     <version>dev-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>FrozzCore-Parent</name>
+    <name>FrozzCore</name>
     <description>Parent project for all FrozzCore modules.</description>
 
     <modules>

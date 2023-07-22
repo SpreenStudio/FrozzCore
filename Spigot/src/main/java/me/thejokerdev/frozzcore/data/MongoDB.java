@@ -10,10 +10,12 @@ import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.VisibilityType;
 import me.thejokerdev.frozzcore.type.Data;
 import me.thejokerdev.frozzcore.type.FUser;
+import me.thejokerdev.frozzcore.type.NickData;
 import org.bson.Document;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.Connection;
+import java.util.HashMap;
 
 public class MongoDB extends Data {
 
@@ -54,6 +56,7 @@ public class MongoDB extends Data {
             document.put("fly", ModifierStatus.OFF.name());
             document.put("speed", ModifierStatus.OFF.name());
             document.put("money", 0.0d);
+            document.put("nicked", false);
             collection.insertOne(document);
             return;
         }
@@ -69,8 +72,16 @@ public class MongoDB extends Data {
         document.put("fly", var.getAllowFlight().name());
         document.put("speed", var.getSpeed().name());
         document.put("money", var.getMoney());
+        document.put("nicked", var.isNicked());
+        if (var.isNicked()) {
+            document.put("nickData", var.getNickData().serialize());
+        } else {
+            document.put("nickData", null);
+        }
         collection.replaceOne(found, document);
     }
+
+    private HashMap<String, Integer> tries;
 
     @Override
     public void getData(FUser var) {
@@ -89,6 +100,7 @@ public class MongoDB extends Data {
             document.put("fly", ModifierStatus.OFF.name());
             document.put("speed", ModifierStatus.OFF.name());
             document.put("money", 0.0d);
+            document.put("nicked", false);
             collection.insertOne(document);
             return;
         }
@@ -109,6 +121,27 @@ public class MongoDB extends Data {
             var.setAllowFlight(ModifierStatus.OFF);
             var.setSpeed(ModifierStatus.OFF);
         }
+        if (plugin.isNickAPI() && found.getBoolean("nicked", false)){
+            plugin.debug("{prefix}&7Loading nick data for &e" + var.getName() + "&7... #1");
+            var.setNickData(new NickData(plugin, var, found.getString("nickData")));
+            var.setNicked(true);
+        }
+
+        if (tries == null){
+            tries = new HashMap<>();
+            tries.put(var.getName(), 0);
+        } else {
+            if (tries.containsKey(var.getName())){
+                int i = tries.get(var.getName());
+                i++;
+                tries.put(var.getName(), i);
+            } else {
+                tries.put(var.getName(), 0);
+            }
+        }
+
+        int i = tries.get(var.getName());
+        plugin.debug("{prefix}&7Loading data for &e" + var.getName() + "&7... #" + i);
     }
 
     @Override

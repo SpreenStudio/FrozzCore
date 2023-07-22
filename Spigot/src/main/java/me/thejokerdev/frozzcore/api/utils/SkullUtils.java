@@ -46,6 +46,7 @@ public class SkullUtils {
         } catch (Exception ignored){ }
         return null;
     }
+
     private static String getURLContent(String urlStr) {
         URL url;
         BufferedReader in = null;

@@ -24,17 +24,14 @@ public class PlayerManager implements Listener {
     }
 
     public FUser getUser(Player p){
-        if (!users.containsKey(p.getUniqueId())){
-            registerUser(p);
-        }
-
-        return users.get(p.getUniqueId());
+        return users.computeIfAbsent(p.getUniqueId(), k -> registerUser(p));
     }
 
-    public void registerUser(Player p){
+    public FUser registerUser(Player p){
         FUser user = new FUser(p);
         users.put(p.getUniqueId(), user);
         user.initItems();
+        return user;
     }
 
     public FUser removeUser(Player p){
@@ -44,13 +41,12 @@ public class PlayerManager implements Listener {
         return users.remove(p.getUniqueId());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent e){
-        Player p = e.getPlayer();
-        registerUser(p);
+        getUser(e.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onQuit(PlayerQuitEvent e){
         Player p = e.getPlayer();
         plugin.getClassManager().getMenusManager().getPlayerMenus(p).values().forEach(menu -> {
@@ -58,6 +54,9 @@ public class PlayerManager implements Listener {
                 menu.getTask().cancel();
             }
         });
-        removeUser(p);
+        FUser user = removeUser(p);
+        if (user.isNicked()){
+            user.getNickData().resetSkin();
+        }
     }
 }
