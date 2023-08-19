@@ -21,6 +21,7 @@ libraries:
   - com.github.cryptomorin:XSeries:9.2.0
   - org.apache.commons:commons-pool2:2.11.1
   - org.slf4j:slf4j-api:2.0.7
+  - org.json:json:20230618
 
 commands:
   frozzcore:

@@ -31,7 +31,7 @@ public enum MinecraftVersion {
 
     private static MinecraftVersion currentVersion;
 
-    private MinecraftVersion() {
+    MinecraftVersion() {
     }
 
     public boolean isAboveOrEqual(MinecraftVersion var1) {

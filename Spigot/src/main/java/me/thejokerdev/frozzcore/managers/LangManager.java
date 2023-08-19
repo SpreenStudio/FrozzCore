@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.managers;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.type.Lang;
@@ -9,14 +10,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class LangManager {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
+    @Getter
     private LinkedHashMap<String, LinkedList<Lang>> languages;
     private HashMap<String, FileUtils> settings;
+    @Getter
     private List<String> languageList;
-    private File langFolder;
+    private final File langFolder;
+    @Getter
     private boolean running = false;
+    @Getter
     private String error = "N/A";
+    @Getter
     private int langs = 0;
+    @Getter
     private String updated;
 
     public LangManager(SpigotMain plugin) {
@@ -78,28 +85,8 @@ public class LangManager {
         }
     }
 
-    public boolean isRunning() {
-        return running;
-    }
-
-    public String getUpdated() {
-        return updated;
-    }
-
-    public List<String> getLanguageList() {
-        return languageList;
-    }
-
     public String getDefault(){
         return plugin.getConfig().getString("settings.languages.default");
-    }
-
-    public int getLangs() {
-        return langs;
-    }
-
-    public String getError() {
-        return error;
     }
 
     public boolean getFromWeb(){
@@ -127,10 +114,6 @@ public class LangManager {
             }
         }
         return null;
-    }
-
-    public LinkedHashMap<String, LinkedList<Lang>> getLanguages() {
-        return languages;
     }
 
     public LinkedList<Lang> getSection(String id){

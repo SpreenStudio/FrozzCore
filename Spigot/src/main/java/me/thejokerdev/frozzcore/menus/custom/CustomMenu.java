@@ -101,7 +101,6 @@ public class CustomMenu extends Menu {
         if (getConfig().get("settings.command")==null && cmd != null){
             cmd.unregister();
             cmd = null;
-            return;
         } else if (getConfig().get("settings.command")!=null){
             if (cmd != null){
                 cmd.unregister();

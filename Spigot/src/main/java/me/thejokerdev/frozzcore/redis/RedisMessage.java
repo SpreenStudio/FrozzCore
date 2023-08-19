@@ -1,6 +1,7 @@
 package me.thejokerdev.frozzcore.redis;
 
 import com.google.gson.Gson;
+import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.redis.payload.RedisKey;
 
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RedisMessage {
+    @Getter
     private final RedisKey payload;
     private final Map<String, String> params;
 
@@ -40,7 +42,4 @@ public class RedisMessage {
         return (new Gson()).toJson(this);
     }
 
-    public RedisKey getPayload() {
-        return this.payload;
-    }
 }

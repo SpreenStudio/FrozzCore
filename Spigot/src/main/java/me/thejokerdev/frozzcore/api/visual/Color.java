@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.visual;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.api.utils.MinecraftVersion;
 
 import java.util.Arrays;
@@ -7,10 +8,12 @@ import java.util.stream.Collectors;
 
 public class Color {
     private static final String HEX_PATTERN = "(#(([0-9A-Fa-f]){6}|([0-9A-Fa-f]){3}))|(([0-9A-Fa-f]){6}|([0-9A-Fa-f]){3})";
+    @Getter
     private String colorCode;
     private final int r;
     private final int g;
     private final int b;
+    @Getter
     private final boolean valid;
 
     public static Color from(String var0) {
@@ -46,10 +49,6 @@ public class Color {
         return "{#" + this.colorCode + "}";
     }
 
-    public String getColorCode() {
-        return this.colorCode;
-    }
-
     public int getRed() {
         return this.r;
     }
@@ -62,12 +61,8 @@ public class Color {
         return this.b;
     }
 
-    public boolean isValid() {
-        return this.valid;
-    }
-
     public String getAppliedTag() {
-        return this.isValid() ? (hasHexSupport() ? "§x" + (String)Arrays.stream(this.colorCode.split("")).map((var0) -> {
+        return this.isValid() ? (hasHexSupport() ? "§x" + Arrays.stream(this.colorCode.split("")).map((var0) -> {
             return "§" + var0;
         }).collect(Collectors.joining()) : MinecraftColor.getClosest(this).getAppliedTag()) : "";
     }

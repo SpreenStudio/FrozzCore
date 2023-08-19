@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class WorldListeners implements Listener {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public WorldListeners(SpigotMain plugin) {
         this.plugin = plugin;

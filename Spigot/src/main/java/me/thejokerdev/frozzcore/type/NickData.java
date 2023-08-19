@@ -58,7 +58,7 @@ public class NickData {
 
         boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
 
-        if (!isGame) return;
+        if (isGame) return;
 
         stopNickTask();
     }
@@ -81,7 +81,7 @@ public class NickData {
 
         boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
 
-        if (!isGame) return;
+        if (isGame) return;
         startNickTask();
     }
 

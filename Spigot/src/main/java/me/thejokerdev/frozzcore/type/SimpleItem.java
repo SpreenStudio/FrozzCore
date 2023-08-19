@@ -28,35 +28,38 @@ import java.util.concurrent.atomic.AtomicReference;
 @Getter
 @Setter
 public class SimpleItem {
+    @Getter
     private XMaterial material;
+    @Getter
     private ItemMeta meta;
+    @Getter
     private int amount = 1;
+    @Getter
     private List<String> lore;
+    @Getter
     private String displayName;
     private String skinTexture;
     private List<String> skinsTexture = new ArrayList<>();
     private short data = 0;
+    @Getter
     private HashMap<XEnchantment, Integer> enchantments;
+    @Getter
     private List<ItemFlag> flags;
     private final HashMap<String, String> placeholders;
     public boolean unbreakable = false;
     private Color color;
+    @Getter
     private ItemStack item = null;
+    @Getter
     private boolean glowing;
+    @Getter
     private String metaData;
     private String info;
-
-    public ItemStack getItem() {
-        return item;
-    }
 
     public void setItem(ItemStack item) {
         this.item = item;
     }
 
-    public FireworkEffectMeta getFireworkEffectMeta() {
-        return fireworkEffectMeta;
-    }
     public SimpleItem setColor(Color var1) {
         if (material.name().contains("LEATHER_")) {
             this.color = var1;
@@ -74,6 +77,7 @@ public class SimpleItem {
         return this;
     }
 
+    @Getter
     private FireworkEffectMeta fireworkEffectMeta = null;
 
     public void setMeta(ItemMeta meta) {
@@ -82,14 +86,6 @@ public class SimpleItem {
 
     public void setMetaData(String metaData) {
         this.metaData = metaData;
-    }
-
-    public String getMetaData() {
-        return metaData;
-    }
-
-    public ItemMeta getMeta() {
-        return meta;
     }
 
     public SimpleItem(ItemStack itemStack) {
@@ -295,10 +291,6 @@ public class SimpleItem {
         return this;
     }
 
-    public boolean isGlowing() {
-        return glowing;
-    }
-
     public SimpleItem setHideFlags(boolean b){
         setShowAttributes(!b);
         return this;
@@ -330,22 +322,6 @@ public class SimpleItem {
         return this;
     }
 
-    public XMaterial getMaterial() {
-        return this.material;
-    }
-
-    public int getAmount() {
-        return this.amount;
-    }
-
-    public List<String> getLore() {
-        return this.lore;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
     public short getDurability(){
         return this.data;
     }
@@ -355,14 +331,6 @@ public class SimpleItem {
             skinTexture = skinsTexture.get(new Random().nextInt(skinsTexture.size()));
         }
         return this.skinTexture;
-    }
-
-    public HashMap<XEnchantment, Integer> getEnchantments() {
-        return this.enchantments;
-    }
-
-    public List<ItemFlag> getFlags() {
-        return this.flags;
     }
 
     public boolean hasEnchantments() {

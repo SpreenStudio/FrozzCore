@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.events;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.api.data.NameTag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -7,10 +8,11 @@ import org.bukkit.event.HandlerList;
 
 import java.beans.ConstructorProperties;
 
+@Getter
 public class NametagFirstLoadedEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-    private Player player;
-    private NameTag nametag;
+    private final Player player;
+    private final NameTag nametag;
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
@@ -18,14 +20,6 @@ public class NametagFirstLoadedEvent extends Event {
 
     public HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public NameTag getNametag() {
-        return this.nametag;
     }
 
     @ConstructorProperties({"player", "nametag"})

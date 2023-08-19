@@ -8,7 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class MenuCMD extends CustomCMD {
-    private CustomMenu menu;
+    private final CustomMenu menu;
     public MenuCMD(SpigotMain plugin, ConfigurationSection section, CustomMenu menu) {
         super(plugin);
         setName(section.getString("name", menu.getMenuId()));

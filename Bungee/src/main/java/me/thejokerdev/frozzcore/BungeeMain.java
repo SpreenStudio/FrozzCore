@@ -13,6 +13,7 @@ import java.nio.file.Files;
 @Getter
 public final class BungeeMain extends Plugin {
 
+    @Getter
     private static BungeeMain plugin;
     private FileUtils config = null;
     private ClassManager cm;
@@ -52,10 +53,6 @@ public final class BungeeMain extends Plugin {
     }
     public void saveConfig(){
         reloadConfig();
-    }
-
-    public static BungeeMain getPlugin() {
-        return plugin;
     }
 
     public String getPrefix(){

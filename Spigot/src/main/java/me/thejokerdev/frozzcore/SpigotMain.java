@@ -27,6 +27,7 @@ import java.io.File;
 @Getter
 @Setter
 public final class SpigotMain extends JavaPlugin {
+    @Getter
     private static SpigotMain plugin;
     private ClassManager classManager;
     private ItemsCache itemsCache;
@@ -178,13 +179,6 @@ public final class SpigotMain extends JavaPlugin {
             console("&fPlaceholderAPI hooked!");
         }
 
-        if (!pm.isPluginEnabled("ProtocolLib")){
-            console("&4&lERROR: &cProtocolLib doesn't found!");
-            return false;
-        } else {
-            console("&aProtocolLib found!");
-        }
-
         if (pm.isPluginEnabled("NickAPI")){
             console("&aNickAPI found!");
             setNickAPI(true);
@@ -214,10 +208,6 @@ public final class SpigotMain extends JavaPlugin {
 
     public boolean haveSR(){
         return sr != null && getConfig().getBoolean("hooks.skinsrestorer");
-    }
-
-    public static SpigotMain getPlugin() {
-        return plugin;
     }
 
     public String getPrefix(){
@@ -264,6 +254,12 @@ public final class SpigotMain extends JavaPlugin {
         }
         if (papi != null){
             papi.unregister();
+        }
+        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData()!=null){
+            getClassManager().getDataManager().getData().close();
+        }
+        if (redis!=null && redis.isActive()){
+            redis.disconnect();
         }
     }
 }

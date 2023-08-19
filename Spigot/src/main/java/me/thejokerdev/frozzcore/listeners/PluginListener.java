@@ -11,6 +11,7 @@ import me.thejokerdev.frozzcore.type.NickData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PluginListener implements Listener {
     private final SpigotMain plugin;
@@ -66,6 +67,13 @@ public class PluginListener implements Listener {
             nickData.resetSkin();
             XSound.ENTITY_ENDERMAN_TELEPORT.play(user.getPlayer(), 1f, 0.5f);
         }
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                plugin.getClassManager().getMenusManager().loadMenus(user.getPlayer());
+                user.getItemsManager().reloadItems();
+            }
+        }.runTaskLaterAsynchronously(plugin, 5L);
         user.saveData(false);
     }
 }

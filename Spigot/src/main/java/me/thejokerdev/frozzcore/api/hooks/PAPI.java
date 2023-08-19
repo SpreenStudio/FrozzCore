@@ -12,11 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import studio.spreen.cloud.api.objects.ServerObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class PAPI extends PlaceholderExpansion {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public PAPI(SpigotMain plugin) {
         this.plugin = plugin;
@@ -59,17 +60,7 @@ public class PAPI extends PlaceholderExpansion {
             return player.getName();
         }
         if (params.equals("chatcolor")){
-            LinkedList<String> list = new LinkedList<>(plugin.getConfig().getConfigurationSection("chat.colors").getKeys(false));
-            String out = plugin.getConfig().getString("chat.colors.default");
-            for (String perm : list){
-                if (perm.equals("default") && !player.hasPermission("core.chatcolor.status")){
-                    continue;
-                }
-                if (player.hasPermission("core.chatcolor."+perm)){
-                    out = plugin.getConfig().getString("chat.colors."+perm);
-                }
-            }
-            return out;
+            return plugin.getUtils().getChatColor(player);
         }
         if (params.equals("fly")){
             FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
@@ -81,6 +72,12 @@ public class PAPI extends PlaceholderExpansion {
             FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
             if (user != null){
                 return user.getSpeed().name();
+            }
+        }
+        if (params.equals("join-date")){
+            FUser user = plugin.getClassManager().getPlayerManager().getUser(player);
+            if (user != null){
+                return plugin.getUtils().getFormattedDate(user);
             }
         }
         if (params.equals("server-id")) {

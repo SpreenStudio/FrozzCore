@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class JumpPadsListener implements Listener {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public JumpPadsListener(SpigotMain plugin){
         this.plugin = plugin;

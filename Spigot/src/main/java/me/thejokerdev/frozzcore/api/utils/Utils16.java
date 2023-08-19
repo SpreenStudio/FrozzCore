@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils16 {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public Utils16(SpigotMain plugin){
         this.plugin = plugin;

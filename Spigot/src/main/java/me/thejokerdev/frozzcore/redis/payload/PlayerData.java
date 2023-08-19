@@ -6,9 +6,11 @@
 package me.thejokerdev.frozzcore.redis.payload;
 
 import com.google.gson.Gson;
+import lombok.Getter;
 
 import java.util.UUID;
 
+@Getter
 public class PlayerData {
     private final UUID uuid;
     private final String name;
@@ -24,15 +26,4 @@ public class PlayerData {
         return (new Gson()).toJson(this);
     }
 
-    public UUID getUuid() {
-        return this.uuid;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getServerName() {
-        return this.serverName;
-    }
 }

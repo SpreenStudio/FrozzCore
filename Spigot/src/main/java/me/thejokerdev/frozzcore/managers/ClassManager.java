@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 @Getter
 public class ClassManager {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     /* Managers */
     private CMDManager cmdManager;

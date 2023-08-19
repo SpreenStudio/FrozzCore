@@ -30,6 +30,7 @@ public class Button {
     private final FUser player;
     private final ConfigurationSection section;
     private final FileUtils file;
+    @Getter
     private int cooldown = 0;
 
     private boolean update = false;
@@ -194,10 +195,6 @@ public class Button {
 
     public SimpleItem getItem() {
         return ItemsManager.setPlaceHolders(item, player.getPlayer());
-    }
-
-    public int getCooldown() {
-        return cooldown;
     }
 
     public boolean executePhysicallyItemsActions(PlayerInteractEvent e){

@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api;
 
+import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
@@ -7,11 +8,8 @@ import me.thejokerdev.frozzcore.type.FUser;
 import org.bukkit.entity.Player;
 
 public class FrozzCoreAPI {
+    @Getter
     private static final SpigotMain plugin = SpigotMain.getPlugin();
-
-    public static SpigotMain getPlugin() {
-        return plugin;
-    }
 
     public static String getPrefix() {
         return plugin.getPrefix();

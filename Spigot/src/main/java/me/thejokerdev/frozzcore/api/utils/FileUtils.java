@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.utils;
 
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 
+@Getter
 public class FileUtils {
     private FileConfiguration config;
     private final File file;
@@ -311,11 +313,4 @@ public class FileUtils {
         return this.config.getKeys(deep);
     }
 
-    public FileConfiguration getConfig() {
-        return this.config;
-    }
-
-    public File getFile() {
-        return this.file;
-    }
 }

@@ -37,7 +37,7 @@ public class ItemsManager {
 
     private FileUtils file;
 
-    private FUser player;
+    private final FUser player;
 
     public ItemsManager(FUser user) {
         this.player = user;

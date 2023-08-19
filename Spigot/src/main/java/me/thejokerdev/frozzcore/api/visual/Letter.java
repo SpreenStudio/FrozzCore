@@ -5,8 +5,11 @@
 
 package me.thejokerdev.frozzcore.api.visual;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
+@Getter
 public enum Letter {
     A('A', 5),
     a('a', 5),
@@ -105,20 +108,12 @@ public enum Letter {
     SPACE(' ', 3),
     DEFAULT('a', 4);
 
-    private char character;
-    private int length;
+    private final char character;
+    private final int length;
 
-    private Letter(char var3, int var4) {
+    Letter(char var3, int var4) {
         this.character = var3;
         this.length = var4;
-    }
-
-    public char getCharacter() {
-        return this.character;
-    }
-
-    public int getLength() {
-        return this.length;
     }
 
     public int getBoldLength() {

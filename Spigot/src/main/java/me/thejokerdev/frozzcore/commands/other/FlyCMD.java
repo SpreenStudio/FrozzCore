@@ -18,7 +18,7 @@ import java.util.List;
 
 @Getter
 public class FlyCMD extends CustomCMD {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public FlyCMD(SpigotMain plugin) {
         super(plugin);

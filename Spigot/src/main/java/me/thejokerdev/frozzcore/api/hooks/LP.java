@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LP {
-    private SpigotMain plugin;
-    private LuckPerms luckperms;
+    private final SpigotMain plugin;
+    private final LuckPerms luckperms;
 
     public LP(SpigotMain plugin) {
         this.plugin = plugin;

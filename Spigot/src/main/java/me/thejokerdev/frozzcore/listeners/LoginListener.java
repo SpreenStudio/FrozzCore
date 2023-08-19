@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.listeners;
 
+import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.Modules;
@@ -24,11 +25,12 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class LoginListener implements Listener {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public LoginListener(SpigotMain plugin) {
         this.plugin = plugin;
     }
+    @Getter private final List<String> ignoreVisibilityPlayers = new ArrayList<>();
 
     @EventHandler
     public void onPreLogin(AsyncPlayerPreLoginEvent event){
@@ -94,6 +96,7 @@ public class LoginListener implements Listener {
         if (bol) {
             plugin.debug("Visibility: Executing method to world "+p.getWorld().getName());
             for (Player t : Bukkit.getOnlinePlayers()) {
+                if (ignoreVisibilityPlayers.contains(t.getName())) continue;
                 if (p != t) {
                     checkVisibility(p, t);
                 }
@@ -101,6 +104,7 @@ public class LoginListener implements Listener {
         } else {
             plugin.debug("Visibility: Executing method for no registered world.");
             for (Player t : p.getWorld().getPlayers()){
+                if (ignoreVisibilityPlayers.contains(t.getName())) continue;
                 if (p != t && !p.canSee(t)){
                     p.showPlayer(t);
                     t.showPlayer(p);
@@ -110,6 +114,7 @@ public class LoginListener implements Listener {
     }
 
     public void checkVisibility(Player p, Player t){
+        if (ignoreVisibilityPlayers.contains(t.getName())) return;
         FUser user = plugin.getClassManager().getPlayerManager().getUser(p);
         FUser user2 = plugin.getClassManager().getPlayerManager().getUser(t);
         if (p.hasMetadata("NPC") || t.hasMetadata("NPC")){

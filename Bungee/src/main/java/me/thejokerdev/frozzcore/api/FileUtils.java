@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileUtils {
-    private File file;
+    private final File file;
     private Configuration configuration;
 
     public FileUtils(String path, String fileName){

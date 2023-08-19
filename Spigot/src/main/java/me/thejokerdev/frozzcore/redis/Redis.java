@@ -13,7 +13,9 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class Redis {
+    @Getter
     private JedisPool pool;
+    @Getter
     private boolean active = false;
     private final SpigotMain plugin;
     @Getter private final RedisManager redisManager;
@@ -110,11 +112,4 @@ public class Redis {
         }
     }
 
-    public JedisPool getPool() {
-        return this.pool;
-    }
-
-    public boolean isActive() {
-        return this.active;
-    }
 }

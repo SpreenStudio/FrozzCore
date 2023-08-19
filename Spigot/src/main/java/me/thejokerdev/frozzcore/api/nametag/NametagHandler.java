@@ -19,7 +19,7 @@ import java.util.LinkedList;
 @Getter
 public class NametagHandler implements Listener {
 
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public NametagHandler(SpigotMain plugin) {
         this.plugin = plugin;

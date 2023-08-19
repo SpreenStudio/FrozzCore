@@ -7,7 +7,7 @@ import me.thejokerdev.frozzcore.discord.Bot;
 
 @Getter
 public class ClassManager {
-    private BungeeMain plugin;
+    private final BungeeMain plugin;
 
     private Utils utils;
 

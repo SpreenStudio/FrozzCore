@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
-    private BungeeMain plugin;
+    private final BungeeMain plugin;
 
     public Utils(BungeeMain plugin) {
         this.plugin = plugin;

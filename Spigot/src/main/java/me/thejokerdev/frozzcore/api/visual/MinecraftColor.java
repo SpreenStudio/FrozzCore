@@ -5,6 +5,8 @@
 
 package me.thejokerdev.frozzcore.api.visual;
 
+import lombok.Getter;
+
 public enum MinecraftColor {
     DARK_RED("&4", "#AA0000"),
     RED("&c", "#FF5555"),
@@ -24,6 +26,7 @@ public enum MinecraftColor {
     BLACK("&0", "#000000");
 
     private final String chatColor;
+    @Getter
     private final Color color;
 
     public static MinecraftColor getClosest(Color var0) {
@@ -42,17 +45,13 @@ public enum MinecraftColor {
         return var1;
     }
 
-    private MinecraftColor(String var3, String var4) {
+    MinecraftColor(String var3, String var4) {
         this.chatColor = var3;
         this.color = Color.from(var4);
     }
 
     public String getName() {
         return this.name().toLowerCase();
-    }
-
-    public Color getColor() {
-        return this.color;
     }
 
     public String getTag() {

@@ -15,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.LinkedList;
 
 public class ChatListener implements Listener {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public ChatListener(SpigotMain plugin) {
         this.plugin = plugin;
@@ -37,7 +37,7 @@ public class ChatListener implements Listener {
         String name = plugin.getConfig().getString("chat.format.name");
         String suffix = plugin.getConfig().getString("chat.format.suffix");
         String message = plugin.getConfig().getString("chat.format.message");
-        message = message.replace("{color}", Utils.ct(getColor(p)))+e.getMessage();
+        message = message.replace("{color}", Utils.ct(plugin.getUtils().getChatColor(e.getPlayer())))+e.getMessage();
 
         String format = prefix+name+suffix;
         format = PlaceholderAPI.setPlaceholders(p, format);
@@ -60,19 +60,5 @@ public class ChatListener implements Listener {
 
         if(plugin.getRedis() != null && plugin.getClassManager().getLinkedChatManager() != null)
             plugin.getClassManager().getLinkedChatManager().sendMessage(e.getPlayer(), e.getFormat(), e.getMessage());
-    }
-
-    public String getColor(Player p){
-        LinkedList<String> list = new LinkedList<>(plugin.getConfig().getConfigurationSection("chat.colors").getKeys(false));
-        String out = plugin.getConfig().getString("chat.colors.default");
-        for (String perm : list){
-            if (perm.equals("default") && !p.hasPermission("core.chatcolor.status")){
-                continue;
-            }
-            if (p.hasPermission("core.chatcolor."+perm)){
-                out = plugin.getConfig().getString("chat.colors."+perm);
-            }
-        }
-        return out;
     }
 }

@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class ItemEvents implements Listener {
 
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     private final HashMap<UUID, HashMap<Button, Long>> time = new HashMap();
 

@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.events;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.api.data.NameTag;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -7,14 +8,20 @@ import org.bukkit.event.HandlerList;
 
 public class NametagEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private boolean cancelled;
     /** @deprecated */
     @Deprecated
     private String value;
+    @Getter
     private NameTag nametag;
+    @Getter
     private String player;
+    @Getter
     private ChangeType changeType;
+    @Getter
     private ChangeReason changeReason;
+    @Getter
     private StorageType storageType;
 
     public NametagEvent(String player, String value) {
@@ -50,10 +57,6 @@ public class NametagEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
@@ -70,55 +73,35 @@ public class NametagEvent extends Event implements Cancellable {
         this.value = value;
     }
 
-    public NameTag getNametag() {
-        return this.nametag;
-    }
-
     public void setNametag(NameTag nametag) {
         this.nametag = nametag;
-    }
-
-    public String getPlayer() {
-        return this.player;
     }
 
     public void setPlayer(String player) {
         this.player = player;
     }
 
-    public ChangeType getChangeType() {
-        return this.changeType;
-    }
-
     public void setChangeType(ChangeType changeType) {
         this.changeType = changeType;
-    }
-
-    public ChangeReason getChangeReason() {
-        return this.changeReason;
     }
 
     public void setChangeReason(ChangeReason changeReason) {
         this.changeReason = changeReason;
     }
 
-    public StorageType getStorageType() {
-        return this.storageType;
-    }
-
     public void setStorageType(StorageType storageType) {
         this.storageType = storageType;
     }
 
-    public static enum StorageType {
+    public enum StorageType {
         MEMORY,
         PERSISTENT;
 
-        private StorageType() {
+        StorageType() {
         }
     }
 
-    public static enum ChangeType {
+    public enum ChangeType {
         PREFIX,
         SUFFIX,
         GROUP,
@@ -127,16 +110,16 @@ public class NametagEvent extends Event implements Cancellable {
         RELOAD,
         UNKNOWN;
 
-        private ChangeType() {
+        ChangeType() {
         }
     }
 
-    public static enum ChangeReason {
+    public enum ChangeReason {
         API,
         PLUGIN,
         UNKNOWN;
 
-        private ChangeReason() {
+        ChangeReason() {
         }
     }
 }

@@ -15,6 +15,7 @@ import org.bson.Document;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MongoDB extends Data {
@@ -23,7 +24,7 @@ public class MongoDB extends Data {
     private MongoDatabase db;
     private MongoClient client;
 
-    private boolean running = false;
+    private final boolean running = false;
 
     public MongoDB(SpigotMain plugin) {
         super(plugin);
@@ -41,11 +42,11 @@ public class MongoDB extends Data {
 
     @Override
     public void syncData(FUser var) {
-        Document query = new Document("uuid", var.getUniqueID().toString());
+        Document query = new Document("_id", var.getUniqueID().toString());
         Document found = collection.find(query).first();
 
         if (found == null){
-            Document document = new Document("uuid", var.getUniqueID().toString());
+            Document document = new Document("_id", var.getUniqueID().toString());
             document.put("name", var.getName());
             document.put("lang", plugin.getClassManager().getLangManager().getDefault());
             document.put("visibility", VisibilityType.ALL.name());
@@ -57,11 +58,12 @@ public class MongoDB extends Data {
             document.put("speed", ModifierStatus.OFF.name());
             document.put("money", 0.0d);
             document.put("nicked", false);
+            document.put("joinDate", new Date().getTime());
             collection.insertOne(document);
             return;
         }
 
-        Document document = new Document("uuid", var.getUniqueID().toString());
+        Document document = new Document("_id", var.getUniqueID().toString());
         document.put("name", var.getName());
         document.put("lang", var.getLang());
         document.put("visibility", var.getVisibilityType().name());
@@ -78,6 +80,7 @@ public class MongoDB extends Data {
         } else {
             document.put("nickData", null);
         }
+        document.put("joinDate", var.getJoinDate() != null ? var.getJoinDate().getTime() : new Date().getTime());
         collection.replaceOne(found, document);
     }
 
@@ -85,11 +88,11 @@ public class MongoDB extends Data {
 
     @Override
     public void getData(FUser var) {
-        Document query = new Document("uuid", var.getUniqueID().toString());
+        Document query = new Document("_id", var.getUniqueID().toString());
         Document found = collection.find(query).first();
 
         if (found == null){
-            Document document = new Document("uuid", var.getUniqueID().toString());
+            Document document = new Document("_id", var.getUniqueID().toString());
             document.put("name", var.getName());
             document.put("lang", plugin.getClassManager().getLangManager().getDefault());
             document.put("visibility", VisibilityType.ALL.name());
@@ -101,6 +104,7 @@ public class MongoDB extends Data {
             document.put("speed", ModifierStatus.OFF.name());
             document.put("money", 0.0d);
             document.put("nicked", false);
+            document.put("joinDate", new Date().getTime());
             collection.insertOne(document);
             return;
         }
@@ -125,6 +129,12 @@ public class MongoDB extends Data {
             plugin.debug("{prefix}&7Loading nick data for &e" + var.getName() + "&7... #1");
             var.setNickData(new NickData(plugin, var, found.getString("nickData")));
             var.setNicked(true);
+        }
+
+        if (found.getLong("joinDate") == null){
+            found.put("joinDate", new Date().getTime());
+        } else {
+            var.setJoinDate(new Date(found.getLong("joinDate")));
         }
 
         if (tries == null){

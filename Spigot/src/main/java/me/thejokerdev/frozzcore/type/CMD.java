@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public abstract class CMD {
 
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public CMD(SpigotMain plugin) {
         this.plugin = plugin;

@@ -72,9 +72,9 @@ public class SkullUtils {
     @SuppressWarnings("deprecation")
     public static ItemStack getHead(OfflinePlayer player) {
         String skinURL = null;
-        loadSkin: if (cached.containsKey(player.getName())) {
+        if (cached.containsKey(player.getName())) {
             skinURL = cached.get(player.getName());
-        }else {
+        } else {
             try {
                 skinURL = getHeadValue(player.getName());
             } catch (Exception ignored) {
@@ -111,9 +111,9 @@ public class SkullUtils {
     public static ItemStack getHead(UUID uuid) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
         String skinURL = null;
-        loadSkin: if (cached.containsKey(player.getName())) {
+        if (cached.containsKey(player.getName())) {
             skinURL = cached.get(player.getName());
-        }else {
+        } else {
             try {
                 skinURL = getHeadValue(player.getName());
             } catch (Exception ignored) {

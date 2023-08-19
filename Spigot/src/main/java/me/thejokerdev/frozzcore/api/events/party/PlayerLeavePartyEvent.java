@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.api.events.party;
 
+import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
 public class PlayerLeavePartyEvent extends Event {
     private static final HandlerList handlerList = new HandlerList();
     private final String player;
@@ -15,18 +17,6 @@ public class PlayerLeavePartyEvent extends Event {
     public PlayerLeavePartyEvent(String var1, String var2) {
         player = var1;
         members = Arrays.asList(var2.split(","));
-    }
-
-    public String getPlayer() {
-        return player;
-    }
-
-    public List<String> getMembers() {
-        return members;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlerList;
     }
 
     @NotNull

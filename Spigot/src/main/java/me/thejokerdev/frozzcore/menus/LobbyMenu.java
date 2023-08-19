@@ -251,7 +251,7 @@ public class LobbyMenu extends Menu {
         return item;
     }
 
-    private HashMap<ItemStack, ServerObject> serverObjectHashMap = new HashMap<>();
+    private final HashMap<ItemStack, ServerObject> serverObjectHashMap = new HashMap<>();
 
     private SimpleItem getServerItem(ServerObject server){
         SimpleItem item = server == plugin.getServerManager().getActualServer() ? actualLobby.getItem().clone() : lobbyToConnect.getItem().clone();

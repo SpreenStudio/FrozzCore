@@ -17,10 +17,14 @@ public class NameTag {
     private int ID = 0;
 
     private int priority = 0;
+    @Getter
     private final List<String> members = new ArrayList<>();
+    @Getter
     private String name;
     private String id;
+    @Getter
     private String prefix = "";
+    @Getter
     private String suffix = "";
 
     public NameTag(String id, String prefix, String suffix, int sortPriority) {
@@ -83,22 +87,6 @@ public class NameTag {
         }
     }
 
-    public List<String> getMembers() {
-        return this.members;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getPrefix() {
-        return this.prefix;
-    }
-
-    public String getSuffix() {
-        return this.suffix;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -158,14 +146,8 @@ public class NameTag {
                 Object this$suffix = this.getSuffix();
                 Object other$suffix = other.getSuffix();
                 if (this$suffix == null) {
-                    if (other$suffix != null) {
-                        return false;
-                    }
-                } else if (!this$suffix.equals(other$suffix)) {
-                    return false;
-                }
-
-                return true;
+                    return other$suffix == null;
+                } else return this$suffix.equals(other$suffix);
             }
         }
     }

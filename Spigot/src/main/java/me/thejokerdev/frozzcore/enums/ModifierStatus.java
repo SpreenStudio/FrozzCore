@@ -5,6 +5,6 @@ import javax.management.ObjectName;
 public enum ModifierStatus {
     DEACTIVATED,
     ON,
-    OFF;
+    OFF
 
 }

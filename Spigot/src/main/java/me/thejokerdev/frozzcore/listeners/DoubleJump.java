@@ -19,14 +19,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 public class DoubleJump implements Listener {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public DoubleJump(SpigotMain plugin){
         this.plugin = plugin;
     }
    
-    private List<String> players = new ArrayList<String>();;
-   
+    private final List<String> players = new ArrayList<String>();
+
     @EventHandler
     public void setFly(PlayerJoinEvent e) {
 
@@ -55,8 +55,6 @@ public class DoubleJump implements Listener {
         }
        
         if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR || p.isFlying() || players.contains(p.getName())) {
-
-            return;
 
         } else {
                

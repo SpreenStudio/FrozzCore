@@ -22,10 +22,13 @@ import java.util.List;
 
 public abstract class Menu {
     public SpigotMain plugin;
+    @Getter
     private String menuId;
     private Inventory inv;
     private Player player;
+    @Getter
     private String title;
+    @Getter
     private String back;
     public List<Button> buttons;
 
@@ -81,10 +84,6 @@ public abstract class Menu {
             plugin.saveResource(menu, false);
         }
         return new FileUtils(file);
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {
@@ -156,16 +155,8 @@ public abstract class Menu {
         this.inv = Bukkit.createInventory(null, this.inv.getSize(), var1);
     }
 
-    public String getMenuId() {
-        return this.menuId;
-    }
-
     public Player getPlayer(){
         return player.getPlayer();
-    }
-
-    public String getBack() {
-        return this.back;
     }
 
     public void setBack(String var1) {

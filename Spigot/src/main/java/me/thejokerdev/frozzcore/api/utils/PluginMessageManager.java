@@ -29,7 +29,7 @@ public class PluginMessageManager implements PluginMessageListener {
         CREATE,
         JOIN,
         LEAVE,
-        DISBAND;
+        DISBAND
     }
 
     private final Multimap<MessageContext, Consumer<ByteArrayDataInput>> contexts = LinkedHashMultimap.create();

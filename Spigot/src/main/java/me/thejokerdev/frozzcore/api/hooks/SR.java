@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class SR {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
 
     public SR(SpigotMain plugin) {
         this.plugin = plugin;

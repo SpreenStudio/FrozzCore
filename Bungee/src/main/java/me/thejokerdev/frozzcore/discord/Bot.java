@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public class Bot implements Listener {
-    private BungeeMain plugin;
+    private final BungeeMain plugin;
     private JDA discord;
     private String token;
     private String guild;

@@ -25,10 +25,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -59,10 +57,10 @@ public class Utils {
         for(char c : message.toCharArray()){
             if(c == '§'){
                 previousCode = true;
-            }else if(previousCode){
+            } else if (previousCode){
                 previousCode = false;
                 isBold = c == 'l' || c == 'L';
-            }else{
+            } else {
                 DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
                 messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
                 messagePxSize++;
@@ -243,6 +241,25 @@ public class Utils {
         }
     }
 
+    public String getFormattedDate(FUser user){
+        long time = user.getJoinDate() != null ? user.getJoinDate().getTime() : new Date().getTime();
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(time));
+    }
+
+    public String getChatColor(Player player) {
+        LinkedList<String> list = new LinkedList<>(plugin.getConfig().getConfigurationSection("chat.colors").getKeys(false));
+        String out = plugin.getConfig().getString("chat.colors.default");
+        for (String perm : list){
+            if (perm.equals("default") && !player.hasPermission("core.chatcolor.status")){
+                continue;
+            }
+            if (player.hasPermission("core.chatcolor."+perm)){
+                out = plugin.getConfig().getString("chat.colors."+perm);
+            }
+        }
+        return out;
+    }
+
     public void sendPlayer(Player player, String server) {
         try {
             ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -374,7 +391,7 @@ public class Utils {
                     }
                     EnderPearl pearl = p.launchProjectile(EnderPearl.class);
                     pearl.setPassenger(p);
-                    actions(p, Arrays.asList("[sound]ENTITY_ENDERMAN_TELEPORT,1.0,1.0"));
+                    actions(p, Collections.singletonList("[sound]ENTITY_ENDERMAN_TELEPORT,1.0,1.0"));
                     setupEnderpearlRunnable(pearl);
                 }
             }

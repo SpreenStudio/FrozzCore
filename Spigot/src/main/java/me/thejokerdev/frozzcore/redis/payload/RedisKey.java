@@ -1,11 +1,14 @@
 package me.thejokerdev.frozzcore.redis.payload;
 
+import lombok.Getter;
+
+@Getter
 public enum RedisKey {
     SERVER_ADD(3600),
     SERVER_REMOVE(3600),
     LINKED_CHAT(3600);
 
-    private long expire;
+    private final long expire;
     RedisKey(long expire){
         this.expire = expire;
     }
@@ -14,7 +17,4 @@ public enum RedisKey {
         return this.name().toLowerCase();
     }
 
-    public long getExpire() {
-        return expire;
-    }
 }

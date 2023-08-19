@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class AdvancedLicense {
 
-	private String licenseKey;
-	private Plugin plugin;
-	private String validationServer;
+	private final String licenseKey;
+	private final Plugin plugin;
+	private final String validationServer;
 	private LogType logType = LogType.NORMAL;
 	private String securityKey = "YecoF0I6M05thxLeokoHuW8iUhTdIUInjkfF";
 	private boolean debug = false;
@@ -110,7 +110,7 @@ public class AdvancedLicense {
 				return ValidationType.valueOf(response);
 			} catch (IllegalArgumentException exc) {
 				String respRand = xor(xor(response, key), sKey);
-				if (rand.substring(0, respRand.length()).equals(respRand))
+				if (rand.startsWith(respRand))
 					return ValidationType.VALID;
 				else
 					return ValidationType.WRONG_RESPONSE;
@@ -138,12 +138,12 @@ public class AdvancedLicense {
 	//
 
 	public enum LogType {
-		NORMAL, LOW, NONE;
-	}
+		NORMAL, LOW, NONE
+    }
 
 	public enum ValidationType {
-		WRONG_RESPONSE, PAGE_ERROR, URL_ERROR, KEY_OUTDATED, KEY_NOT_FOUND, NOT_VALID_IP, INVALID_PLUGIN, VALID;
-	}
+		WRONG_RESPONSE, PAGE_ERROR, URL_ERROR, KEY_OUTDATED, KEY_NOT_FOUND, NOT_VALID_IP, INVALID_PLUGIN, VALID
+    }
 
 	//
 	// Binary methods

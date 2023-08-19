@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import java.beans.ConstructorProperties;
 
 public final class NametagAPI implements INametagApi {
-    private NametagHandler handler;
-    private NametagManager manager;
+    private final NametagHandler handler;
+    private final NametagManager manager;
 
     public NameTag getNametag(Player player) {
         return this.manager.getNameTag(player.getName());

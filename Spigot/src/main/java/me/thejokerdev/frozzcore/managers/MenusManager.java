@@ -21,7 +21,7 @@ import java.util.HashMap;
 @Getter
 public class MenusManager implements Listener {
 
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
     public HashMap<String, HashMap<String, Menu>> menus = new HashMap<>();
 
     public File folder;

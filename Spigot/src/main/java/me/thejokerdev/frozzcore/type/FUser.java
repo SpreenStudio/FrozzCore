@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -29,10 +30,12 @@ public class FUser {
     private UUID uniqueID;
 
     private String lang;
+    @Getter
     private boolean firstJoin;
     private int hype;
     private ModifierStatus jump = ModifierStatus.OFF;
     private ModifierStatus doubleJump = ModifierStatus.OFF;
+    @Getter
     private ModifierStatus allowFlight = ModifierStatus.OFF;
     private ModifierStatus speed = ModifierStatus.OFF;
     private ItemsManager itemsManager;
@@ -43,7 +46,9 @@ public class FUser {
     private boolean nicked = false;
     private NickData nickData;
 
-    public FUser(Player p){
+    private Date joinDate;
+
+    public FUser(Player p) {
         this(p.getName(), p.getUniqueId());
     }
 
@@ -121,14 +126,6 @@ public class FUser {
 
     public String getLang() {
         return lang == null ? SpigotMain.getPlugin().getClassManager().getLangManager().getDefault() : lang;
-    }
-
-    public boolean isFirstJoin() {
-        return firstJoin;
-    }
-
-    public ModifierStatus getAllowFlight() {
-        return allowFlight;
     }
 
     public void setAllowFlight(ModifierStatus modifier) {

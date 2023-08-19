@@ -16,8 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 public class LangDownloader {
-    private SpigotMain plugin;
-    private File langFolder;
+    private final SpigotMain plugin;
+    private final File langFolder;
     public final LinkedHashMap<String, String> readWithInputStreamCache = new LinkedHashMap<>();
     private String mainFolder;
 

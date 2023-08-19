@@ -1,13 +1,16 @@
 package me.thejokerdev.frozzcore.managers;
 
+import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.data.MongoDB;
 import me.thejokerdev.frozzcore.data.MySQL;
 import me.thejokerdev.frozzcore.data.SQLite;
 import me.thejokerdev.frozzcore.type.Data;
 
+@Getter
 public class DataManager {
-    private SpigotMain plugin;
+    private final SpigotMain plugin;
+    @Getter
     private Data data;
 
     public DataManager(SpigotMain plugin) {
@@ -37,7 +40,4 @@ public class DataManager {
         data.setup();
     }
 
-    public Data getData() {
-        return data;
-    }
 }

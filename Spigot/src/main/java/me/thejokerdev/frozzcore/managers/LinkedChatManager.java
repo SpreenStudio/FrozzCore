@@ -2,16 +2,12 @@ package me.thejokerdev.frozzcore.managers;
 
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
-import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.redis.payload.RedisKey;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPubSub;
 import studio.spreen.cloud.api.CloudAPI;
 
 import java.util.ArrayList;

@@ -1,5 +1,8 @@
 package me.thejokerdev.frozzcore.api.misc;
 
+import lombok.Getter;
+
+@Getter
 public enum DefaultFontInfo {
 
     A('A', 5),
@@ -99,20 +102,12 @@ public enum DefaultFontInfo {
     SPACE(' ', 3),
     DEFAULT('a', 4);
 
-    private char character;
-    private int length;
+    private final char character;
+    private final int length;
 
     DefaultFontInfo(char character, int length) {
         this.character = character;
         this.length = length;
-    }
-
-    public char getCharacter(){
-        return this.character;
-    }
-
-    public int getLength(){
-        return this.length;
     }
 
     public int getBoldLength(){

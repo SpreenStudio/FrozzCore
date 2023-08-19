@@ -12,14 +12,16 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class PlayerManager implements Listener {
-    private HashMap<UUID, FUser> users = new HashMap<>();
+    private final ConcurrentHashMap<UUID, FUser> users;
     private final SpigotMain plugin;
 
     public PlayerManager(SpigotMain plugin) {
         this.plugin = plugin;
+        users = new ConcurrentHashMap<>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -29,7 +31,6 @@ public class PlayerManager implements Listener {
 
     public FUser registerUser(Player p){
         FUser user = new FUser(p);
-        users.put(p.getUniqueId(), user);
         user.initItems();
         return user;
     }
@@ -46,7 +47,7 @@ public class PlayerManager implements Listener {
         getUser(e.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e){
         Player p = e.getPlayer();
         plugin.getClassManager().getMenusManager().getPlayerMenus(p).values().forEach(menu -> {

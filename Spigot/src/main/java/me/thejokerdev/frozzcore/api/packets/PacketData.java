@@ -1,5 +1,8 @@
 package me.thejokerdev.frozzcore.api.packets;
 
+import lombok.Getter;
+
+@Getter
 enum PacketData {
     v1_7("e", "c", "d", "a", "f", "g", "b", "NA", "NA", "NA"),
     cauldron("field_149317_e", "field_149319_c", "field_149316_d", "field_149320_a", "field_149314_f", "field_149315_g", "field_149318_b", "NA", "NA", "NA"),
@@ -25,46 +28,6 @@ enum PacketData {
     private final String color;
     private final String push;
     private final String visibility;
-
-    public String getMembers() {
-        return this.members;
-    }
-
-    public String getPrefix() {
-        return this.prefix;
-    }
-
-    public String getSuffix() {
-        return this.suffix;
-    }
-
-    public String getTeamName() {
-        return this.teamName;
-    }
-
-    public String getParamInt() {
-        return this.paramInt;
-    }
-
-    public String getPackOption() {
-        return this.packOption;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public String getColor() {
-        return this.color;
-    }
-
-    public String getPush() {
-        return this.push;
-    }
-
-    public String getVisibility() {
-        return this.visibility;
-    }
 
     PacketData(String members, String prefix, String suffix, String teamName, String paramInt, String packOption, String displayName, String color, String push, String visibility) {
         this.members = members;
