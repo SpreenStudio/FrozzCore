@@ -2,6 +2,7 @@ package me.thejokerdev.frozzcore.managers;
 
 import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.menus.LanguageMenu;
 import me.thejokerdev.frozzcore.menus.LobbyMenu;
 import me.thejokerdev.frozzcore.menus.custom.CustomMenu;
 import me.thejokerdev.frozzcore.type.Menu;
@@ -58,6 +59,7 @@ public class MenusManager implements Listener {
                 if (cloud){
                     new LobbyMenu(plugin, p);
                 }
+                new LanguageMenu(plugin, p);
             } else {
                 plugin.debug("Customs menu folder is empty!");
             }

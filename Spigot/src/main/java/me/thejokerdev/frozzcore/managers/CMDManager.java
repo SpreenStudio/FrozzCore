@@ -45,19 +45,22 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         commands.add(new SendPlayerCMD(plugin));
         commands.add(new MoneyCMD(plugin));
 
-        customCommands.put("fly", new FlyCMD(plugin));
-        customCommands.put("gamemode", new GamemodeCMD(plugin));
-        customCommands.put("gmc", new GmcCMD(plugin));
-        customCommands.put("gms", new GmsCMD(plugin));
-        customCommands.put("gma", new GmaCMD(plugin));
-        customCommands.put("gmsp", new GmspCMD(plugin));
-        if (plugin.isNickAPI()){
-            customCommands.put("nick", new NickCMD(plugin));
+        if (plugin.getConfig().getBoolean("modules.commands")) {
+
+            customCommands.put("fly", new FlyCMD(plugin));
+            customCommands.put("gamemode", new GamemodeCMD(plugin));
+            customCommands.put("gmc", new GmcCMD(plugin));
+            customCommands.put("gms", new GmsCMD(plugin));
+            customCommands.put("gma", new GmaCMD(plugin));
+            customCommands.put("gmsp", new GmspCMD(plugin));
+            if (plugin.isNickAPI()) {
+                customCommands.put("nick", new NickCMD(plugin));
+            }
+            //customCommands.put("coins", new CoinsCMD(plugin));
+
+
+            customCommands.values().forEach(CustomCMD::register);
         }
-        //customCommands.put("coins", new CoinsCMD(plugin));
-
-
-        customCommands.values().forEach(CustomCMD::register);
     }
 
 

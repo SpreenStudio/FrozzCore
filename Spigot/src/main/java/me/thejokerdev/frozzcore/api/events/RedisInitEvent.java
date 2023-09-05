@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class RedisInitEvent extends Event {
-    @Getter
     private static final HandlerList handlerList = new HandlerList();
 
     private final SpigotMain plugin;
@@ -23,6 +22,10 @@ public class RedisInitEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 }

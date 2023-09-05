@@ -3,20 +3,25 @@ package me.thejokerdev.frozzcore.managers;
 import lombok.Getter;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
+import me.thejokerdev.frozzcore.enums.LanguageType;
 import me.thejokerdev.frozzcore.type.Lang;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LangManager {
     private final SpigotMain plugin;
     @Getter
     private LinkedHashMap<String, LinkedList<Lang>> languages;
+
+    @Getter
+    private LinkedHashMap<String, LinkedList<Lang>> internalLanguages;
     private HashMap<String, FileUtils> settings;
     @Getter
     private List<String> languageList;
-    private final File langFolder;
+    private File langFolder;
     @Getter
     private boolean running = false;
     @Getter
@@ -32,6 +37,15 @@ public class LangManager {
     }
 
     public LangManager init(){
+        LanguageType languageType;
+        try {
+            languageType = LanguageType.valueOf(plugin.getConfig().getString("settings.languages.type"));
+        } catch (Exception e){
+            languageType = LanguageType.LOCAL;
+        }
+        if (languageType == LanguageType.LOCAL){
+            langFolder = new File(plugin.getConfig().getString("settings.languages.path", "/root/storage/languages/"));
+        }
         languages = new LinkedHashMap<>();
         settings = new LinkedHashMap<>();
         languageList = new ArrayList<>();
@@ -41,9 +55,11 @@ public class LangManager {
             langFolder.mkdir();
         }
 
-        if (!getFromWeb()){
-            error = "&cCan't download files from github repository.";
-            return this;
+        if (languageType == LanguageType.REMOTE || langFolder.listFiles().length == 0) {
+            if (!getFromWeb()) {
+                error = "&cCan't download files from github repository.";
+                return this;
+            }
         }
 
         if (Objects.requireNonNull(langFolder.listFiles()).length == 0){
@@ -59,6 +75,7 @@ public class LangManager {
     }
 
     public void loadFiles(){
+        internalLanguages = new LinkedHashMap<>();
         languages.clear();
         languageList.clear();
         for (File f : Objects.requireNonNull(langFolder.listFiles())){
@@ -70,14 +87,20 @@ public class LangManager {
                 }
                 for (File f2 : Objects.requireNonNull(f.listFiles())){
                     if (f2.getName().endsWith(".yml") && f2.getName().contains("_")){
-                        File file = f2;
-                        list.add(new Lang(file));
+                        String id = f2.getName().replace(".yml", "");
+                        Lang lang = new Lang(f2);
+                        list.add(lang);
+
+                        LinkedList<Lang> list1 = new LinkedList<>();
+                        if (internalLanguages.containsKey(id)){
+                            list1.addAll(internalLanguages.get(id));
+                        }
+                        list1.add(lang);
+                        internalLanguages.put(id, list1);
                         if (!languageList.contains(f2.getName().replace(".yml", ""))){
                             languageList.add(f2.getName().replace(".yml", ""));
                         }
                         langs +=1;
-                    } else if (f2.getName().equals(".yml") && f2.getName().contains("module_settings")){
-                        settings.put(var1, new FileUtils(f2));
                     }
                 }
                 languages.put(var1, list);
@@ -98,9 +121,6 @@ public class LangManager {
     }
 
     public void reload(){
-        if (!getFromWeb()){
-            error = "&cCan't download files from github repository.";
-        }
         this.init();
     }
 
@@ -118,6 +138,36 @@ public class LangManager {
 
     public LinkedList<Lang> getSection(String id){
         return languages.get(id);
+    }
+
+    public String translatedPercent(Lang lang){
+        LinkedList<Lang> defaultLangs = new LinkedList<>(internalLanguages.get(getDefault()));
+
+        int keys = 0;
+
+        for (Lang lang1 : defaultLangs){
+            keys += lang1.getFile().getKeys(true).size();
+        }
+
+        int translated = 0;
+        defaultLangs.clear();
+        defaultLangs.addAll(internalLanguages.get(lang.getId()));
+
+        for (Lang lang1 : defaultLangs){
+            translated += lang1.getFile().getKeys(true).size();
+        }
+
+        double percent = (translated * 100) / keys;
+
+        return String.format("%.0f", percent)+"%";
+    }
+
+    public List<Lang> getLangs(){
+        List<Lang> list = new ArrayList<>();
+        for (LinkedList<Lang> list1 : internalLanguages.values()){
+            list.add(list1.get(0));
+        }
+        return list;
     }
 
 }

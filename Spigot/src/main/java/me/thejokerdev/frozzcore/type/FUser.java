@@ -62,6 +62,20 @@ public class FUser {
         SpigotMain.getPlugin().getClassManager().getDataManager().getData().getData(this);
     }
 
+    public void set(ModifierStatus jump, ModifierStatus doubleJump, ModifierStatus allowFlight, ModifierStatus speed){
+        this.jump = jump;
+        this.doubleJump = doubleJump;
+        this.allowFlight = allowFlight;
+        this.speed = speed;
+    }
+
+    public void apply(){
+        setJump(jump);
+        setDoubleJump(doubleJump);
+        setAllowFlight(allowFlight);
+        setSpeed(speed);
+    }
+
     public void initItems(){
         itemsManager = new ItemsManager(this);
         itemsManager.check();

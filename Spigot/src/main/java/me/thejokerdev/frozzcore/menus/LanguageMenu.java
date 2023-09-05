@@ -1,11 +1,11 @@
 package me.thejokerdev.frozzcore.menus;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ItemType;
 import me.thejokerdev.frozzcore.type.Button;
+import me.thejokerdev.frozzcore.type.Lang;
 import me.thejokerdev.frozzcore.type.Menu;
 import me.thejokerdev.frozzcore.type.SimpleItem;
 import org.bukkit.Material;
@@ -18,19 +18,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import studio.spreen.cloud.api.objects.ServerObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-public class LobbyMenu extends Menu {
+public class LanguageMenu extends Menu {
     private int page = 0;
     private int pages = 0;
     private Button prevPage;
     private Button nextPage;
-    private Button noLobbies;
-    private Button actualLobby;
-    private Button lobbyToConnect;
 
-    public LobbyMenu(SpigotMain plugin, Player player){
-        super(plugin, player, "lobbies", true);
+    public LanguageMenu(SpigotMain plugin, Player player){
+        super(plugin, player, "languages", true);
 
         updateLang();
         update();
@@ -99,14 +99,14 @@ public class LobbyMenu extends Menu {
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
-        ServerObject server = serverObjectHashMap.get(item);
-        if (server==null) return;
-        if (server == plugin.getServerManager().getActualServer()){
-            plugin.getUtils().sendMessage(getPlayer(), "general@messages.alreadyConnected");
+        Lang lang = langObjectsMap.get(item);
+        if (lang==null) return;
+        if (lang.getId().equals(getUser().getLang())){
+            plugin.getUtils().sendMessage(getPlayer(), "general@messages.alreadySelected");
             XSound.ENTITY_ENDERMAN_TELEPORT.play(getPlayer(), 1, 0.4f);
             return;
         }
-        plugin.getUtils().sendPlayer(getPlayer(), server.getName());
+        getUser().setLang(lang.getId(), false, true);
     }
 
     @Override
@@ -122,19 +122,16 @@ public class LobbyMenu extends Menu {
             notUsed.addAll(b.getSlot());
         }
 
-        List<ServerObject> servers = new ArrayList<>();
-        for (ServerObject object : plugin.getServerManager().getActualGroup().getServers()){
-            if (object.getState().equalsIgnoreCase("MAINTENANCE") || object.getState().equalsIgnoreCase("STARTING")){
-                continue;
+        List<Lang> languages = new ArrayList<>(plugin.getClassManager().getLangManager().getLangs());
+
+        languages.sort((o1, o2) -> {
+            //Alphabetical order
+            int i = o1.getId().compareTo(o2.getId());
+            if (i == 0){
+                //If the same, order by last update
+                return o1.getLastUpdate().compareTo(o2.getLastUpdate());
             }
-            servers.add(object);
-        }
-
-        servers.sort((o1, o2) -> {
-            int i1 = getNumber(o1);
-            int i2 = getNumber(o2);
-
-            return Integer.compare(i1, i2);
+            return i;
         });
 
         int maxItems = 7;
@@ -146,26 +143,26 @@ public class LobbyMenu extends Menu {
             }
         }
 
-        if (page > 0 && servers.size() < page*maxItems+1){
+        if (page > 0 && languages.size() < page*maxItems+1){
             page = 0;
             update();
             return;
         }
 
-        pages = (int) Math.ceil((double) servers.size() /maxItems);
+        pages = (int) Math.ceil((double) languages.size() /maxItems);
         if (page > 0){
             setItem(prevPage.getSlot(), previousPage());
             notUsed.add(45);
         }
-        if (servers.size() > (page+1)*maxItems){
+        if (languages.size() > (page+1)*maxItems){
             setItem(nextPage.getSlot(), nextPage());
             notUsed.add(53);
         }
-        if (servers.size() > maxItems){
-            servers = servers.subList(page*maxItems, Math.min(page*maxItems+maxItems, servers.size()));
+        if (languages.size() > maxItems){
+            languages = languages.subList(page*maxItems, Math.min(page*maxItems+maxItems, languages.size()));
         }
-        if (servers.size() > 0){
-            for (int i = 0; i < servers.size(); i++){
+        if (languages.size() > 0){
+            for (int i = 0; i < languages.size(); i++){
                 int slot = 10+i;
                 if (slot >= 17){
                     slot += 2;
@@ -176,19 +173,13 @@ public class LobbyMenu extends Menu {
                 if (slot >= 35){
                     slot += 2;
                 }
-                ServerObject p = servers.get(i);
-                SimpleItem item = getServerItem(p);
+                Lang p = languages.get(i);
+                SimpleItem item = getLangItem(p);
                 ItemStack stack;
-                if (item == null){
-                    continue;
-                }
-                serverObjectHashMap.put((stack = item.build(getPlayer())), p);
+                langObjectsMap.put((stack = item.build(getPlayer())), p);
                 setItem(slot, stack);
                 notUsed.add(slot);
             }
-        } else {
-            setItem(noLobbies.getSlot(), noLobbies());
-            notUsed.add(22);
         }
 
         if (clear) {
@@ -225,9 +216,6 @@ public class LobbyMenu extends Menu {
         }
         prevPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.prevPage", ItemType.MENU, getMenuId());
         nextPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.nextPage", ItemType.MENU, getMenuId());
-        noLobbies = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.noLobbies", ItemType.MENU, getMenuId());
-        actualLobby = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.actualLobby", ItemType.MENU, getMenuId());
-        lobbyToConnect = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.lobbyToConnect", ItemType.MENU, getMenuId());
     }
 
     private SimpleItem nextPage(){
@@ -244,48 +232,39 @@ public class LobbyMenu extends Menu {
         return item;
     }
 
-    private SimpleItem noLobbies(){
-        SimpleItem item = noLobbies.getItem().clone();
-        item.setDisplayName(applyPlaceHolders(item.getDisplayName()));
-        item.setLore(applyPlaceHolders(item.getLore()));
+    private final HashMap<ItemStack, Lang> langObjectsMap = new HashMap<>();
+    private final HashMap<String, Button> langItemsMap = new HashMap<>();
+
+    public Button loadLangItem(String lang){
+        if (getConfig().get("items."+lang)==null){
+            return null;
+        }
+        return new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items."+lang, ItemType.MENU, getMenuId());
+    }
+
+    private SimpleItem getLangItem(Lang lang){
+
+        Button button = langItemsMap.computeIfAbsent(lang.getId(), this::loadLangItem);
+        if (button == null){
+            button = loadLangItem("no-data");
+        }
+
+        SimpleItem item = button.getItem().clone();
+        item.setDisplayName(applyPlaceHolders(item.getDisplayName(), lang));
+        item.setLore(applyPlaceHolders(item.getLore(), lang));
+        item.setInfo(lang.getId());
         return item;
     }
 
-    private final HashMap<ItemStack, ServerObject> serverObjectHashMap = new HashMap<>();
-
-    private SimpleItem getServerItem(ServerObject server){
-        SimpleItem item = server == plugin.getServerManager().getActualServer() ? actualLobby.getItem().clone() : lobbyToConnect.getItem().clone();
-        item.setDisplayName(applyPlaceHolders(item.getDisplayName(), server));
-        item.setLore(applyPlaceHolders(item.getLore(), server));
-        item.setInfo(server.getName());
-        item.setAmount(getNumber(server));
-        return item;
-    }
-
-    public String applyPlaceHolders(String in, ServerObject server){
+    public String applyPlaceHolders(String in, Lang lang){
         in = in.replace("{actualPage}", String.valueOf(page+1));
         in = in.replace("{maxPages}", String.valueOf(pages));
 
-        if (server != null) {
+        if (lang != null) {
             try {
-                in = in.replace("{serverName}", server.getName());
-                String server_number = server.getName();
-                if (server_number.contains("-")) {
-                    try {
-                        String[] split = server_number.split("-");
-                        server_number = split[split.length - 1];
-                        int i = Integer.parseInt(server_number);
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-                in = in.replace("{serverNumber}", server_number);
-                in = in.replace("{serverState}", server.getState());
-                in = in.replace("{serverOnline}", String.valueOf(server.getOnlinePlayerCount()));
-                in = in.replace("{serverMax}", String.valueOf(server.getMaxPlayerCount()));
-                in = in.replace("{serverMotd}", server.getMotd());
-                in = in.replace("{serverMap}", server.getMap());
-                in = in.replace("{serverGroup}", server.getGroup().getName());
-                in = in.replace("{serverId}", server.getId());
+                in = in.replace("{lang}", lang.getId());
+                in = in.replace("{language}", lang.getId());
+                in = in.replace("{translated}", plugin.getClassManager().getLangManager().translatedPercent(lang));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -298,9 +277,9 @@ public class LobbyMenu extends Menu {
         return applyPlaceHolders(in, null);
     }
 
-    public List<String> applyPlaceHolders(List<String> in, ServerObject server){
+    public List<String> applyPlaceHolders(List<String> in, Lang lang){
         List<String> out = new ArrayList<>(in);
-        out.replaceAll(s -> applyPlaceHolders(s, server));
+        out.replaceAll(s -> applyPlaceHolders(s, lang));
         return out;
     }
 

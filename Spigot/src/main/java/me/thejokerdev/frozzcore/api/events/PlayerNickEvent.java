@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PlayerNickEvent extends Event {
-    @Getter
     private static final HandlerList handlerList = new HandlerList();
     private final FUser user;
     private final Cause cause;
@@ -28,5 +27,9 @@ public class PlayerNickEvent extends Event {
     public enum Cause {
         NICK,
         UNNICK
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
     }
 }

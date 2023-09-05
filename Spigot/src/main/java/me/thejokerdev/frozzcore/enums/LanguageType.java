@@ -1,2 +1,6 @@
-package me.thejokerdev.frozzcore.enums;public class LanguageType {
+package me.thejokerdev.frozzcore.enums;
+
+public enum LanguageType {
+    LOCAL,
+    REMOTE
 }

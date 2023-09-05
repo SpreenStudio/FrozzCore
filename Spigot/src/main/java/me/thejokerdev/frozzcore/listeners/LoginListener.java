@@ -34,9 +34,11 @@ public class LoginListener implements Listener {
 
     @EventHandler
     public void onPreLogin(AsyncPlayerPreLoginEvent event){
-        if (!plugin.isLoaded()){
+        if (!plugin.isLoaded()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "§cEl servidor está cargando aún, por favor, inténtelo de nuevo en unos segundos.");
+            return;
         }
+        plugin.getClassManager().getPlayerManager().getUser(event.getName(), event.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -45,8 +47,8 @@ public class LoginListener implements Listener {
         e.setJoinMessage(null);
         boolean spawnExists = plugin.getSpawn() != null;
         World w = p.getWorld();
-
         FUser user = plugin.getClassManager().getPlayerManager().getUser(p);
+        user.apply();
         boolean tpEveryJoin = plugin.getConfig().getBoolean("settings.tpEveryJoin", true);
         if (!tpEveryJoin) {
             if (!p.hasPlayedBefore()){

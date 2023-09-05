@@ -26,11 +26,15 @@ public class PlayerManager implements Listener {
     }
 
     public FUser getUser(Player p){
-        return users.computeIfAbsent(p.getUniqueId(), k -> registerUser(p));
+        return users.computeIfAbsent(p.getUniqueId(), k -> registerUser(p.getName(), p.getUniqueId()));
     }
 
-    public FUser registerUser(Player p){
-        FUser user = new FUser(p);
+    public FUser getUser(String name, UUID uuid){
+        return users.computeIfAbsent(uuid, k -> registerUser(name, uuid));
+    }
+
+    public FUser registerUser(String name, UUID uuid){
+        FUser user = new FUser(name, uuid);
         user.initItems();
         return user;
     }

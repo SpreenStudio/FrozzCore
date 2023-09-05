@@ -7,6 +7,7 @@ modules:
   items: true
   nametags: true
   linked-chat: true
+  commands: true
   whitelist:
     enabled: false
     worlds:
@@ -70,7 +71,9 @@ settings:
   tpEveryJoin: true
   debug: false
   languages:
-    default: en_US
+    mode: LOCAL #LOCAL or REMOTE
+    path: '/root/storage/languages/'
+    default: es_ES
     downloader:
       user: 'FrozzMC'
       repo: 'languages'

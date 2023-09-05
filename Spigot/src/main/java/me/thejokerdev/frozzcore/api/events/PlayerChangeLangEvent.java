@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PlayerChangeLangEvent extends Event {
+    @Getter
     private static final HandlerList handlerList = new HandlerList();
     private final Player player;
     private final String lastLang;
@@ -22,6 +23,10 @@ public class PlayerChangeLangEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 }

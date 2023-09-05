@@ -1,6 +1,7 @@
 package me.thejokerdev.frozzcore.api.hooks;
 
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.api.events.PlayerChangeLangEvent;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.event.EventBus;
@@ -24,6 +25,7 @@ public class LP {
         bus.subscribe(plugin, GroupLoadEvent.class, this::onGroupsLoad);
         bus.subscribe(plugin, GroupDeleteEvent.class, this::onGroupDelete);
         bus.subscribe(plugin, GroupCreateEvent.class, this::onGroupCreate);
+
     }
 
     public List<String> getGroups(){

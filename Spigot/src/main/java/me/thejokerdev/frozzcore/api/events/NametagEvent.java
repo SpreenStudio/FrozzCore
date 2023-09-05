@@ -6,22 +6,17 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+@Getter
 public class NametagEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
-    @Getter
     private boolean cancelled;
     /** @deprecated */
     @Deprecated
     private String value;
-    @Getter
     private NameTag nametag;
-    @Getter
     private String player;
-    @Getter
     private ChangeType changeType;
-    @Getter
     private ChangeReason changeReason;
-    @Getter
     private StorageType storageType;
 
     public NametagEvent(String player, String value) {

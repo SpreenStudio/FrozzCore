@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class EconomyChangeEvent extends Event {
-    @Getter
     private static final HandlerList handlerList = new HandlerList();
     private final FUser user;
     private final EconomyAction action;
@@ -24,6 +23,10 @@ public class EconomyChangeEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 }

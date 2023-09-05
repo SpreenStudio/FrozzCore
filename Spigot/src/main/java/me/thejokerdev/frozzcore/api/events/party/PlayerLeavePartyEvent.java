@@ -24,4 +24,8 @@ public class PlayerLeavePartyEvent extends Event {
     public HandlerList getHandlers() {
         return handlerList;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
 }

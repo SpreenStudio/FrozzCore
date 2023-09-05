@@ -8,6 +8,8 @@
 # IntelliJ
 out/
 
+!libs/
+
 # Compiled class file
 *.class
 
@@ -18,7 +20,6 @@ out/
 *.ctxt
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear

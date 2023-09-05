@@ -1,8 +1,8 @@
 settings:
-  rows: 5
+  rows: 4
   clear: true
-  update: 10 #-1 to disable
-  title: '&0Language'
+  update: -1 #-1 to disable
+  title: '%core_lobby_menus.languages.title%'
 
 items:
   prevPage:
@@ -10,9 +10,9 @@ items:
     skull: 'name-MHF_ArrowLeft'
     slot: 9
     meta:
-      name: '%core_lobby_menus.lobbies.items.prevPage.name%'
+      name: '%core_lobby_menus.languages.items.prevPage.name%'
       lore:
-        - '%core_lobby_menus.lobbies.items.prevPage.lore%'
+        - '%core_lobby_menus.languages.items.prevPage.lore%'
   nextPage:
     material: player_head
     skull: 'name-MHF_ArrowRight'
@@ -33,10 +33,9 @@ items:
         - '&7add information of this language.'
   en_US:
     material: player_head
-    skull: base-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJl
-      cy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRiZDhlYzQ2MTkyYTk1NWM2YmQ2NTFhYjRkODZmOTg2N2U0ZDRiZDk5YWYyMWNhOTJlYzlkMjZmODZkYTkxIn19fQ==
+    skull: base-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNhYzk3NzRkYTEyMTcyNDg1MzJjZTE0N2Y3ODMxZjY3YTEyZmRjY2ExY2YwY2I0YjM4NDhkZTZiYzk0YjQifX19
     meta:
-      name: '&bEnglish'
+      name: '&bEnglish &8({lang})'
       lore:
         - '&f '
         - '&f Select this language to use'
@@ -47,10 +46,9 @@ items:
         - '&f Translated: &b{translated}'
   es_ES:
     material: player_head
-    skull: base-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJl
-      cy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRiZDhlYzQ2MTkyYTk1NWM2YmQ2NTFhYjRkODZmOTg2N2U0ZDRiZDk5YWYyMWNhOTJlYzlkMjZmODZkYTkxIn19fQ==
+    skull: base-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzJkNzMwYjZkZGExNmI1ODQ3ODNiNjNkMDgyYTgwMDQ5YjVmYTcwMjI4YWJhNGFlODg0YzJjMWZjMGMzYThiYyJ9fX0=
     meta:
-      name: '&bEspañol'
+      name: '&bEspañol &8({lang})'
       lore:
         - '&f '
         - '&f Selecciona este idioma para usar'
@@ -61,9 +59,14 @@ items:
         - '&f Traducido: &b{translated}'
 
 extra-items:
+  panels:
+    material: gray_stained_glass_pane
+    slot: 0-35
+    meta:
+      name: "&7"
   close:
     material: barrier
-    slot: 26
+    slot: 35
     meta:
       name: '%core_lobby_menus.general-items.close.name%'
       lore:
@@ -74,10 +77,10 @@ extra-items:
         - '[sound]BLOCK_NOTE_BLOCK_HARP,3.0,1.0'
   prev:
     material: player_head
-    slot: 18
+    slot: 27
     skull: base-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRiZDhlYzQ2MTkyYTk1NWM2YmQ2NTFhYjRkODZmOTg2N2U0ZDRiZDk5YWYyMWNhOTJlYzlkMjZmODZkYTkxIn19fQ==
     meta:
-      name: '%core_lobby_menus.settings.items.prev.name%'
+      name: '%core_lobby_menus.languages.items.prev.name%'
     actions:
       multiclick:
         - '[open]profile'

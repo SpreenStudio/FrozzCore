@@ -20,4 +20,8 @@ public class PlayerCreatePartyEvent extends Event {
     public HandlerList getHandlers() {
         return handlerList;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
 }

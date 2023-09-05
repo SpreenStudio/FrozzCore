@@ -114,16 +114,17 @@ public class MongoDB extends Data {
         var.setFirstJoin(found.getBoolean("firstJoin"));
         var.setHype(found.getInteger("hype"));
         var.setMoney(found.getDouble("money") == null ? 0.0d : found.getDouble("money"));
+        ModifierStatus jump = ModifierStatus.OFF;
+        ModifierStatus doubleJump = ModifierStatus.OFF;
+        ModifierStatus allowFlight = ModifierStatus.OFF;
+        ModifierStatus speed = ModifierStatus.OFF;
         try {
-            var.setJump(ModifierStatus.valueOf(found.getString("jump").toUpperCase()));
-            var.setDoubleJump(ModifierStatus.valueOf(found.getString("doubleJump").toUpperCase()));
-            var.setAllowFlight(ModifierStatus.valueOf(found.getString("fly").toUpperCase()));
-            var.setSpeed(ModifierStatus.valueOf(found.getString("speed").toUpperCase()));
-        } catch (ClassCastException e){
-            var.setJump(ModifierStatus.OFF);
-            var.setDoubleJump(ModifierStatus.OFF);
-            var.setAllowFlight(ModifierStatus.OFF);
-            var.setSpeed(ModifierStatus.OFF);
+            jump = ModifierStatus.valueOf(found.getString("jump").toUpperCase());
+            doubleJump = ModifierStatus.valueOf(found.getString("doubleJump").toUpperCase());
+            allowFlight = ModifierStatus.valueOf(found.getString("fly").toUpperCase());
+            speed = ModifierStatus.valueOf(found.getString("speed").toUpperCase());
+            var.set(jump, doubleJump, allowFlight, speed);
+        } catch (ClassCastException ignored){
         }
         if (plugin.isNickAPI() && found.getBoolean("nicked", false)){
             plugin.debug("{prefix}&7Loading nick data for &e" + var.getName() + "&7... #1");

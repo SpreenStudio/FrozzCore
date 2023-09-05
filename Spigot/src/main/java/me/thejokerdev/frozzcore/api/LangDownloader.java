@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.thejokerdev.frozzcore.SpigotMain;
+import me.thejokerdev.frozzcore.enums.LanguageType;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class LangDownloader {
     private final SpigotMain plugin;
-    private final File langFolder;
+    private File langFolder;
     public final LinkedHashMap<String, String> readWithInputStreamCache = new LinkedHashMap<>();
     private String mainFolder;
 
@@ -27,6 +28,15 @@ public class LangDownloader {
     }
 
     public boolean downloadFromGitHub(String folder) {
+        LanguageType languageType;
+        try {
+            languageType = LanguageType.valueOf(plugin.getConfig().getString("settings.languages.type"));
+        } catch (Exception e){
+            languageType = LanguageType.LOCAL;
+        }
+        if (languageType == LanguageType.LOCAL){
+            langFolder = new File(plugin.getConfig().getString("settings.languages.path", "/root/storage/languages/"));
+        }
         boolean si = true;
         JsonParser parser = new JsonParser();
         try {
@@ -69,7 +79,6 @@ public class LangDownloader {
     }
 
     public void downloadUsingCommons(String url, File file) throws IOException {
-        plugin.console("{prefix}Downloaded file: "+file.toString());
         org.apache.commons.io.FileUtils.copyURLToFile(new URL(url), file);
     }
 
