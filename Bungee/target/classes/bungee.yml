@@ -1,0 +1,4 @@
+name: FrozzCore
+version: '1.0'
+main: me.thejokerdev.frozzcore.BungeeMain
+description: FrozzMC's Core plugin.

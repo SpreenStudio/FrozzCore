@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bungee/FrozzCore-Bungee.iml" filepath="$PROJECT_DIR$/Bungee/FrozzCore-Bungee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spigot/FrozzCore-Spigot.iml" filepath="$PROJECT_DIR$/Spigot/FrozzCore-Spigot.iml" />
+    </modules>
+  </component>
+</project>
