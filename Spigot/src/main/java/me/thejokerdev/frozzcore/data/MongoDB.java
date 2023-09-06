@@ -137,22 +137,6 @@ public class MongoDB extends Data {
         } else {
             var.setJoinDate(new Date(found.getLong("joinDate")));
         }
-
-        if (tries == null){
-            tries = new HashMap<>();
-            tries.put(var.getName(), 0);
-        } else {
-            if (tries.containsKey(var.getName())){
-                int i = tries.get(var.getName());
-                i++;
-                tries.put(var.getName(), i);
-            } else {
-                tries.put(var.getName(), 0);
-            }
-        }
-
-        int i = tries.get(var.getName());
-        plugin.debug("{prefix}&7Loading data for &e" + var.getName() + "&7... #" + i);
     }
 
     @Override
