@@ -51,14 +51,14 @@ public class Redis {
 
     public void stablishConnection(ConfigurationSection section, final Consumer<JedisPool> consumer) {
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(section.getInt("config.maxConnections", 8));
+        config.setMaxTotal(2048);
         JedisPool pool;
         boolean hasPassword = !section.getString("auth.password", "").isEmpty();
         if (hasPassword) {
             config.setTestOnBorrow(true);
-            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 0, section.getString("auth.password", ""));
+            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 0, section.getString("auth.password", ""), 30000);
         } else {
-            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379));
+            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 30000);
         }
         consumer.accept(pool);
     }
