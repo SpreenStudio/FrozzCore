@@ -17,7 +17,6 @@ import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.type.FUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -34,7 +33,7 @@ public final class SpigotMain extends JavaPlugin {
     private PluginMessageManager pluginMessageManager;
 
     private LuckPermsHook luckPerms = null;
-    private SkinsRestorerHook sr = null;
+    private SkinsRestorerHook skinsRestorer = null;
     private Location spawn = null;
     public Utils utils;
 
@@ -61,9 +60,13 @@ public final class SpigotMain extends JavaPlugin {
         utils = classManager.getUtils();
         itemsCache = new ItemsCache(this);
 
-        if (!checkDependencies()){
+        // If PlaceholderAPI not exists then: log &  disable this plugin
+        if (!hasPlaceholderAPI()){
+            console("&4&lERROR: &cPlaceholderAPI doesn't found!");
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        registerDependencies();
 
         getServer().getOnlinePlayers().forEach(p-> getClassManager().getPlayerManager().getUser(p));
 
@@ -167,39 +170,44 @@ public final class SpigotMain extends JavaPlugin {
 
     private PapiExpansion papiExpansion;
 
-    public boolean checkDependencies(){
-        PluginManager pm = getServer().getPluginManager();
-        if (!pm.isPluginEnabled("PlaceholderAPI")){
-            console("&4&lERROR: &cPlaceholderAPI doesn't found!");
-            return false;
-        } else {
+    public void registerDependencies(){
+        checkDependencyPlugin("PlaceholderAPI", () -> {
             console("&aPlaceholderAPI found!");
             papiExpansion = new PapiExpansion(this);
             papiExpansion.register();
             console("&fPlaceholderAPI hooked!");
-        }
+        });
 
-        if (pm.isPluginEnabled("NickAPI")){
+        checkDependencyPlugin("NickAPI", () -> {
             console("&aNickAPI found!");
             setNickAPIEnabled(true);
-        }
+        });
 
-        if (pm.isPluginEnabled("LuckPerms")){
+        checkDependencyPlugin("LuckPerms", () -> {
             console("&aLuckPerms found!");
             luckPerms = new LuckPermsHook(this);
-        }
+        });
 
-        if (pm.isPluginEnabled("SkinsRestorer")){
+        checkDependencyPlugin("SkinsRestorer", () -> {
             console("&aSkinsRestorer found!");
-            sr = new SkinsRestorerHook(this);
-        }
+            skinsRestorer = new SkinsRestorerHook(this);
+        });
 
-        if (pm.isPluginEnabled("Cloud")){
+
+        checkDependencyPlugin("Cloud", () -> {
             console("&aCloud found!");
             serverManager = new ServerManager(this);
-        }
+        });
+    }
 
-        return true;
+    private boolean hasPlaceholderAPI() {
+        return Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+    }
+
+    private void checkDependencyPlugin(String name, Runnable function) {
+        if (Bukkit.getPluginManager().isPluginEnabled(name)) {
+            function.run();
+        }
     }
 
     public boolean isLuckPermsEnabled() {
@@ -207,7 +215,7 @@ public final class SpigotMain extends JavaPlugin {
     }
 
     public boolean isSkinsRestorerEnabled() {
-        return sr != null && getConfig().getBoolean("hooks.skinsrestorer");
+        return skinsRestorer != null && getConfig().getBoolean("hooks.skinsrestorer");
     }
 
     public String getPrefix(){
