@@ -3,7 +3,6 @@ package me.thejokerdev.frozzcore.data;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.DataType;
 import me.thejokerdev.frozzcore.enums.ModifierStatus;
@@ -126,7 +125,7 @@ public class MongoDB extends Data {
             var.set(jump, doubleJump, allowFlight, speed);
         } catch (ClassCastException ignored){
         }
-        if (plugin.isNickAPI() && found.getBoolean("nicked", false)){
+        if (plugin.isNickAPIEnabled() && found.getBoolean("nicked", false)){
             plugin.debug("{prefix}&7Loading nick data for &e" + var.getName() + "&7... #1");
             var.setNickData(new NickData(plugin, var, found.getString("nickData")));
             var.setNicked(true);

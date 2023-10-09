@@ -91,17 +91,17 @@ public class ScoreBoard implements Listener {
         }
     }
 
-    public void contentBoard(FUser var0) {
+    public void contentBoard(FUser fUser) {
         if (!plugin.getConfig().getBoolean("modules.scoreboard")){
             return;
         }
-        if (var0.getPlayer() == null){
+        if (fUser.getPlayer() == null){
             return;
         }
-        if (!plugin.getUtils().isWorldProtected(var0.getPlayer().getWorld(), Modules.SCOREBOARD)){
+        if (!plugin.getUtils().isWorldProtected(fUser.getPlayer().getWorld(), Modules.SCOREBOARD)){
             return;
         }
-        Player var1 = var0.getPlayer();
+        Player var1 = fUser.getPlayer();
         World w = plugin.getSpawn().getWorld();
         if (w == null){
             w = var1.getWorld();
@@ -114,11 +114,11 @@ public class ScoreBoard implements Listener {
         title = plugin.getConfig().getString("scoreboard.boards.default.title");
         list = new LinkedList<>(plugin.getConfig().getStringList("scoreboard.boards.default.lines"));
         title = Utils.ct(title);
-        title = PlaceholderAPI.setPlaceholders(var0.getPlayer(), title);
+        title = PlaceholderAPI.setPlaceholders(fUser.getPlayer(), title);
         LinkedList<String> finalList = new LinkedList<>();
         for (String value : list) {
             value = Utils.ct(value);
-            value = PlaceholderAPI.setPlaceholders(var0.getPlayer(), value);
+            value = PlaceholderAPI.setPlaceholders(fUser.getPlayer(), value);
             value = Utils.ct(value);
             if (value.contains("\\n")) {
                 Collections.addAll(finalList, value.split("\\n"));
@@ -130,6 +130,6 @@ public class ScoreBoard implements Listener {
             }
             finalList.add(value);
         }
-        boardAPI.scoredSidebar(var0.getPlayer(), title, boardAPI.getLinkedHashMap(finalList));
+        boardAPI.scoredSidebar(fUser.getPlayer(), title, boardAPI.getLinkedHashMap(finalList));
     }
 }

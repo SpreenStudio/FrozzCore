@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import me.thejokerdev.frozzcore.api.cache.ItemsCache;
 import me.thejokerdev.frozzcore.api.events.RedisInitEvent;
-import me.thejokerdev.frozzcore.api.hooks.LP;
-import me.thejokerdev.frozzcore.api.hooks.PAPI;
-import me.thejokerdev.frozzcore.api.hooks.SR;
+import me.thejokerdev.frozzcore.api.hooks.LuckPermsHook;
+import me.thejokerdev.frozzcore.api.hooks.PapiExpansion;
+import me.thejokerdev.frozzcore.api.hooks.SkinsRestorerHook;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.api.utils.LocationUtil;
 import me.thejokerdev.frozzcore.api.utils.PluginMessageManager;
 import me.thejokerdev.frozzcore.api.utils.Utils;
 import me.thejokerdev.frozzcore.managers.ClassManager;
-import me.thejokerdev.frozzcore.managers.LinkedChatManager;
 import me.thejokerdev.frozzcore.managers.ServerManager;
 import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.type.FUser;
@@ -27,29 +26,30 @@ import java.io.File;
 @Getter
 @Setter
 public final class SpigotMain extends JavaPlugin {
+
     @Getter
     private static SpigotMain plugin;
     private ClassManager classManager;
     private ItemsCache itemsCache;
     private PluginMessageManager pluginMessageManager;
 
-    private LP lp = null;
-    private SR sr = null;
+    private LuckPermsHook luckPerms = null;
+    private SkinsRestorerHook sr = null;
     private Location spawn = null;
     public Utils utils;
 
     private boolean loaded = false;
 
-    //Messaging
+    // Messaging
     private Redis redis;
 
-    private String id;
+    private String serverId;
     private String serverName;
     int tries = 0;
 
     private ServerManager serverManager;
 
-    private boolean nickAPI = false;
+    private boolean nickAPIEnabled = false;
 
     @Override
     public void onEnable() {
@@ -69,7 +69,7 @@ public final class SpigotMain extends JavaPlugin {
 
         classManager.getCmdManager().initCMDs();
 
-        if (getConfig().get("lobby.spawn")!=null){
+        if (getConfig().get("lobby.spawn") != null){
             spawn = LocationUtil.getLocation(getConfig().getString("lobby.spawn"));
         }
 
@@ -120,20 +120,20 @@ public final class SpigotMain extends JavaPlugin {
                     String[] split = serverName.split("_");
                     try {
                         Integer.parseInt(split[1]);
-                        id = split[1];
+                        serverId = split[1];
                     } catch (Exception e) {
-                        id = 1 + "";
+                        serverId = 1 + "";
                     }
                 }
             } catch (NoSuchMethodError e) {
                 serverName = "lobby";
-                id = "1";
+                serverId = "1";
             }
             loaded = true;
         }
     }
 
-    public void init(){
+    public void init() {
         File file = new File(getDataFolder(), "server.yml");
         if (!file.exists()){
             saveResource("server.yml", false);
@@ -159,13 +159,13 @@ public final class SpigotMain extends JavaPlugin {
             console("{prefix}Server id not found in server.yml");
             return;
         }
-        this.id = id;
+        this.serverId = id;
         redis.addServer(serverName, serverIp, serverPort);
         String info = "&fServer name: &b"+serverName+" &7| &fServer IP: &e"+serverIp+" &7| &fServer Port: &e"+serverPort;
         console("{prefix}&7Server connected to proxy and load server: "+info+"&7.");
     }
 
-    private PAPI papi;
+    private PapiExpansion papiExpansion;
 
     public boolean checkDependencies(){
         PluginManager pm = getServer().getPluginManager();
@@ -174,24 +174,24 @@ public final class SpigotMain extends JavaPlugin {
             return false;
         } else {
             console("&aPlaceholderAPI found!");
-            papi = new PAPI(this);
-            papi.register();
+            papiExpansion = new PapiExpansion(this);
+            papiExpansion.register();
             console("&fPlaceholderAPI hooked!");
         }
 
         if (pm.isPluginEnabled("NickAPI")){
             console("&aNickAPI found!");
-            setNickAPI(true);
+            setNickAPIEnabled(true);
         }
 
         if (pm.isPluginEnabled("LuckPerms")){
             console("&aLuckPerms found!");
-            lp = new LP(this);
+            luckPerms = new LuckPermsHook(this);
         }
 
         if (pm.isPluginEnabled("SkinsRestorer")){
             console("&aSkinsRestorer found!");
-            sr = new SR(this);
+            sr = new SkinsRestorerHook(this);
         }
 
         if (pm.isPluginEnabled("Cloud")){
@@ -202,11 +202,11 @@ public final class SpigotMain extends JavaPlugin {
         return true;
     }
 
-    public boolean haveLP(){
-        return lp != null && getConfig().getBoolean("hooks.luckperms");
+    public boolean isLuckPermsEnabled() {
+        return luckPerms != null && getConfig().getBoolean("hooks.luckperms");
     }
 
-    public boolean haveSR(){
+    public boolean isSkinsRestorerEnabled() {
         return sr != null && getConfig().getBoolean("hooks.skinsrestorer");
     }
 
@@ -246,20 +246,18 @@ public final class SpigotMain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (redis == null){
-            return;
-        }
-        if (redis.isActive() && serverName != null){
-            redis.removeServer(serverName);
-        }
-        if (papi != null){
-            papi.unregister();
-        }
-        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData()!=null){
-            getClassManager().getDataManager().getData().close();
-        }
-        if (redis!=null && redis.isActive()){
+        // Redis connection + server registration
+        if (redis != null && redis.isActive()) {
+            if (serverName != null) redis.removeServer(serverName);
             redis.disconnect();
+        }
+        // PlaceholderAPI
+        if (papiExpansion != null) {
+            papiExpansion.unregister();
+        }
+        // DataManager
+        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData() != null){
+            getClassManager().getDataManager().getData().close();
         }
     }
 }

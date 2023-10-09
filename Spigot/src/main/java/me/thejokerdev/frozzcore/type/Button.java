@@ -1,6 +1,5 @@
 package me.thejokerdev.frozzcore.type;
 
-import com.cryptomorin.xseries.XMaterial;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
@@ -8,19 +7,17 @@ import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.enums.ItemRequirements;
 import me.thejokerdev.frozzcore.enums.ItemType;
 import me.thejokerdev.frozzcore.managers.ItemsManager;
-import me.thejokerdev.frozzcore.managers.MenusManager;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.swing.plaf.SplitPaneUI;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 public class Button {

@@ -4,10 +4,7 @@ import com.cryptomorin.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ItemType;
-import me.thejokerdev.frozzcore.type.Button;
-import me.thejokerdev.frozzcore.type.Lang;
-import me.thejokerdev.frozzcore.type.Menu;
-import me.thejokerdev.frozzcore.type.SimpleItem;
+import me.thejokerdev.frozzcore.type.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -114,6 +111,7 @@ public class LanguageMenu extends Menu {
         boolean clear = getConfig().getBoolean("settings.clear", false);
         List<Integer> notUsed = new ArrayList<>();
 
+        FUser fUser = plugin.getClassManager().getPlayerManager().getUser(getPlayer());
         for (Button b : buttons){
             if (!b.canView()){
                 continue;
@@ -122,17 +120,7 @@ public class LanguageMenu extends Menu {
             notUsed.addAll(b.getSlot());
         }
 
-        List<Lang> languages = new ArrayList<>(plugin.getClassManager().getLangManager().getLangs());
-
-        languages.sort((o1, o2) -> {
-            //Alphabetical order
-            int i = o1.getId().compareTo(o2.getId());
-            if (i == 0){
-                //If the same, order by last update
-                return o1.getLastUpdate().compareTo(o2.getLastUpdate());
-            }
-            return i;
-        });
+        List<Lang> languages = getSortedLanguages();
 
         int maxItems = 7;
         List<Integer> multiply = new ArrayList<>(Arrays.asList(36, 45, 54));
@@ -143,25 +131,25 @@ public class LanguageMenu extends Menu {
             }
         }
 
-        if (page > 0 && languages.size() < page*maxItems+1){
+        if (page > 0 && languages.size() < page * maxItems+1){
             page = 0;
             update();
             return;
         }
 
-        pages = (int) Math.ceil((double) languages.size() /maxItems);
+        pages = (int) Math.ceil((double) languages.size() / maxItems);
         if (page > 0){
             setItem(prevPage.getSlot(), previousPage());
             notUsed.add(45);
         }
-        if (languages.size() > (page+1)*maxItems){
+        if (languages.size() > (page + 1) * maxItems){
             setItem(nextPage.getSlot(), nextPage());
             notUsed.add(53);
         }
         if (languages.size() > maxItems){
             languages = languages.subList(page*maxItems, Math.min(page*maxItems+maxItems, languages.size()));
         }
-        if (languages.size() > 0){
+        if (!languages.isEmpty()){
             for (int i = 0; i < languages.size(); i++){
                 int slot = 10+i;
                 if (slot >= 17){
@@ -173,10 +161,10 @@ public class LanguageMenu extends Menu {
                 if (slot >= 35){
                     slot += 2;
                 }
-                Lang p = languages.get(i);
-                SimpleItem item = getLangItem(p);
+                Lang language = languages.get(i);
+                SimpleItem item = getLangItem(fUser, language);
                 ItemStack stack;
-                langObjectsMap.put((stack = item.build(getPlayer())), p);
+                langObjectsMap.put((stack = item.build(getPlayer())), language);
                 setItem(slot, stack);
                 notUsed.add(slot);
             }
@@ -190,6 +178,20 @@ public class LanguageMenu extends Menu {
                 setItem(i, new ItemStack(Material.AIR));
             }
         }
+    }
+
+    private List<Lang> getSortedLanguages() {
+        List<Lang> languages = new ArrayList<>(plugin.getClassManager().getLangManager().getLangs());
+        languages.sort((o1, o2) -> {
+            // Alphabetical order
+            int i = o1.getId().compareTo(o2.getId());
+            if (i == 0){
+                // If the same, order by last update
+                return o1.getLastUpdate().compareTo(o2.getLastUpdate());
+            }
+            return i;
+        });
+        return languages;
     }
 
     public int getNumber(ServerObject server){
@@ -208,14 +210,15 @@ public class LanguageMenu extends Menu {
         String title = getConfig().getString("settings.title");
         setTitle(PlaceholderAPI.setPlaceholders(getPlayer(), title));
         buttons.clear();
-        if (getConfig().get("extra-items")!=null){
+        FUser fUser = plugin.getClassManager().getPlayerManager().getUser(getPlayer());
+        if (getConfig().get("extra-items") != null){
             for (String key : getConfig().getSection("extra-items").getKeys(false)){
                 key = "extra-items."+key;
-                buttons.add(new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), key, ItemType.MENU, getMenuId()));
+                buttons.add(createButtonBySection(fUser, key));
             }
         }
-        prevPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.prevPage", ItemType.MENU, getMenuId());
-        nextPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.nextPage", ItemType.MENU, getMenuId());
+        prevPage = createButtonBySection(fUser, "items.prevPage");
+        nextPage = createButtonBySection(fUser, "items.nextPage");
     }
 
     private SimpleItem nextPage(){
@@ -235,18 +238,18 @@ public class LanguageMenu extends Menu {
     private final HashMap<ItemStack, Lang> langObjectsMap = new HashMap<>();
     private final HashMap<String, Button> langItemsMap = new HashMap<>();
 
-    public Button loadLangItem(String lang){
+    public Button loadLangItem(FUser fUser, String lang){
         if (getConfig().get("items."+lang)==null){
             return null;
         }
-        return new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items."+lang, ItemType.MENU, getMenuId());
+        return createButtonBySection(fUser, "items."+lang);
     }
 
-    private SimpleItem getLangItem(Lang lang){
+    private SimpleItem getLangItem(FUser fUser, Lang lang){
 
-        Button button = langItemsMap.computeIfAbsent(lang.getId(), this::loadLangItem);
+        Button button = langItemsMap.computeIfAbsent(lang.getId(), s -> loadLangItem(fUser, s));
         if (button == null){
-            button = loadLangItem("no-data");
+            button = loadLangItem(fUser, "no-data");
         }
 
         SimpleItem item = button.getItem().clone();
@@ -271,6 +274,10 @@ public class LanguageMenu extends Menu {
         }
 
         return in;
+    }
+
+    private Button createButtonBySection(FUser fUser, String sectionPath) {
+        return new Button(fUser, getConfig(), sectionPath, ItemType.MENU, getMenuId());
     }
 
     public String applyPlaceHolders(String in){

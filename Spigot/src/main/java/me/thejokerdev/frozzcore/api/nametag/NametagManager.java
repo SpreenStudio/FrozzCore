@@ -22,7 +22,7 @@ public class NametagManager {
         if (TEAMS.size() != 0){
             reset();
         }
-        if (plugin.haveLP()){
+        if (plugin.isLuckPermsEnabled()){
             return;
         }
         file = plugin.getClassManager().getUtils().getFile("nametags.yml");
