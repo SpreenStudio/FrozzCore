@@ -13,6 +13,7 @@ import me.thejokerdev.frozzcore.type.FUser;
 import me.thejokerdev.frozzcore.type.NickData;
 import org.bson.Document;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.Connection;
 import java.util.Date;

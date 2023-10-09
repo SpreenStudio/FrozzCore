@@ -103,6 +103,8 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             if (!sender.hasPermission(command.getPermission())){
                 continue;
             }
+            if (command.getHelp().equalsIgnoreCase("none")) continue;
+            plugin.debug("Command help of: "+command.getName());
             list.add(plugin.getClassManager().getUtils().getMSG(command.getHelp()));
         }
         if (list.size() == 0){
