@@ -31,7 +31,7 @@ public class SendPlayerCMD extends CMD {
 
     @Override
     public String getHelp() {
-        return "Send a player to another server";
+        return "none";
     }
 
     @Override
