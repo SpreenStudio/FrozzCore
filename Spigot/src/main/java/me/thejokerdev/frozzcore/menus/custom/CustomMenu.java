@@ -22,7 +22,7 @@ public class CustomMenu extends Menu {
         updateLang();
         update();
 
-        if (getConfig().get("settings.command")==null){
+        if (getConfig().get("settings.command") == null){
             return;
         }
 
@@ -30,7 +30,7 @@ public class CustomMenu extends Menu {
         cmd.register();
     }
     @Override
-    public void onOpen(InventoryOpenEvent var1) {
+    public void onOpen(InventoryOpenEvent event) {
         update();
         if (getConfig().get("settings.update")==null){
             return;
@@ -60,13 +60,13 @@ public class CustomMenu extends Menu {
     }
 
     @Override
-    public void onClick(InventoryClickEvent var1) {
+    public void onClick(InventoryClickEvent event) {
         for (Button b : buttons){
-            if ((b.getSlot().contains(-1) || b.getSlot().contains(var1.getSlot())) && plugin.getClassManager().getUtils().compareItems(var1.getCurrentItem(), b.getItem().build(getPlayer()))){
+            if ((b.getSlot().contains(-1) || b.getSlot().contains(event.getSlot())) && plugin.getClassManager().getUtils().compareItems(event.getCurrentItem(), b.getItem().build(getPlayer()))){
                 if (!b.canView()){
                     continue;
                 }
-                if (!b.executeItemInMenuActions(var1)){
+                if (!b.executeItemInMenuActions(event)){
                     return;
                 }
             }

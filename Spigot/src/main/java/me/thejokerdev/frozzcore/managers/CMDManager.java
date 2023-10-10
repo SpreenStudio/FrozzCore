@@ -53,7 +53,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             customCommands.put("gms", new GmsCMD(plugin));
             customCommands.put("gma", new GmaCMD(plugin));
             customCommands.put("gmsp", new GmspCMD(plugin));
-            if (plugin.isNickAPI()) {
+            if (plugin.isNickAPIEnabled()) {
                 customCommands.put("nick", new NickCMD(plugin));
             }
             //customCommands.put("coins", new CoinsCMD(plugin));
@@ -107,7 +107,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             plugin.debug("Command help of: "+command.getName());
             list.add(plugin.getClassManager().getUtils().getMSG(command.getHelp()));
         }
-        if (list.size() == 0){
+        if (list.isEmpty()){
             return;
         }
         help = help.replace("{commands}", String.join("\n", list));

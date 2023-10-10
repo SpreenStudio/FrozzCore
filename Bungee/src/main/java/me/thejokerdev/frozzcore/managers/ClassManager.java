@@ -11,7 +11,7 @@ public class ClassManager {
 
     private Utils utils;
 
-    //Classes
+    // Classes
     private Bot bot;
 
     public ClassManager(BungeeMain plugin) {

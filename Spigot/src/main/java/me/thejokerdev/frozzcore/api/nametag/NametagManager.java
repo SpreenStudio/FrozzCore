@@ -22,12 +22,12 @@ public class NametagManager {
         if (TEAMS.size() != 0){
             reset();
         }
-        if (plugin.haveLP()){
+        if (plugin.isLuckPermsEnabled()){
             return;
         }
         file = plugin.getClassManager().getUtils().getFile("nametags.yml");
         plugin.debug("NameTags load. Step #1");
-        if (file.getKeys(false).size() == 0){
+        if (file.getKeys(false).isEmpty()){
             TEAMS.put("default", new NameTag("default", "&7", "", 0));
             plugin.debug("NameTags load. Step NON keys");
             return;

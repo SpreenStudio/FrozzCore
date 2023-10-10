@@ -1,11 +1,11 @@
 package me.thejokerdev.frozzcore.menus;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ItemType;
 import me.thejokerdev.frozzcore.type.Button;
+import me.thejokerdev.frozzcore.type.FUser;
 import me.thejokerdev.frozzcore.type.Menu;
 import me.thejokerdev.frozzcore.type.SimpleItem;
 import org.bukkit.Material;
@@ -164,7 +164,7 @@ public class LobbyMenu extends Menu {
         if (servers.size() > maxItems){
             servers = servers.subList(page*maxItems, Math.min(page*maxItems+maxItems, servers.size()));
         }
-        if (servers.size() > 0){
+        if (!servers.isEmpty()){
             for (int i = 0; i < servers.size(); i++){
                 int slot = 10+i;
                 if (slot >= 17){
@@ -179,9 +179,6 @@ public class LobbyMenu extends Menu {
                 ServerObject p = servers.get(i);
                 SimpleItem item = getServerItem(p);
                 ItemStack stack;
-                if (item == null){
-                    continue;
-                }
                 serverObjectHashMap.put((stack = item.build(getPlayer())), p);
                 setItem(slot, stack);
                 notUsed.add(slot);
@@ -215,19 +212,21 @@ public class LobbyMenu extends Menu {
     @Override
     public void updateLang() {
         String title = getConfig().getString("settings.title");
+        FUser fUser = plugin.getClassManager().getPlayerManager().getUser(getPlayer());
         setTitle(PlaceholderAPI.setPlaceholders(getPlayer(), title));
         buttons.clear();
-        if (getConfig().get("extra-items")!=null){
+        if (getConfig().get("extra-items") != null){
             for (String key : getConfig().getSection("extra-items").getKeys(false)){
                 key = "extra-items."+key;
-                buttons.add(new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), key, ItemType.MENU, getMenuId()));
+                buttons.add(createButtonBySection(fUser, key));
             }
         }
-        prevPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.prevPage", ItemType.MENU, getMenuId());
-        nextPage = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.nextPage", ItemType.MENU, getMenuId());
-        noLobbies = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.noLobbies", ItemType.MENU, getMenuId());
-        actualLobby = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.actualLobby", ItemType.MENU, getMenuId());
-        lobbyToConnect = new Button(plugin.getClassManager().getPlayerManager().getUser(getPlayer()), getConfig(), "items.lobbyToConnect", ItemType.MENU, getMenuId());
+
+        prevPage = createButtonBySection(fUser, "items.prevPage");
+        nextPage = createButtonBySection(fUser, "items.nextPage");
+        noLobbies = createButtonBySection(fUser, "items.noLobbies");
+        actualLobby = createButtonBySection(fUser, "items.actualLobby");
+        lobbyToConnect = createButtonBySection(fUser, "items.lobbyToConnect");
     }
 
     private SimpleItem nextPage(){
@@ -274,7 +273,7 @@ public class LobbyMenu extends Menu {
                     try {
                         String[] split = server_number.split("-");
                         server_number = split[split.length - 1];
-                        int i = Integer.parseInt(server_number);
+                        //int i = Integer.parseInt(server_number);
                     } catch (NumberFormatException ignored) {
                     }
                 }
@@ -292,6 +291,10 @@ public class LobbyMenu extends Menu {
         }
 
         return in;
+    }
+
+    private Button createButtonBySection(FUser user, String sectionPath) {
+        return new Button(user, getConfig(), sectionPath, ItemType.MENU, getMenuId());
     }
 
     public String applyPlaceHolders(String in){

@@ -1,8 +1,6 @@
 package me.thejokerdev.frozzcore.api.hooks;
 
 import me.thejokerdev.frozzcore.SpigotMain;
-import me.thejokerdev.frozzcore.api.events.PlayerChangeLangEvent;
-import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.event.EventBus;
 import net.luckperms.api.event.group.GroupCreateEvent;
@@ -14,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LP {
+public class LuckPermsHook {
     private final SpigotMain plugin;
-    private final LuckPerms luckperms;
+    private final net.luckperms.api.LuckPerms luckperms;
 
-    public LP(SpigotMain plugin) {
+    public LuckPermsHook(SpigotMain plugin) {
         this.plugin = plugin;
         luckperms = LuckPermsProvider.get();
         EventBus bus = luckperms.getEventBus();
@@ -42,21 +40,21 @@ public class LP {
     }
 
     private void onGroupsLoad(GroupLoadEvent event){
-        if (!plugin.haveLP()){
+        if (!plugin.isLuckPermsEnabled()){
             return;
         }
         plugin.getClassManager().getNametagManager().addNameTag(event.getGroup().getName(), event.getGroup().getWeight().getAsInt());
     }
 
     private void onGroupCreate(GroupCreateEvent event){
-        if (!plugin.haveLP()){
+        if (!plugin.isLuckPermsEnabled()){
             return;
         }
         plugin.getClassManager().getNametagManager().addNameTag(event.getGroup().getName(), event.getGroup().getWeight().getAsInt());
     }
 
     private void onGroupDelete(GroupDeleteEvent event){
-        if (!plugin.haveLP()){
+        if (!plugin.isLuckPermsEnabled()){
             return;
         }
         plugin.getClassManager().getNametagManager().removeTag(event.getGroupName());
