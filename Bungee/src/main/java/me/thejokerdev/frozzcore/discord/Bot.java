@@ -5,13 +5,8 @@ import me.thejokerdev.frozzcore.BungeeMain;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
-import net.md_5.bungee.event.EventHandler;
 
 import javax.security.auth.login.LoginException;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public class Bot implements Listener {
+
     private final BungeeMain plugin;
     private JDA discord;
     private String token;
