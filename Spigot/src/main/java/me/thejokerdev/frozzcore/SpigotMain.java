@@ -61,7 +61,7 @@ public final class SpigotMain extends JavaPlugin {
         itemsCache = new ItemsCache(this);
 
         // If PlaceholderAPI not exists then: log &  disable this plugin
-        if (!hasPlaceholderAPI()){
+        if (!hasPlaceholderAPI()) {
             console("&4&lERROR: &cPlaceholderAPI doesn't found!");
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -69,7 +69,7 @@ public final class SpigotMain extends JavaPlugin {
         registerDependencies();
 
         // Register all online players
-        getServer().getOnlinePlayers().forEach(p-> getClassManager().getPlayerManager().registerUser(p.getName(), p.getUniqueId()));
+        getServer().getOnlinePlayers().forEach(p -> getClassManager().getPlayerManager().registerUser(p.getName(), p.getUniqueId()));
 
         classManager.getCmdManager().initCMDs();
 
@@ -90,7 +90,7 @@ public final class SpigotMain extends JavaPlugin {
                         cancel();
                         return;
                     }
-                    if (redis.isActive()){
+                    if (redis.isActive()) {
                         init();
                         classManager.initAfterStart();
                         Bukkit.getPluginManager().callEvent(new RedisInitEvent(plugin, redis));
@@ -106,7 +106,7 @@ public final class SpigotMain extends JavaPlugin {
                 public void run() {
                     loaded = true;
                 }
-            }.runTaskLater(this, 20L*5);
+            }.runTaskLater(this, 20L * 5);
         } else {
             // REDIS: DISABLED >>
             try {
@@ -136,45 +136,45 @@ public final class SpigotMain extends JavaPlugin {
 
     public void init() {
         File file = new File(getDataFolder(), "server.yml");
-        if (!file.exists()){
+        if (!file.exists()) {
             saveResource("server.yml", false);
         }
         FileUtils fileUtils = new FileUtils(file);
         boolean enabled = fileUtils.getBoolean("enabled", false);
-        if (!enabled){
+        if (!enabled) {
             console("{prefix}&cServer not enabled in server.yml to add with Redis.");
             return;
         }
         String serverName = fileUtils.getString("server-name");
         String serverIp = fileUtils.getString("server-ip", getServer().getIp());
         serverIp = serverIp.replace("{server-ip}", getServer().getIp());
-        String serverPort = fileUtils.getString("server-port", getServer().getPort()+"");
-        serverPort = serverPort.replace("{server-port}", getServer().getPort()+"");
+        String serverPort = fileUtils.getString("server-port", getServer().getPort() + "");
+        serverPort = serverPort.replace("{server-port}", getServer().getPort() + "");
         String id = fileUtils.getString("id");
-        if (serverName==null){
+        if (serverName == null) {
             console("{prefix}Server name not found in server.yml");
             return;
         }
         this.serverName = serverName;
-        if (id==null){
+        if (id == null) {
             console("{prefix}Server id not found in server.yml");
             return;
         }
         this.serverId = id;
         redis.addServer(serverName, serverIp, serverPort);
-        String info = "&fServer name: &b"+serverName+" &7| &fServer IP: &e"+serverIp+" &7| &fServer Port: &e"+serverPort;
-        console("{prefix}&7Server connected to proxy and load server: "+info+"&7.");
+        String info = "&fServer name: &b" + serverName + " &7| &fServer IP: &e" + serverIp + " &7| &fServer Port: &e" + serverPort;
+        console("{prefix}&7Server connected to proxy and load server: " + info + "&7.");
     }
 
     private void loadSpawnIfSet() {
-        if (getConfig().get("lobby.spawn") != null){
+        if (getConfig().get("lobby.spawn") != null) {
             spawn = LocationUtil.getLocation(getConfig().getString("lobby.spawn"));
         }
     }
 
     private PapiExpansion papiExpansion;
 
-    public void registerDependencies(){
+    public void registerDependencies() {
         checkDependencyPlugin("PlaceholderAPI", () -> {
             console("&aPlaceholderAPI found!");
             papiExpansion = new PapiExpansion(this);
@@ -196,7 +196,6 @@ public final class SpigotMain extends JavaPlugin {
             console("&aSkinsRestorer found!");
             skinsRestorer = new SkinsRestorerHook(this);
         });
-
 
         checkDependencyPlugin("Cloud", () -> {
             console("&aCloud found!");
@@ -222,52 +221,42 @@ public final class SpigotMain extends JavaPlugin {
         return skinsRestorer != null && getConfig().getBoolean("hooks.skinsrestorer");
     }
 
-    public String getPrefix(){
+    public String getPrefix() {
         return Utils.ct(getConfig().getString("settings.prefix"));
     }
 
-    public void console(String... in){
+    public void console(String... in) {
         getClassManager().getUtils().sendMessage(in);
     }
 
-    public void debug(String in){
-        if (!getConfig().getBoolean("settings.debug")){
+    public void debug(String in) {
+        if (!getConfig().getBoolean("settings.debug")) {
             return;
         }
-        if (classManager == null || classManager.getUtils() == null){
+        if (classManager == null || classManager.getUtils() == null) {
             Bukkit.getConsoleSender().sendMessage(Utils.ct(getPrefix() + "&e&lDEBUG: &7" + in));
             return;
         }
-        getClassManager().getUtils().sendMessage("{prefix}&e&lDEBUG: &7"+in);
+        getClassManager().getUtils().sendMessage("{prefix}&e&lDEBUG: &7" + in);
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
         if (loaded) {
-            plugin.getClassManager().getUtils().startTab(true);
-            if (plugin.getConfig().getBoolean("modules.nametags")){
-                plugin.getClassManager().getNametagManager().init();
+            getClassManager().getUtils().startTab(true);
+            if (getConfig().getBoolean("modules.nametags")) {
+                getClassManager().getNametagManager().init();
             }
-            for (FUser user : plugin.getClassManager().getPlayerManager().getUsers().values()){
+            for (FUser user : getClassManager().getPlayerManager().getUsers().values()) {
                 user.getItemsManager().reloadItems();
-                plugin.getClassManager().getMenusManager().loadMenus(user.getPlayer());
+                getClassManager().getMenusManager().loadMenus(user.getPlayer());
             }
         }
     }
 
     @Override
     public void onDisable() {
-<<<<<<< HEAD
-        if (redis != null && redis.isActive()){
-            if (serverName != null) redis.removeServer(serverName);
-            redis.disconnect();
-        }
-        if (papi != null){
-            papi.unregister();
-        }
-        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData()!=null){
-=======
         // Redis connection + server registration
         if (redis != null && redis.isActive()) {
             if (serverName != null) redis.removeServer(serverName);
@@ -278,8 +267,7 @@ public final class SpigotMain extends JavaPlugin {
             papiExpansion.unregister();
         }
         // DataManager
-        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData() != null){
->>>>>>> 5ee417ba3f4dd8bddcda9ad6f51d2ce2c5187ba0
+        if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData() != null) {
             getClassManager().getDataManager().getData().close();
         }
     }
