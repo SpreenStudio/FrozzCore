@@ -68,20 +68,18 @@ public final class SpigotMain extends JavaPlugin {
 
         registerDependencies();
 
-        getServer().getOnlinePlayers().forEach(p-> getClassManager().getPlayerManager().getUser(p));
+        // Register all online players
+        getServer().getOnlinePlayers().forEach(p-> getClassManager().getPlayerManager().registerUser(p.getName(), p.getUniqueId()));
 
         classManager.getCmdManager().initCMDs();
 
-        if (getConfig().get("lobby.spawn") != null){
-            spawn = LocationUtil.getLocation(getConfig().getString("lobby.spawn"));
-        }
+        loadSpawnIfSet();
 
         plugin.getClassManager().getUtils().startTab(false);
         pluginMessageManager = new PluginMessageManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         boolean redisEnabled = getConfig().getBoolean("redis.enabled", false);
-
         if (redisEnabled) {
             redis = new Redis(this);
             redis.connect();
@@ -95,8 +93,7 @@ public final class SpigotMain extends JavaPlugin {
                     if (redis.isActive()){
                         init();
                         classManager.initAfterStart();
-                        RedisInitEvent event = new RedisInitEvent(plugin, redis);
-                        Bukkit.getPluginManager().callEvent(event);
+                        Bukkit.getPluginManager().callEvent(new RedisInitEvent(plugin, redis));
                     } else {
                         getServer().getScheduler().runTaskLater(SpigotMain.this, this, 20);
                         tries++;
@@ -111,6 +108,7 @@ public final class SpigotMain extends JavaPlugin {
                 }
             }.runTaskLater(this, 20L*5);
         } else {
+            // REDIS: DISABLED >>
             try {
                 serverName = getServer().getServerName();
                 if (serverManager != null) {
@@ -166,6 +164,12 @@ public final class SpigotMain extends JavaPlugin {
         redis.addServer(serverName, serverIp, serverPort);
         String info = "&fServer name: &b"+serverName+" &7| &fServer IP: &e"+serverIp+" &7| &fServer Port: &e"+serverPort;
         console("{prefix}&7Server connected to proxy and load server: "+info+"&7.");
+    }
+
+    private void loadSpawnIfSet() {
+        if (getConfig().get("lobby.spawn") != null){
+            spawn = LocationUtil.getLocation(getConfig().getString("lobby.spawn"));
+        }
     }
 
     private PapiExpansion papiExpansion;
