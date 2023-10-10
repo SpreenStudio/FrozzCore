@@ -43,7 +43,7 @@ public class ScoreBoard implements Listener {
         }
         task = (new BukkitRunnable() {
             public void run() {
-                if (plugin.getClassManager().getPlayerManager().getUsers().size() == 0){
+                if (plugin.getClassManager().getPlayerManager().getUsers().isEmpty()){
                     return;
                 }
                 for (FUser var3 : plugin.getClassManager().getPlayerManager().getUsers().values()) {

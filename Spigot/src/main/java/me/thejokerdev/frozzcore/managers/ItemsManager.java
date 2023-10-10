@@ -75,7 +75,7 @@ public class ItemsManager {
 
         file = plugin.getClassManager().getUtils().getFile("items.yml");
 
-        if (file.getKeys(false).size() == 0){
+        if (file.getKeys(false).isEmpty()){
             return;
         }
 

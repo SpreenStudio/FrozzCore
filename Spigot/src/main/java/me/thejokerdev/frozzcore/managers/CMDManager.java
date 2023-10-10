@@ -107,7 +107,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             plugin.debug("Command help of: "+command.getName());
             list.add(plugin.getClassManager().getUtils().getMSG(command.getHelp()));
         }
-        if (list.size() == 0){
+        if (list.isEmpty()){
             return;
         }
         help = help.replace("{commands}", String.join("\n", list));
