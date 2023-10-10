@@ -2,14 +2,13 @@ package me.thejokerdev.frozzcore.api.hooks;
 
 import me.thejokerdev.frozzcore.SpigotMain;
 import net.skinsrestorer.api.SkinsRestorerAPI;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class SR {
+public class SkinsRestorerHook {
     private final SpigotMain plugin;
 
-    public SR(SpigotMain plugin) {
+    public SkinsRestorerHook(SpigotMain plugin) {
         this.plugin = plugin;
     }
 

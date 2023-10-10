@@ -11,8 +11,8 @@ public class Animation {
     public Animation() {
     }
 
-    public static String wave(String var0, Color... var1) {
-        return wave(var0, true, 5, 10, var1);
+    public static String wave(String var0, Color... colors) {
+        return wave(var0, true, 5, 10, colors);
     }
 
     public static String wave(String var0, boolean var1, int var2, int var3, Color... var4) {

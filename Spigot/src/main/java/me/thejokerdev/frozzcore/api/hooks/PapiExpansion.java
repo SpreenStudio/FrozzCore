@@ -14,10 +14,10 @@ import studio.spreen.cloud.api.objects.ServerObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PAPI extends PlaceholderExpansion {
+public class PapiExpansion extends PlaceholderExpansion {
     private final SpigotMain plugin;
 
-    public PAPI(SpigotMain plugin) {
+    public PapiExpansion(SpigotMain plugin) {
         this.plugin = plugin;
     }
 

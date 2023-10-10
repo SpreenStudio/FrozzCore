@@ -61,8 +61,8 @@ public class NametagHandler implements Listener {
             plugin.debug("Tag Default is NULL");
         }
 
-        if (plugin.haveLP()){
-            return plugin.getClassManager().getNametagManager().getTag(plugin.getLp().getGroup(p));
+        if (plugin.isLuckPermsEnabled()){
+            return plugin.getClassManager().getNametagManager().getTag(plugin.getLuckPerms().getGroup(p));
         } else {
             for (NameTag var1 : tags) {
                 if (p.hasPermission(var1.getPerm())){

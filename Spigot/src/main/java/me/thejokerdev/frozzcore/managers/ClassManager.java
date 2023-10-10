@@ -48,19 +48,19 @@ public class ClassManager {
         menusManager = new MenusManager(plugin);
 
         /* Languages */
-        if (plugin.getConfig().getBoolean("modules.languages")) {
+        if (isModuleEnabled("languages")) {
             langDownloader = new LangDownloader(plugin);
             langManager = new LangManager(plugin);
         }
         /* Lobby */
-        if (plugin.getConfig().getBoolean("modules.lobby")) {
-            listener(new LobbyListener(plugin));
+        if (isModuleEnabled("lobby")) {
+            regListener(new LobbyListener(plugin));
         }
-        if (plugin.getConfig().getBoolean("modules.chat")) {
-            listener(new ChatListener(plugin));
+        if (isModuleEnabled("chat")) {
+            regListener(new ChatListener(plugin));
         }
 
-        if (plugin.getConfig().getBoolean("modules.nametags")) {
+        if (isModuleEnabled("nametags")) {
             nametagManager = new NametagManager(plugin);
             nametagHandler = new NametagHandler(plugin);
         }
@@ -70,7 +70,7 @@ public class ClassManager {
         scoreBoard = new ScoreBoard(plugin);
         loginListener = new LoginListener(plugin);
 
-        listener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin), new PluginListener(plugin));
+        regListener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin), new PluginListener(plugin));
     }
 
     public void init() {
@@ -80,17 +80,17 @@ public class ClassManager {
         if (nametagManager != null){
             nametagManager.init();
         }
-        if (plugin.getConfig().getBoolean("modules.scoreboard")){
+        if (isModuleEnabled("scoreboard")){
             scoreBoard.loadAll();
         }
     }
 
     public void initAfterStart(){
         if (plugin.getRedis() != null) {
-            if (plugin.getConfig().getBoolean("modules.linked-chat")) {
+            if (isModuleEnabled("linked-chat")) {
                 linkedChatManager = new LinkedChatManager(plugin);
             } else {
-                plugin.getLogger().severe("disabled linkedchat");
+                plugin.getLogger().severe("disabled linked-chat");
             }
             if (linkedChatManager != null) {
                 linkedChatManager.init();
@@ -98,7 +98,11 @@ public class ClassManager {
         }
     }
 
-    public void listener(Listener... listener) {
+    private boolean isModuleEnabled(String name) {
+        return plugin.getConfig().getBoolean("modules." + name);
+    }
+
+    public void regListener(Listener... listener) {
         Arrays.stream(listener).forEach(listener1 -> Bukkit.getServer().getPluginManager().registerEvents(listener1, plugin));
     }
 }
