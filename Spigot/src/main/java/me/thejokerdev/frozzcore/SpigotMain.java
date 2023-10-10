@@ -246,20 +246,15 @@ public final class SpigotMain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (redis == null){
-            return;
-        }
-        if (redis.isActive() && serverName != null){
-            redis.removeServer(serverName);
+        if (redis != null && redis.isActive()){
+            if (serverName != null) redis.removeServer(serverName);
+            redis.disconnect();
         }
         if (papi != null){
             papi.unregister();
         }
         if (getClassManager().getDataManager() != null && getClassManager().getDataManager().getData()!=null){
             getClassManager().getDataManager().getData().close();
-        }
-        if (redis!=null && redis.isActive()){
-            redis.disconnect();
         }
     }
 }
