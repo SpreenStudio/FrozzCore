@@ -8,9 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="FrozzCore-Bungee" />
         <module name="FrozzCore-Spigot" />
+        <module name="FrozzCore-API" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="API" target="1.8" />
       <module name="Bungee" target="1.8" />
       <module name="FrozzCore" target="1.5" />
       <module name="Spigot" target="1.8" />
