@@ -20,15 +20,9 @@ public class EasterEggManager {
     private MongoCollection<Document> collection;
     private Map<String, List<String>> easter_eggs = new HashMap<>();
     private final String server;
-    private final SpigotMain plugin;
 
     public EasterEggManager(SpigotMain plugin) {
-        this.plugin = plugin;
         this.server = CloudAPI.getBukkitAPI().getThisServer().getGroup().getName();
-
-        if(plugin.getClassManager() == null){
-            plugin.getLogger().warning("getClassManager ES NULLLLLLLLL");
-        }
 
         Data data = plugin.getClassManager().getDataManager().getData();
 

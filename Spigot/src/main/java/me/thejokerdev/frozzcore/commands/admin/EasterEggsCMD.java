@@ -72,7 +72,7 @@ public class EasterEggsCMD extends CMD {
             case "clear":{
                 if(args.length != 2){
                     //getPlugin().getUtils().sendMessage(sender, getHelp());
-                    sender.sendMessage("argumentos insuficientes");
+                    sender.sendMessage("argumentos insuficientes!");
                     return true;
                 }
 
@@ -80,7 +80,7 @@ public class EasterEggsCMD extends CMD {
                 PlayerObject player = CloudAPI.getUniversalAPI().getPlayer(playerName);
 
                 if(player == null || !player.isOnline()){
-                    p.sendMessage("El jugador "+playerName+" se encuentra desconectado!");
+                    p.sendMessage("El jugador "+playerName+" se encuentra desconectado!.");
                     return true;
                 }
 
