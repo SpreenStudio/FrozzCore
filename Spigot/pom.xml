@@ -83,12 +83,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
@@ -122,7 +116,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.11</version>
+            <version>3.12.13</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -183,7 +177,7 @@
             <artifactId>statsspigot</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/StatsSpigot.jar</systemPath>
+            <systemPath>${project.basedir}/libs/StatsSpigot2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

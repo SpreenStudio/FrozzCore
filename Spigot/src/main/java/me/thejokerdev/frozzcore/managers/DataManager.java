@@ -40,4 +40,8 @@ public class DataManager {
         data.setup();
     }
 
+    public Data getData(){
+        return data;
+    }
+
 }

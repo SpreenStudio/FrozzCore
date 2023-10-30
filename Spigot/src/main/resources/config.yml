@@ -8,6 +8,7 @@ modules:
   nametags: true
   linked-chat: true
   commands: true
+  eastereggs: true
   whitelist:
     enabled: false
     worlds:

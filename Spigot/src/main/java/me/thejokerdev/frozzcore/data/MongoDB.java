@@ -186,4 +186,8 @@ public class MongoDB extends Data {
 
         plugin.debug("{prefix}&7Connected to database.");
     }
+
+    public MongoDatabase getDatabase(){
+        return db;
+    }
 }
