@@ -16,14 +16,15 @@ public final class BungeeMain extends Plugin {
     @Getter
     private static BungeeMain plugin;
     private FileUtils config = null;
-    private ClassManager cm;
+    @Getter
+    private ClassManager classManager;
     @Override
     public void onEnable() {
         plugin = this;
         saveDefaultConfig();
-        cm = new ClassManager(this);
+        classManager = new ClassManager(this);
 
-        cm.setup();
+        classManager.setup();
     }
 
     void saveDefaultConfig(){
@@ -57,15 +58,11 @@ public final class BungeeMain extends Plugin {
 
     public String getPrefix(){
         String prefix = "&b&lFrozzMC &8&l» &7";
-        return config!=null ? config.get("settings.prefix")!=null ? cm.getUtils().ct(config.getString("settings.prefix")) : prefix : prefix;
-    }
-
-    public ClassManager getClassManager() {
-        return cm;
+        return config!=null ? config.get("settings.prefix")!=null ? classManager.getUtils().ct(config.getString("settings.prefix")) : prefix : prefix;
     }
 
     @Override
     public void onDisable() {
-        cm.getBot().stop();
+        classManager.getBot().stop();
     }
 }

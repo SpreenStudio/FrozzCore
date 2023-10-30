@@ -3,6 +3,7 @@ package me.thejokerdev.frozzcore.api.nametag;
 import me.thejokerdev.frozzcore.api.data.NameTag;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public interface INametagApi {
 
     NameTag getNametag(Player var1);

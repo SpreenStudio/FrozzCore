@@ -81,8 +81,8 @@ public class SkullUtils {
             }
         }
         ItemStack head = new ItemStack(XMaterial.PLAYER_HEAD.parseMaterial(), 1, (short)3);
-        if (skinURL == null && SpigotMain.getPlugin().haveSR()){
-            skinURL = SpigotMain.getPlugin().getSr().getSkin(player.getUniqueId());
+        if (skinURL == null && SpigotMain.getPlugin().isSkinsRestorerEnabled()){
+            skinURL = SpigotMain.getPlugin().getSkinsRestorer().getSkin(player.getUniqueId());
         }
         if (skinURL == null){
             return head;
