@@ -86,7 +86,7 @@ public class ClassManager {
         }
         if(plugin.getConfig().getBoolean("modules.eastereggs")){
             easterEggManager = new EasterEggManager(plugin);
-            listener(new EasterEggListener(plugin));
+            regListener(new EasterEggListener(plugin));
         }
     }
 
