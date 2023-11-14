@@ -1,15 +1,21 @@
 package me.thejokerdev.frozzcore.api;
 
-import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.FileUtils;
 import me.thejokerdev.frozzcore.type.FUser;
+import me.thejokerdev.frozzcore.type.Lang;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
 public class FrozzCoreAPI {
-    @Getter
     private static final SpigotMain plugin = SpigotMain.getPlugin();
+
+    public static SpigotMain getPlugin() {
+        return plugin;
+    }
 
     public static String getPrefix() {
         return plugin.getPrefix();
@@ -30,5 +36,36 @@ public class FrozzCoreAPI {
             return plugin.getUtils().formatMSG(p, msg);
         }
         return plugin.getUtils().formatMSG(p, file.getString(key));
+    }
+
+    public void broadcast(Collection<Player> players, String section, String key) {
+        List<Lang> files = plugin.getClassManager().getLangManager().getSection(section);
+        HashMap<String, String> map = new HashMap<>();
+        for (Lang file : files) {
+            String msg = file.getFile().getString(key);
+            if (msg==null) {
+                msg = plugin.getClassManager().getUtils().getMSG("keyNotFound").replace("{key}", key);
+            }
+            map.put(file.getId(), msg);
+        }
+
+        for (Player p : players) {
+            FUser user = getUser(p);
+            String msg = map.get(user.getLang());
+            if (msg==null) {
+                continue;
+            }
+            plugin.getUtils().sendMessage(p, msg);
+        }
+    }
+
+    public void sendMSG(Player player, String section, String key, Object... objects){
+        FUser user = getUser(player);
+        user.sendMSGWithObjets(getTranslation(user.getPlayer(), section, key), objects);
+    }
+
+    public void sendMSG(Player player, String section, String key){
+        FUser user = getUser(player);
+        plugin.getUtils().sendMessage(player, getTranslation(user.getPlayer(), section, key));
     }
 }

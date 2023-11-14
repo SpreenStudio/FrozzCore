@@ -1,0 +1,2 @@
+general:
+  testMessage: '{prefix}&7Hi! This is a test message from you %s!'

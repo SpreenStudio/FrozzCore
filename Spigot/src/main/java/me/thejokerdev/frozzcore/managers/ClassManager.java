@@ -28,6 +28,7 @@ public class ClassManager {
     private NametagManager nametagManager;
     private NametagHandler nametagHandler;
     private LinkedChatManager linkedChatManager;
+    private EasterEggManager easterEggManager;
 
     private LoginListener loginListener;
     private ScoreBoard scoreBoard;
@@ -82,6 +83,10 @@ public class ClassManager {
         }
         if (isModuleEnabled("scoreboard")){
             scoreBoard.loadAll();
+        }
+        if(plugin.getConfig().getBoolean("modules.eastereggs")){
+            easterEggManager = new EasterEggManager(plugin);
+            listener(new EasterEggListener(plugin));
         }
     }
 

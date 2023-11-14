@@ -44,6 +44,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
         commands.add(new JumppadsCMD(plugin));
         commands.add(new SendPlayerCMD(plugin));
         commands.add(new MoneyCMD(plugin));
+        commands.add(new EasterEggsCMD(plugin));
 
         if (plugin.getConfig().getBoolean("modules.commands")) {
 
