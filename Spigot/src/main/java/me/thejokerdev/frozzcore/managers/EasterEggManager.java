@@ -11,6 +11,7 @@ import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import studio.spreen.cloud.api.CloudAPI;
 
@@ -36,6 +37,22 @@ public class EasterEggManager {
         for(Chunk chunk : Bukkit.getWorlds().get(0).getLoadedChunks()){
             onLoadChunk(chunk);
         }
+
+        registerEasterEggsConfig();
+    }
+
+    private void registerEasterEggsConfig() {
+        FileConfiguration config = SpigotMain.getPlugin().getConfig();
+        List<String> list = Arrays.asList("ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
+        if (!config.contains("eastereggs.textures")) {
+            config.set("eastereggs.textures", list);
+            SpigotMain.getPlugin().saveDefaultConfig();
+        }
+    }
+
+    public static String getRandomEasterEggTexture() {
+        List<String> list = SpigotMain.getPlugin().getConfig().getStringList("eastereggs.textures");
+        return list.get(new Random().nextInt(list.size() - 1));
     }
 
     public void addEasterEgg(Location location) {
@@ -54,7 +71,7 @@ public class EasterEggManager {
 
         eggsList.add(loc);
         easter_eggs.put(server, eggsList);
-        placePlayerHeadWithTextureValue(location, "ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
+        placePlayerHeadWithTextureValue(location);
     }
 
     public boolean checkEasterEgg(Location location) {
@@ -65,7 +82,7 @@ public class EasterEggManager {
 
     public void addEaster(Player player, Location location) {
         if (!checkEasterEgg(location)) {
-            player.sendMessage("no es el huevo");
+            sendMessage(player, "not_egg");
             return;
         }
 
@@ -74,7 +91,7 @@ public class EasterEggManager {
         List<String> playerEggs = getPlayerEggsList(document);
 
         if (playerEggs.contains(loc)) {
-            player.sendMessage("Ya tienes este EasterEgg");
+            sendMessage(player, "already_found");
             return;
         }
 
@@ -86,7 +103,9 @@ public class EasterEggManager {
             Document newDocument = createPlayerEasterEggDocument(player.getUniqueId().toString(), playerEggs);
             insertPlayerEasterEggDocument(newDocument);
         }
-        player.sendMessage("encontraste el easteregg "+getEasterEggsFoundByPlayer(player.getUniqueId())+" - "+getTotalEasterEggsInAllServers());
+        sendMessage(player, "new_found",
+                String.valueOf(getEasterEggsFoundByPlayer(player.getUniqueId())),
+                String.valueOf(getTotalEasterEggsInAllServers()));
     }
 
     public void removeEasterEgg(Location location) {
@@ -220,7 +239,7 @@ public class EasterEggManager {
         return blockX >> 4 == chunkX && blockZ >> 4 == chunkZ;
     }
 
-    public void placePlayerHeadWithTextureValue(Location location, String texture) {
+    public void placePlayerHeadWithTextureValue(Location location) {
         Block block = location.getBlock();
         if (block.getType() != Material.SKULL)
             block.setType(Material.SKULL);
@@ -228,6 +247,12 @@ public class EasterEggManager {
         Skull skull = (Skull)block.getState();
         skull.setSkullType(SkullType.PLAYER);
 
-        skull.setSkullTexture(texture);
+        skull.setSkullTexture(getRandomEasterEggTexture());
     }
+
+    private static void sendMessage(Player player, String path, Object... args) {
+        String fullPath = "general@eastereggs." + path;
+        SpigotMain.getPlugin().getUtils().sendMessage(player, fullPath, true , args);
+    }
+
 }
