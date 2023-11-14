@@ -82,7 +82,7 @@ public class EasterEggManager {
 
     public void addEaster(Player player, Location location) {
         if (!checkEasterEgg(location)) {
-            sendMessage(player, "not-egg");
+            sendMessage(player, "not_egg");
             return;
         }
 
@@ -91,7 +91,7 @@ public class EasterEggManager {
         List<String> playerEggs = getPlayerEggsList(document);
 
         if (playerEggs.contains(loc)) {
-            sendMessage(player, "already-found");
+            sendMessage(player, "already_found");
             return;
         }
 
@@ -103,7 +103,7 @@ public class EasterEggManager {
             Document newDocument = createPlayerEasterEggDocument(player.getUniqueId().toString(), playerEggs);
             insertPlayerEasterEggDocument(newDocument);
         }
-        sendMessage(player, "new-found",
+        sendMessage(player, "new_found",
                 String.valueOf(getEasterEggsFoundByPlayer(player.getUniqueId())),
                 String.valueOf(getTotalEasterEggsInAllServers()));
     }
