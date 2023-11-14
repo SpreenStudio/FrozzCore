@@ -65,7 +65,7 @@ public class EasterEggManager {
 
     public void addEaster(Player player, Location location) {
         if (!checkEasterEgg(location)) {
-            player.sendMessage("no es el huevo");
+            sendMessage(player, "not-egg");
             return;
         }
 
@@ -74,7 +74,7 @@ public class EasterEggManager {
         List<String> playerEggs = getPlayerEggsList(document);
 
         if (playerEggs.contains(loc)) {
-            player.sendMessage("Ya tienes este EasterEgg");
+            sendMessage(player, "already-found");
             return;
         }
 
@@ -86,7 +86,9 @@ public class EasterEggManager {
             Document newDocument = createPlayerEasterEggDocument(player.getUniqueId().toString(), playerEggs);
             insertPlayerEasterEggDocument(newDocument);
         }
-        player.sendMessage("encontraste el easteregg "+getEasterEggsFoundByPlayer(player.getUniqueId())+" - "+getTotalEasterEggsInAllServers());
+        sendMessage(player, "new-found",
+                String.valueOf(getEasterEggsFoundByPlayer(player.getUniqueId())),
+                String.valueOf(getTotalEasterEggsInAllServers()));
     }
 
     public void removeEasterEgg(Location location) {
@@ -230,4 +232,10 @@ public class EasterEggManager {
 
         skull.setSkullTexture(texture);
     }
+
+    private static void sendMessage(Player player, String path, Object... args) {
+        String fullPath = "general@eastereggs." + path;
+        SpigotMain.getPlugin().getUtils().sendMessage(player, fullPath, true , args);
+    }
+
 }

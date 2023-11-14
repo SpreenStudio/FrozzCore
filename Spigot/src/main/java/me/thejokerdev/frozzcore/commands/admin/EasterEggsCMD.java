@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class EasterEggsCMD extends CMD {
+
     public EasterEggsCMD(SpigotMain plugin) {
         super(plugin);
     }
