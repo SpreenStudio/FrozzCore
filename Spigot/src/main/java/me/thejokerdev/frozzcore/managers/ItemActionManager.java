@@ -15,7 +15,7 @@ public class ItemActionManager {
         register("close", new Close());
         register("server", new Server());
         register("balancer", new Balancer());
-        register("command", new Command());
+        register("cmd", new Command());
         register("cmd=OP", new CommandOp());
         register("cmd=Console", new CommandConsole());
         register("msg", new Message());
