@@ -9,6 +9,7 @@ import me.thejokerdev.frozzcore.api.misc.DefaultFontInfo;
 import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.Modules;
 import me.thejokerdev.frozzcore.enums.VisibilityType;
+import me.thejokerdev.frozzcore.managers.ItemActionManager;
 import me.thejokerdev.frozzcore.type.FUser;
 import me.thejokerdev.frozzcore.type.Menu;
 import net.md_5.bungee.api.ChatColor;
@@ -290,116 +291,8 @@ public class Utils {
     public boolean actions(Player p, List<String> list){
         for (String s : list){
             s = PlaceholderAPI.setPlaceholders(p, s);
-            if (s.startsWith("[close]")){
-                p.closeInventory();
-                continue;
-            }
-            if (s.startsWith("[sound]")){
-                playAudio(p, s.replace("[sound]", ""));
-                continue;
-            }
-            if (s.startsWith("[server]")){
-                sendPlayer(p, s.replace("[server]", ""));
-                continue;
-            }
-            if (s.startsWith("[balancer]")){
-                plugin.getPluginMessageManager().connectPlayer(p, s.replace("[balancer]", ""));
-                continue;
-            }
-            if (s.startsWith("[cmd]")){
-                s = s.replace("[cmd]", "");
-                p.chat("/"+s);
-            }
-            if (s.startsWith("[cmd=OP]")){
-                s = s.replace("[cmd=OP]", "");
-                Bukkit.dispatchCommand(p, s);
-            }
-            if (s.startsWith("[cmd=Console]")){
-                s = s.replace("[cmd=Console]", "");
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
-            }
-            if (s.startsWith("[msg]")){
-                s = s.replace("[msg]", "");
-                s = formatMSG(p, s);
-                p.sendMessage(s);
-            }
-            if (s.startsWith("[open]")){
-                s = s.replace("[open]", "");
-                for (Menu menu : plugin.getClassManager().getMenusManager().getPlayerMenus(p).values()){
-                    plugin.debug(menu.getMenuId()+" is loaded for "+p.getName());
-                }
-                Menu menu = plugin.getClassManager().getMenusManager().getPlayerMenu(p, s);
-                if (menu == null){
-                    plugin.getClassManager().getMenusManager().loadMenus(p);
-                    sendMessage(p, "menus.not-exist");
-                    return true;
-                }
-                p.openInventory(menu.getInventory());
-            }
-            if (s.startsWith("[title]")){
-                s = s.replace("[title]", "");
-                String[] split = s.split("`");
-                if (split.length <= 2){
-                    Titles.sendTitle(p, formatMSG(p, split[0]), formatMSG(p, split[1]));
-                }
-                if (split.length == 5){
-                    Titles.sendTitle(p, Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), formatMSG(p, split[0]), formatMSG(p, split[1]));
-                }
-            }
-            FUser user = plugin.getClassManager().getPlayerManager().getUser(p);
-            if (s.startsWith("[action]")){
-                s = s.replace("[action]", "");
-                if (s.equalsIgnoreCase("visibility")){
-                    changeVisibility(p);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("return")){
-                    return false;
-                }
-                if (s.equalsIgnoreCase("jump")){
-                    user.setJump(user.getJump() == ModifierStatus.OFF ? ModifierStatus.ON : ModifierStatus.OFF);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("disableJump")){
-                    user.setJump(ModifierStatus.DEACTIVATED);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("doublejump")){
-                    user.setDoubleJump(user.getDoubleJump() == ModifierStatus.OFF ? ModifierStatus.ON : ModifierStatus.OFF);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("disableDoubleJump")){
-                    user.setDoubleJump(ModifierStatus.DEACTIVATED);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("fly")){
-                    user.setAllowFlight(user.getAllowFlight() == ModifierStatus.OFF ? ModifierStatus.ON : ModifierStatus.OFF);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("disableFly")){
-                    user.setAllowFlight(ModifierStatus.DEACTIVATED);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("disableSpeed")){
-                    user.setSpeed(ModifierStatus.DEACTIVATED);
-                    user.saveData(false);
-                }
-                if (s.equalsIgnoreCase("enderbutt")){
-                    if (p.getVehicle() != null && p.getVehicle() instanceof EnderPearl){
-                        EnderPearl pearl = (EnderPearl) p.getVehicle();
-                        pearl.remove();
-                    }
-                    EnderPearl pearl = p.launchProjectile(EnderPearl.class);
-                    pearl.setPassenger(p);
-                    actions(p, Collections.singletonList("[sound]ENTITY_ENDERMAN_TELEPORT,1.0,1.0"));
-                    setupEnderpearlRunnable(pearl);
-                }
-            }
-            if (s.startsWith("[speed]")){
-                s = s.replace("[speed]",  "");
-                user.setSpeed(user.getSpeed() == ModifierStatus.OFF ? ModifierStatus.ON : ModifierStatus.OFF);
-                user.saveData(false);
-            }
+
+            ItemActionManager.execute(p, s);
         }
         return true;
     }

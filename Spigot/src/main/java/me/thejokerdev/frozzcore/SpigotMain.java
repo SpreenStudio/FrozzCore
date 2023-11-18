@@ -12,6 +12,7 @@ import me.thejokerdev.frozzcore.api.utils.LocationUtil;
 import me.thejokerdev.frozzcore.api.utils.PluginMessageManager;
 import me.thejokerdev.frozzcore.api.utils.Utils;
 import me.thejokerdev.frozzcore.managers.ClassManager;
+import me.thejokerdev.frozzcore.managers.ItemActionManager;
 import me.thejokerdev.frozzcore.managers.ServerManager;
 import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.type.FUser;
@@ -78,6 +79,8 @@ public final class SpigotMain extends JavaPlugin {
         plugin.getClassManager().getUtils().startTab(false);
         pluginMessageManager = new PluginMessageManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        ItemActionManager.registerDefaults();
 
         boolean redisEnabled = getConfig().getBoolean("redis.enabled", false);
         if (redisEnabled) {
