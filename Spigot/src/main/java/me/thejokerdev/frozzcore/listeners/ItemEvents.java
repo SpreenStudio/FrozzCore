@@ -28,8 +28,6 @@ public class ItemEvents implements Listener {
 
     private final SpigotMain plugin;
 
-    private final HashMap<UUID, HashMap<Button, Long>> time = new HashMap();
-
     public ItemEvents(SpigotMain plugin) {
         this.plugin = plugin;
     }
@@ -74,49 +72,11 @@ public class ItemEvents implements Listener {
                 if (item.getType() == Material.ENDER_PEARL){
                     e.setCancelled(true);
                 }
-                if (b.getCooldown() > 0) {
-                    if (this.canUseItem(b, p.getUniqueId(), b.getCooldown() * 1000)) {
-                        HashMap<Button, Long> preMap;
-                        if (this.time.containsKey(p.getUniqueId())) {
-                            preMap = this.time.get(p.getUniqueId());
-                            preMap.put(b, System.currentTimeMillis());
-                            this.time.put(p.getUniqueId(), preMap);
-                        } else {
-                            preMap = new HashMap<>();
-                            preMap.put(b, System.currentTimeMillis());
-                            this.time.put(p.getUniqueId(), preMap);
-                        }
-
-                        b.executePhysicallyItemsActions(e);
-                        if (b.canInteract()){
-                            e.setCancelled(false);
-                        }
-                        return;
-                    } else {
-                        String msg = plugin.getClassManager().getUtils().getLangMSG(p, "items.cooldown");
-                        double timeleft = Math.round((float) (((Long) ((HashMap<?, ?>) this.time.get(p.getUniqueId())).get(b) + (b.getCooldown() * 1000L) - System.currentTimeMillis()) / 1000L * 100L));
-                        plugin.getClassManager().getUtils().sendMessage(p, msg.replaceAll("<time>", String.valueOf((int)(timeleft / 100.0D))));
-                    }
-                } else {
-                    b.executePhysicallyItemsActions(e);
-                    if (b.canInteract()){
-                        e.setCancelled(false);
-                    }
+                b.executePhysicallyItemsActions(e);
+                if (b.canInteract()){
+                    e.setCancelled(false);
                 }
             }
-        }
-    }
-
-    private boolean canUseItem(Button b, UUID uuid, int cooldown) {
-        if (this.time.containsKey(uuid)) {
-            long current = System.currentTimeMillis();
-            if (this.time.get(uuid).containsKey(b)) {
-                return (Long)((HashMap<?, ?>)this.time.get(uuid)).get(b) + (long)cooldown <= current;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
         }
     }
 

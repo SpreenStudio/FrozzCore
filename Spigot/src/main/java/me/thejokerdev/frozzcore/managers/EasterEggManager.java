@@ -30,6 +30,8 @@ public class EasterEggManager {
         if (!(data instanceof MongoDB))
             return;
 
+        registerEasterEggsConfig();
+
         MongoDatabase db = ((MongoDB) data).getDatabase();
         collection = db.getCollection("eastereggs");
         easter_eggs = getAllEasterEggsMap();
@@ -37,8 +39,6 @@ public class EasterEggManager {
         for(Chunk chunk : Bukkit.getWorlds().get(0).getLoadedChunks()){
             onLoadChunk(chunk);
         }
-
-        registerEasterEggsConfig();
     }
 
     private void registerEasterEggsConfig() {
@@ -52,10 +52,10 @@ public class EasterEggManager {
 
     public static String getRandomEasterEggTexture() {
         List<String> list = SpigotMain.getPlugin().getConfig().getStringList("eastereggs.textures");
+        if(list.size() == 1)
+            return list.get(0);
 
-        if (list.isEmpty()) list.add("ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
-
-        return list.get(new Random().nextInt(list.size()));
+        return list.get(new Random().nextInt(list.size() - 1));
     }
 
     public void addEasterEgg(Location location) {
