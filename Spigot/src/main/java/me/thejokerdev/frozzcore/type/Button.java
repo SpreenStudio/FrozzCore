@@ -27,8 +27,6 @@ public class Button {
     private final FUser player;
     private final ConfigurationSection section;
     private final FileUtils file;
-    @Getter
-    private int cooldown = 0;
 
     private boolean update = false;
     private List<String> updateItems = new ArrayList<>();
@@ -49,9 +47,6 @@ public class Button {
         }
         this.slot = getSlotFromString(file.getSection(section).getString("slot"));
         this.section = file.getSection(section);
-        if (this.section.get("cooldown")!=null){
-            this.cooldown = this.section.getInt("cooldown");
-        }
         if (this.section.get("update")!=null){
             this.update = this.section.getBoolean("update");
             this.updateItems = new ArrayList<>(this.section.getStringList("update-items"));
@@ -185,9 +180,6 @@ public class Button {
         this.item = player.getItemsManager().createItem(player.getPlayer(), file.getSection(section), pl);
         this.slot = getSlotFromString(file.getSection(section).getString("slot"));
         this.section = file.getSection(section);
-        if (this.section.get("cooldown")!=null){
-            this.cooldown = this.section.getInt("cooldown");
-        }
     }
 
     public SimpleItem getItem() {
