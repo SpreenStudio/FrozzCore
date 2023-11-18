@@ -52,7 +52,10 @@ public class EasterEggManager {
 
     public static String getRandomEasterEggTexture() {
         List<String> list = SpigotMain.getPlugin().getConfig().getStringList("eastereggs.textures");
-        return list.get(new Random().nextInt(list.size() - 1));
+
+        if (list.isEmpty()) list.add("ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
+
+        return list.get(new Random().nextInt(list.size()));
     }
 
     public void addEasterEgg(Location location) {
@@ -226,7 +229,7 @@ public class EasterEggManager {
             if(!isLocationInChunk(chunk, location))
                 continue;
 
-            placePlayerHeadWithTextureValue(location, "ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
+            placePlayerHeadWithTextureValue(location);
         }
     }
 
