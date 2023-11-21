@@ -12,9 +12,7 @@ public class Open implements ItemActionExecutor {
     @Override
     public boolean onCommand(Player player, String label) {
         String s = label.replace("[open]", "");
-        for (Menu menu : plugin.getClassManager().getMenusManager().getPlayerMenus(player).values()) {
-            plugin.debug(menu.getMenuId() + " is loaded for " + player.getName());
-        }
+        plugin.getClassManager().getMenusManager().getPlayerMenus(player);
         Menu menu = plugin.getClassManager().getMenusManager().getPlayerMenu(player, s);
         if (menu == null) {
             plugin.getClassManager().getMenusManager().loadMenus(player);
