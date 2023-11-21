@@ -38,6 +38,15 @@ public class FrozzCoreAPI {
         return plugin.getUtils().formatMSG(p, file.getString(key));
     }
 
+    public String getTranslation(String lang, String section, String key){
+        FileUtils file = plugin.getClassManager().getLangManager().getLanguageOfSection(section, lang).getFile();
+        if (file.get(key)==null) {
+            String msg = plugin.getClassManager().getUtils().getMSG("keyNotFound").replace("{key}", key);
+            return plugin.getUtils().formatMSG(null, msg);
+        }
+        return plugin.getUtils().formatMSG(null, file.getString(key));
+    }
+
     public void broadcast(Collection<Player> players, String section, String key) {
         List<Lang> files = plugin.getClassManager().getLangManager().getSection(section);
         HashMap<String, String> map = new HashMap<>();
