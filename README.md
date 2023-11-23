@@ -1,2 +1,2 @@
 # FrozzCore
-Core para Spigot/Bungee 1.8 - 1.18.2
+Core para Spigot/Bungee en StatsPvP
