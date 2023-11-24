@@ -44,26 +44,26 @@ public class ProxyUtils extends CMD {
             return;
         }
         if (args.length == 0){
-            plugin.getUtils().sendMessage(sender, "cmds.frozzcore.help");
+            plugin.getUtils().sendMessage(sender, "cmds.proxyutils.help");
         }
         if (args.length == 1){
             String arg1 = args[0];
             if (arg1.equalsIgnoreCase("reload")){
                 plugin.reloadConfig();
-                plugin.getUtils().sendMessage(sender, "cmds.frozzcore.reload");
+                plugin.getUtils().sendMessage(sender, "cmds.proxyutils.reload");
                 return;
             }
             if (arg1.equalsIgnoreCase("setplayerlimit")){
-                plugin.getUtils().sendMessage(sender, "cmds.frozzcore.setplayerlimit.usage");
+                plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setplayerlimit.usage");
                 return;
             }
             if (arg1.equalsIgnoreCase("setmaxplayers")){
-                plugin.getUtils().sendMessage(sender, "cmds.frozzcore.setmaxplayers.usage");
+                plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setmaxplayers.usage");
                 return;
             }
             if (arg1.equalsIgnoreCase("unbanall")){
                 List<String> banned = new ArrayList<>(plugin.getConfig().getStringList("unban-list"));
-                String cmd = "unban %player% Unbanned by frozzcore";
+                String cmd = "unban %player% Unbanned by Console";
                 plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), "glist");
                 banned.forEach(s -> plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), cmd.replace("%player%", s)));
                 plugin.getUtils().sendMessage(sender, "{prefix}&aSe han desbaneado &e"+banned.size()+" &ajugadores.");
@@ -78,12 +78,12 @@ public class ProxyUtils extends CMD {
                 try {
                     maxPlayers = Integer.parseInt(max);
                 } catch (NumberFormatException e) {
-                    plugin.getUtils().sendMessage(sender, "cmds.frozzcore.setmaxplayers.notNumber");
+                    plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setmaxplayers.notNumber");
                     return;
                 }
                 plugin.getConfig().set("motd.max-players", maxPlayers);
                 plugin.saveConfig();
-                String msg = plugin.getMessages().getString("cmds.frozzcore.setmaxplayers.success");
+                String msg = plugin.getMessages().getString("cmds.proxyutils.setmaxplayers.success");
                 msg = msg.replace("{amount}", max);
                 plugin.getUtils().sendMessage(sender, msg);
                 return;
@@ -94,7 +94,7 @@ public class ProxyUtils extends CMD {
                 try {
                     maxPlayers = Integer.parseInt(max);
                 } catch (NumberFormatException e) {
-                    plugin.getUtils().sendMessage(sender, "cmds.frozzcore.setplayerlimit.notNumber");
+                    plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setplayerlimit.notNumber");
                     return;
                 }
                 try {
@@ -103,7 +103,7 @@ public class ProxyUtils extends CMD {
                 }
                 plugin.getConfig().set("settings.player-limit", maxPlayers);
                 plugin.saveConfig();
-                String msg = plugin.getMessages().getString("cmds.frozzcore.setplayerlimit.success");
+                String msg = plugin.getMessages().getString("cmds.proxyutils.setplayerlimit.success");
                 msg = msg.replace("{amount}", max);
                 plugin.getUtils().sendMessage(sender, msg);
             }
@@ -113,11 +113,11 @@ public class ProxyUtils extends CMD {
                 try {
                     bool = Boolean.parseBoolean(str);
                 } catch (NumberFormatException e) {
-                    plugin.getUtils().sendMessage(sender, "cmds.frozzcore.setonlinemode.usage");
+                    plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setonlinemode.usage");
                     return;
                 }
                 if (bool == plugin.isOnlineMode()){
-                    String msg = plugin.getMessages().getString("cmds.frozzcore.setonlinemode.already");
+                    String msg = plugin.getMessages().getString("cmds.proxyutils.setonlinemode.already");
                     msg = msg.replace("{status}", String.valueOf(bool));
                     plugin.getUtils().sendMessage(sender, msg);
                     return;
@@ -125,7 +125,7 @@ public class ProxyUtils extends CMD {
                 plugin.getConfig().set("settings.online-mode", bool);
                 plugin.saveConfig();
 
-                String msg = plugin.getMessages().getString("cmds.frozzcore.setonlinemode."+ (bool ? "premium" : "no-premium"));
+                String msg = plugin.getMessages().getString("cmds.proxyutils.setonlinemode."+ (bool ? "premium" : "no-premium"));
                 plugin.getUtils().sendMessage(sender, msg);
             }
         }
