@@ -124,3 +124,12 @@ items:
 placeholders:
   network1: '&b&lGatiscordia &f&lNetwork'
   network2: '&b&lG&f&lN &8» &7'
+
+anti:
+  disconnect-spam:
+    enabled: true
+    kick-reasons:
+      - 'disconnect.spam'
+      - 'disconnect spam'
+      - 'Kicked for spamming'
+      - 'Kicked for spam'

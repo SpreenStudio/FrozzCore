@@ -5,7 +5,6 @@ import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.Modules;
 import me.thejokerdev.frozzcore.type.FUser;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.net.UnknownServiceException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class WorldListeners implements Listener {
     private final SpigotMain plugin;
@@ -38,10 +31,10 @@ public class WorldListeners implements Listener {
 
         if (spawnExists && plugin.getClassManager().getUtils().isWorldProtected(w, Modules.JOINTP)) {
             if (plugin.getSpawn().getWorld().equals(w)) {
-                plugin.getClassManager().getLoginListener().spawnRandomLoc(p, plugin.getSpawn());
+                plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, plugin.getSpawn());
             }
         } else if (plugin.getClassManager().getUtils().isWorldProtected(w, Modules.JOINTP)) {
-            plugin.getClassManager().getLoginListener().spawnRandomLoc(p, w.getSpawnLocation());
+            plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, w.getSpawnLocation());
         }
 
         if (plugin.getClassManager().getUtils().isWorldProtected(w, Modules.ITEMS)) {
@@ -49,7 +42,7 @@ public class WorldListeners implements Listener {
         }
 
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            plugin.getClassManager().getLoginListener().checkVisibility(p);
+            plugin.getClassManager().getConnectionListener().checkVisibility(p);
             if (plugin.getConfig().getBoolean("settings.perWorld")) {
                 for (Player t : Bukkit.getOnlinePlayers()) {
                     if (t != p) {
@@ -70,7 +63,7 @@ public class WorldListeners implements Listener {
                 if (!plugin.getUtils().isWorldProtected(t.getWorld(), Modules.JOINMESSAGES)) {
                     continue;
                 }
-                String str = plugin.getClassManager().getLoginListener().getJoinMessage(p);
+                String str = plugin.getClassManager().getConnectionListener().getJoinMessage(p);
                 if (str != null) {
                     plugin.getClassManager().getUtils().sendMessage(t, str);
                 }

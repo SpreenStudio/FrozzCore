@@ -4,30 +4,27 @@ import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.Modules;
-import me.thejokerdev.frozzcore.enums.VisibilityType;
 import me.thejokerdev.frozzcore.type.FUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public class LoginListener implements Listener {
+public class ConnectionListener implements Listener {
     private final SpigotMain plugin;
 
-    public LoginListener(SpigotMain plugin) {
+    public ConnectionListener(SpigotMain plugin) {
         this.plugin = plugin;
     }
     @Getter private final List<String> ignoreVisibilityPlayers = new ArrayList<>();
@@ -225,5 +222,53 @@ public class LoginListener implements Listener {
             return null;
         }
         return plugin.getClassManager().getUtils().getMessage(PlaceholderAPI.setPlaceholders(p, out));
+    }
+
+    /* ANTI-DISCONNECTSPAM */
+    private final Map<Player, Event> inKickProcessPlayers = Collections.synchronizedMap(new HashMap<>());
+
+    private boolean isAntiDisconnectSpamEnabled(){
+        return plugin.getConfig().getBoolean("anti.disconnect-spam.enabled", true);
+    }
+
+    private List<String> getKickReasons(){
+        return new ArrayList<>(plugin.getConfig().getStringList("anti.disconnect-spam.kick-reasons"));
+    }
+
+    private boolean isDisconnectSpamKick(PlayerKickEvent e) {
+        for (String disabledKick : getKickReasons()) {
+            if (disabledKick.toLowerCase().contains(e.getReason().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void earlyKick(PlayerKickEvent e){
+        if (!isAntiDisconnectSpamEnabled()) return;
+        if (isDisconnectSpamKick(e)){
+            inKickProcessPlayers.put(e.getPlayer(), e);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    inKickProcessPlayers.remove(e.getPlayer());
+                }
+            }.runTaskLaterAsynchronously(plugin, 200L);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onKick(PlayerKickEvent e){
+        Player p = e.getPlayer();
+        boolean isDisconnectSpamKick = inKickProcessPlayers.containsKey(p);
+        inKickProcessPlayers.remove(p);
+        if (!isDisconnectSpamKick) {
+            isDisconnectSpamKick = isDisconnectSpamKick(e);
+        }
+        if (isDisconnectSpamKick){
+            e.setCancelled(true);
+            e.setReason(null);
+        }
     }
 }

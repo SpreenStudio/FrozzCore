@@ -6,12 +6,10 @@ import com.cryptomorin.xseries.messages.Titles;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.misc.DefaultFontInfo;
-import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.Modules;
 import me.thejokerdev.frozzcore.enums.VisibilityType;
 import me.thejokerdev.frozzcore.managers.ItemActionManager;
 import me.thejokerdev.frozzcore.type.FUser;
-import me.thejokerdev.frozzcore.type.Menu;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -358,7 +356,7 @@ public class Utils {
         }
         user.setVisibilityType(type);
 
-        plugin.getClassManager().getLoginListener().checkVisibility(p);
+        plugin.getClassManager().getConnectionListener().checkVisibility(p);
     }
 
     public FileUtils getFile(String file){

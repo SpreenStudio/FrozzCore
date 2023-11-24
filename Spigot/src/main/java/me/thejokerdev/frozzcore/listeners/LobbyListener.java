@@ -3,9 +3,7 @@ package me.thejokerdev.frozzcore.listeners;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.Modules;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,10 +13,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class LobbyListener implements Listener {
     private final SpigotMain plugin;
@@ -147,7 +141,7 @@ public class LobbyListener implements Listener {
         Player p = e.getPlayer();
         World w = p.getWorld();
         if (plugin.getUtils().isWorldProtected(w, Modules.LOBBY) && plugin.getConfig().getBoolean("lobby.respawn")){
-            plugin.getClassManager().getLoginListener().spawnRandomLoc(p, plugin.getSpawn() !=null ? plugin.getSpawn() : w.getSpawnLocation());
+            plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, plugin.getSpawn() !=null ? plugin.getSpawn() : w.getSpawnLocation());
             if (plugin.getUtils().isWorldProtected(w, Modules.ITEMS) && plugin.getConfig().getBoolean("items.onRespawn")){
                 plugin.getClassManager().getPlayerManager().getUser(p).getItemsManager().setItems();
             }
