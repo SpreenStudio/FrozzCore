@@ -55,7 +55,7 @@ redis:
     maxConnections: 50
     useSSL: false
   auth:
-    password: 'uqqVbwm/XOY'
+    password: 'uqqVbwm/XOY
 stream:
   enabled: true
   time: 300

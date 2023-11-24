@@ -47,21 +47,16 @@ public class StaffChat extends CMD {
             if (args.length == 1){
                 String arg = args[0];
                 ProxiedPlayer t = plugin.getProxy().getPlayer(arg);
-                if (t == null){
-                    plugin.getUtils().sendMessage(sender, "{prefix}&cEse jugador no está conectado.");
+                if (t != null){
+                    if (!t.hasPermission(Permissions.STAFFCHAT_STAFF.get())) {
+                        plugin.getUtils().sendMessage(sender, "general.noPermissions");
+                        return;
+                    }
+                    toggle(t);
                     return;
                 }
-                if (!t.hasPermission(Permissions.STAFFCHAT_STAFF.get())) {
-                    plugin.getUtils().sendMessage(sender, "general.noPermissions");
-                    return;
-                }
-                toggle(t);
-                return;
             }
             if (args.length > 0) {
-                String format = plugin.getConfig().getString("staffchat.format-console");
-                format = plugin.getUtils().getMSG(null, format).getText();
-
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < args.length; i++) {
@@ -70,7 +65,7 @@ public class StaffChat extends CMD {
                         sb.append(" ");
                     }
                 }
-                plugin.getUtils().sendMSGtoStaff(null, format + sb);
+                sendMSG(null, sb.toString());
             }
             return;
         }
@@ -100,9 +95,6 @@ public class StaffChat extends CMD {
             }
             case "toggle": toggle(p); break;
             default :{
-                String format = plugin.getConfig().getString("staffchat.format");
-                format = plugin.getUtils().getMSG(p, format).getText();
-
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < args.length; i++) {
@@ -111,10 +103,14 @@ public class StaffChat extends CMD {
                         sb.append(" ");
                     }
                 }
-                plugin.getUtils().sendMSGtoStaff(p, format + sb);
+                sendMSG(p, sb.toString());
                 break;
             }
         }
+    }
+
+    public void sendMSG(ProxiedPlayer p, String msg) {
+        plugin.getUtils().sendMSG(p, msg);
     }
 
     public void toggle(ProxiedPlayer p) {

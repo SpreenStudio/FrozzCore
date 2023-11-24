@@ -1,0 +1,16 @@
+staff:
+  url: 'https://discord.com/api/webhooks/1177650117059285172/hwAnP7HGt-lt3K76Bv0r2fnLgEBaqHCw_UAiz9QNSXm-j4jw3KsHTrpFWvQJ0x6fBoDA'
+  username: 'Staff'
+  avatar: 'https://cdn.discordapp.com/attachments/1177650117059285172/1177650167348989973/unknown.png'
+  embed:
+    color: "#00ff00"
+    name: "Staff"
+    footer: "Staff"
+    timestamp: true
+permissions:
+  url: 'https://discord.com/api/webhooks/1177650167348989973/ToSJxaGORghXlGOlcuWKWmoyj0yt3RcSxYrpVyteo9Fpw6iQeaKxma8Snaq-wQcslUFq'
+  embed:
+    color: "#00ff00"
+    name: "Permissions"
+    footer: "Permissions"
+    timestamp: true

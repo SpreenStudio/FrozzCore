@@ -58,7 +58,7 @@ public class Maintenance extends CMD {
                             if (!group.isServerInGroup(p.getServer().getInfo())) continue;
                         }
                         if (!list.isEmpty() && list.contains(p.getName().toLowerCase())) continue;
-                        if (p.hasPermission("frozzcore.maintenance.bypass") || p.hasPermission("frozzcore.maintenance.bypass." + server)) continue;
+                        if (p.hasPermission("proxyutils.maintenance.bypass") || p.hasPermission("proxyutils.maintenance.bypass." + server)) continue;
 
                         String msg = this.plugin.getConfig().getString("maintenance.kick-msg");
                         p.disconnect(this.plugin.getUtils().getMSG(p, msg));

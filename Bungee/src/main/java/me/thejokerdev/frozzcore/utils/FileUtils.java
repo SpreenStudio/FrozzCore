@@ -1,6 +1,7 @@
 package me.thejokerdev.frozzcore.utils;
 
 import com.google.common.io.ByteStreams;
+import lombok.Getter;
 import me.thejokerdev.frozzcore.BungeeMain;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -8,21 +9,22 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
-import java.util.List;
 
+@Getter
 public class FileUtils {
     private final BungeeMain plugin;
-    public Configuration configuration;
+    public Configuration config;
     public Configuration messages;
     public Configuration serversCache;
     public Configuration whitelist;
+    public Configuration webhooks;
     public FileUtils(BungeeMain plugin) {
         this.plugin = plugin;
     }
 
     public void reloadConfig(BungeeMain plugin){
         try {
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
                     loadResource(plugin, "config.yml"));
             messages = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
                     loadResource(plugin, "messages.yml"));
@@ -30,6 +32,8 @@ public class FileUtils {
                     loadResource(plugin, "servers-cache.yml"));
             whitelist = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
                     loadResource(plugin, "whitelist.yml"));
+            webhooks = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
+                    loadResource(plugin, "webhooks.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,26 +75,10 @@ public class FileUtils {
         }
         return resourceFile;
     }
-    
-    public Configuration getConfig() {
-        return configuration;
-    }
-
-    public Configuration getMessages() {
-        return messages;
-    }
-
-    public Configuration getServersCache() {
-        return serversCache;
-    }
-
-    public Configuration getWhitelist() {
-        return whitelist;
-    }
 
     public void saveConfig() {
         try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, new File(plugin.getDataFolder(), "config.yml"));
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, new File(plugin.getDataFolder(), "config.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,6 +95,14 @@ public class FileUtils {
     public void saveWhitelist(){
         try {
             ConfigurationProvider.getProvider(YamlConfiguration.class).save(whitelist, new File(plugin.getDataFolder(), "whitelist.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveWebHooks(){
+        try {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(webhooks, new File(plugin.getDataFolder(), "webhooks.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

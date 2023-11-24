@@ -33,7 +33,13 @@ public class LoginEvents implements Listener {
         ProxiedPlayer p = e.getPlayer();
 
         if (p.hasPermission(Permissions.STAFFCHAT_JOIN.get())){
-            plugin.getUtils().sendMSGtoStaff(p, plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.join")).getText());
+            String msg = plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.join")).getText();
+            plugin.getUtils().sendMSGtoStaff(p, msg);
+            plugin.getWebhookManager().getStaff().setTitle("Staff join")
+                    .setDescription(msg)
+                    .setColor("#00ff00")
+                    .setTimestamp(true)
+                    .execute();
             if (Managers.isHided(p)){
                 plugin.getProxy().getScheduler().schedule(plugin, () -> plugin.getUtils().sendMessage(p, "staffchat.hided-reminder"), 1, TimeUnit.SECONDS);
             }
@@ -48,7 +54,13 @@ public class LoginEvents implements Listener {
         ProxiedPlayer p = e.getPlayer();
 
         if (p.hasPermission(Permissions.STAFFCHAT_LEAVE.get())){
-            plugin.getUtils().sendMSGtoStaff(p, plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.leave")).getText());
+            String msg = plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.leave")).getText();
+            plugin.getUtils().sendMSGtoStaff(p, msg);
+            plugin.getWebhookManager().getStaff().setTitle("Staff left")
+                    .setDescription(msg)
+                    .setColor("#ff0000")
+                    .setTimestamp(true)
+                    .execute();
         }
     }
 
@@ -93,8 +105,8 @@ public class LoginEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerConnect(ServerConnectEvent event){
-        List<String> servers = new ArrayList<>(plugin.getConfig().getStringList("BungeeMaintenance.servers"));
-        String msg = this.plugin.getConfig().getString("BungeeMaintenance.kick-msg");
+        List<String> servers = new ArrayList<>(plugin.getConfig().getStringList("maintenance.servers"));
+        String msg = this.plugin.getConfig().getString("maintenance.kick-msg");
         if (servers.contains(event.getTarget().getName())){
             if (entryCheck(event.getPlayer(), event.getTarget().getName())){
                 event.setCancelled(true);
@@ -105,7 +117,7 @@ public class LoginEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLoginProcess(PreLoginEvent e) {
-        String msg = this.plugin.getConfig().getString("BungeeMaintenance.kick-msg");
+        String msg = this.plugin.getConfig().getString("maintenance.kick-msg");
         String noSlots = "&cLo sentimos, no hay cupo disponible para que entres al servidor.";
         if (plugin.getFileUtils().getWhitelist().getBoolean("settings.enabled")){
             plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "Whitelist enabled");
@@ -121,11 +133,11 @@ public class LoginEvents implements Listener {
                     plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "Whitelist check granted for " + e.getConnection().getName());
                     return;
                 }
-                if (plugin.getConfig().getBoolean("BungeeMaintenance.enabled")) {
+                if (plugin.getConfig().getBoolean("maintenance.enabled")) {
                     if (entryCheck(e.getConnection().getName())) {
                         e.setCancelled(true);
                         e.setCancelReason(this.plugin.getUtils().getMSG(null, msg));
-                        plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "BungeeMaintenance check failed for " + e.getConnection().getName());
+                        plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "Maintenance check failed for " + e.getConnection().getName());
                         return;
                     }
                 }
@@ -146,13 +158,13 @@ public class LoginEvents implements Listener {
                 }
             }
         }
-        if (!plugin.getConfig().getBoolean("BungeeMaintenance.enabled")) {
+        if (!plugin.getConfig().getBoolean("maintenance.enabled")) {
             return;
         }
         if (entryCheck(e.getConnection().getName())) {
             e.setCancelled(true);
             e.setCancelReason(this.plugin.getUtils().getMSG(null, msg));
-            plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "BungeeMaintenance check failed for " + e.getConnection().getName());
+            plugin.getUtils().sendMessage(plugin.getProxy().getConsole(), "Maintenance check failed for " + e.getConnection().getName());
         }
     }
 
@@ -173,8 +185,8 @@ public class LoginEvents implements Listener {
     }
 
     public boolean entryCheck(ProxiedPlayer p, String server) {
-        String perm = "frozzcore.BungeeMaintenance.bypass";
-        List<String> list = this.plugin.getConfig().getStringList("BungeeMaintenance.whitelist");
+        String perm = "proxyutils.maintenance.bypass";
+        List<String> list = this.plugin.getConfig().getStringList("maintenance.whitelist");
         if (!list.isEmpty() && list.contains(p.getName().toLowerCase())){
             return false;
         }
@@ -187,7 +199,7 @@ public class LoginEvents implements Listener {
     }
 
     public boolean entryCheck(String p) {
-        List<String> list = this.plugin.getConfig().getStringList("BungeeMaintenance.whitelist");
+        List<String> list = this.plugin.getConfig().getStringList("maintenance.whitelist");
         return !list.contains(p.toLowerCase());
     }
 

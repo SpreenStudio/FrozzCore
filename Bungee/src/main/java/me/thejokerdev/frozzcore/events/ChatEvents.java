@@ -29,18 +29,14 @@ public class ChatEvents implements Listener {
         if (msg.startsWith("/")){
             return;
         }
-        String format = plugin.getConfig().getString("staffchat.format");
-        format = plugin.getUtils().getMSG(p, format).getText();
-
         boolean b = plugin.getConfig().getBoolean("staffchat.symbol.enabled");
         if (b){
             String prefix = plugin.getConfig().getString("staffchat.symbol.id");
             if (e.getMessage().toLowerCase().startsWith(prefix)){
 
                 msg = msg.replaceFirst(prefix, "");
-                msg = format+msg;
 
-                plugin.getUtils().sendMSGtoStaff(p, msg);
+                sendMSG(p, msg);
                 e.setCancelled(true);
                 return;
             }
@@ -48,8 +44,11 @@ public class ChatEvents implements Listener {
 
         if (Managers.isToggled(p)){
             e.setCancelled(true);
-            msg = format+msg;
-            plugin.getUtils().sendMSGtoStaff(p, msg);
+            sendMSG(p, msg);
         }
+    }
+
+    public void sendMSG(ProxiedPlayer p, String msg) {
+        plugin.getUtils().sendMSG(p, msg);
     }
 }

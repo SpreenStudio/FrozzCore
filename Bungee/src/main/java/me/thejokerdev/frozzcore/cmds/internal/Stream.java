@@ -106,7 +106,7 @@ public class Stream extends CMD {
             plugin.getUtils().sendMessage(p, "stream.invalid-platform");
             return;
         }
-        if (p.hasPermission("frozzcore.stream.bypass")) {
+        if (p.hasPermission("proxyutils.stream.bypass")) {
             sendMSG(p, var1);
             return;
         }

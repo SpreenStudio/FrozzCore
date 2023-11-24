@@ -280,6 +280,18 @@ public class Utils {
         }
     }
 
+    public void sendMSG(ProxiedPlayer p, String msg) {
+        String format = plugin.getConfig().getString(p == null ? "staffchat.format-console" : "staffchat.format");
+        format = plugin.getUtils().getMSG(p, format).getText();
+
+        String webhook = ChatColor.stripColor(msg);
+        plugin.getWebhookManager().getStaff().setMessage("**"+ChatColor.stripColor(format)+"**" + webhook).setEmbed(false).execute();
+
+        msg = getMSG(p, format+msg).getText();
+
+        plugin.getUtils().sendMSGtoStaff(p, msg);
+    }
+
     public void sendMSGtoStaff(ProxiedPlayer staff, String msg){
         TextComponent component = new TextComponent(getMSG(staff, msg));
         if (staff != null && staff.getServer() != null){

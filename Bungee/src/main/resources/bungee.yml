@@ -6,3 +6,5 @@ author: SpreenStudio
 
 softDepends:
   - LiteBans
+  - Cloud
+  - LuckPerms

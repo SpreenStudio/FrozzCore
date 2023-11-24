@@ -8,15 +8,19 @@ import me.thejokerdev.frozzcore.events.ChatEvents;
 import me.thejokerdev.frozzcore.events.LoginEvents;
 import me.thejokerdev.frozzcore.events.PingEvents;
 import me.thejokerdev.frozzcore.groups.GroupsManager;
+import me.thejokerdev.frozzcore.hooks.cloud.CloudEvents;
+import me.thejokerdev.frozzcore.hooks.luckperms.LuckPermsEvents;
 import me.thejokerdev.frozzcore.managers.Placeholders;
 import me.thejokerdev.frozzcore.managers.PlatformManager;
 import me.thejokerdev.frozzcore.managers.RedisCacheManager;
 import me.thejokerdev.frozzcore.redis.Redis;
 import me.thejokerdev.frozzcore.utils.FileUtils;
 import me.thejokerdev.frozzcore.utils.Utils;
+import me.thejokerdev.frozzcore.hooks.webhooks.WebhookManager;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -40,6 +44,9 @@ public final class BungeeMain extends Plugin {
     private CMDManager cmdManager;
     private PlatformManager platformManager;
     private GroupsManager groupsManager;
+    private WebhookManager webhookManager;
+    private LuckPermsEvents luckPermsEvents;
+    private CloudEvents cloudEvents;
 
     //Redis
     private Redis redis;
@@ -65,6 +72,8 @@ public final class BungeeMain extends Plugin {
         long ms = System.currentTimeMillis();
 
         api = LuckPermsProvider.get();
+        luckPermsEvents = new LuckPermsEvents(this);
+
         sanctions = Database.get();
 
         loadClasses();
@@ -109,6 +118,10 @@ public final class BungeeMain extends Plugin {
 
         groupsManager = new GroupsManager(this);
         groupsManager.reload();
+
+        webhookManager = new WebhookManager(this);
+
+        cloudEvents = new CloudEvents(this);
 
         checkServers();
 
@@ -192,6 +205,12 @@ public final class BungeeMain extends Plugin {
         return prefix == null ? "" : prefix;
     }
 
+    public String getPrefixNotFormat(ProxiedPlayer player){
+        String prefix = getConfig().getString("settings.name-mode").equalsIgnoreCase("prefix") ? getUser(player.getName()).getCachedData().getMetaData().getPrefix() : getUser(player.getName()).getFriendlyName();
+        prefix = utils.ct(prefix);
+        return prefix == null ? "" : ChatColor.stripColor(prefix);
+    }
+
     @Override
     public void onDisable() {
         long ms = System.currentTimeMillis();
@@ -199,6 +218,14 @@ public final class BungeeMain extends Plugin {
         if (this.redis != null && this.redis.isActive()) {
             RedisCacheManager.get(this).clearCacheFromRedis();
             this.redis.disconnect();
+        }
+
+        if (luckPermsEvents != null) {
+            luckPermsEvents.unregister();
+        }
+
+        if (cloudEvents!= null) {
+            cloudEvents.unregister();
         }
 
         ms = System.currentTimeMillis()-ms;

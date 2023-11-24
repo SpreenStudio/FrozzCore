@@ -5,6 +5,7 @@ import me.thejokerdev.frozzcore.cmds.CMD;
 import me.thejokerdev.frozzcore.managers.Permissions;
 import me.thejokerdev.frozzcore.utils.StringUtil;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,12 +51,34 @@ public class ProxyUtils extends CMD {
             String arg1 = args[0];
             if (arg1.equalsIgnoreCase("reload")){
                 plugin.reloadConfig();
+                plugin.getWebhookManager().load();
                 plugin.getUtils().sendMessage(sender, "cmds.proxyutils.reload");
                 return;
             }
             if (arg1.equalsIgnoreCase("setplayerlimit")){
                 plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setplayerlimit.usage");
                 return;
+            }
+            if (sender instanceof ProxiedPlayer){
+                ProxiedPlayer p = (ProxiedPlayer) sender;
+                if (arg1.equalsIgnoreCase("simulejoin")){
+                    String msg = plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.join")).getText();
+                    plugin.getWebhookManager().getStaff().setTitle("Staff join")
+                            .setDescription(msg)
+                            .setColor("#00ff00")
+                            .setTimestamp(true)
+                            .execute();
+                    return;
+                }
+                if (arg1.equalsIgnoreCase("simuleleave")){
+                    String msg = plugin.getUtils().getMSG(p, plugin.getFileUtils().getMessages().getString("staffchat.leave")).getText();
+                    plugin.getWebhookManager().getStaff().setTitle("Staff leave")
+                            .setDescription(msg)
+                            .setColor("#ff0000")
+                            .setTimestamp(true)
+                            .execute();
+                    return;
+                }
             }
             if (arg1.equalsIgnoreCase("setmaxplayers")){
                 plugin.getUtils().sendMessage(sender, "cmds.proxyutils.setmaxplayers.usage");
@@ -135,7 +158,9 @@ public class ProxyUtils extends CMD {
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1){
-            StringUtil.copyPartialMatches(args[0], Arrays.asList("reload", "setmaxplayers", "test", "setplayerlimit", "setonlinemode", "unbanall"), list);
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("reload", "setmaxplayers", "test", "setplayerlimit", "setonlinemode", "unbanall"
+                    , "simulejoin", "simuleleave"
+            ), list);
             Collections.sort(list);
         }
         if (args.length == 2){
