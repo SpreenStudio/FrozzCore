@@ -1,0 +1,16 @@
+name: helpop
+aliases: []
+
+#Set 'none' to avoid this permission.
+permission: proxyutils.admin
+
+actions:
+  - '[msg]'
+  - '[msg]{center}&8&m =========&8| &e&lNueva solicitud de Helpop&8|&m========= '
+  - '[msg]'
+  - '[msg]&f    Usuario: &eJ0keer'
+  - '[msg]&f    ID: &8&o#e01Dqa'
+  - '[msg]&f    Mensaje: &7¿Cuánto tiempo tengo para poder votar en &7SkyWars?'
+  - '[msg]'
+  - '[msg]{center}&e&nAtender solicitud&8 ● &e&nDenunciar mal uso'
+  - '[msg]'

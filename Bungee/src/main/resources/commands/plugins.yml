@@ -1,0 +1,17 @@
+name: plugins
+aliases:
+  - pl
+  - plugin
+  - 'bukkit:plugins'
+  - 'bukkit:pl'
+  - 'about'
+  - 'bukkit:about'
+  - 'bungee'
+  
+
+#Set 'none' to avoid this permission.
+permission: none
+
+actions:
+  - '[msg]&fPlugins (4): &a¿Necesitas&f, &aalgo&f, &apor&f, &aacá?'
+  - '[sound]NOTE_PLING,1.0,1.0'

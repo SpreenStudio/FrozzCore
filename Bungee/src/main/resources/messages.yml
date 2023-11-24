@@ -1,0 +1,145 @@
+prefix: '&b&lProxyUtils &e» &f'
+
+general:
+  muted: '{prefix}&c¡Estás silenciado! No puedes hablar.'
+  not-slot-available: '&cLo sentimos, no hay cupo disponible para que entres al servidor.'
+  onlyPlayers: '{prefix}&c¡Este comando es solo para jugadores!'
+  onlyConsole: '{prefix}&c¡Este comando es solo para la consola!'
+  noPermissions: '&c¡No tienes permiso para hacer eso!'
+  playerNotExists: '{prefix}&fEse jugador no existe.'
+  notYou: '{prefix}&cNo puedes ejecutar contigo.'
+  time:
+    minute: '%s minuto, '
+    minutes: '%s minutos, '
+    hour: '%s hora, '
+    hours: '%s horas, '
+    second: '%s segundo'
+    seconds: '%s segundos'
+
+status-on: '&aactivado'
+status-off: '&cdesactivado'
+
+login:
+  offline-mode: '{prefix}&c¡Tu cuenta no es premium!'
+
+message:
+  usage: "&cUsa: /msg <jugador> <mensaje>"
+  cantSend: "&cNo puedes enviar mensajes a este jugador."
+  format:
+    player: "&7[&bTú &7-> &b{player}&7] &f{msg}"
+    other: "&7[&b{player} &7-> &bTú&7] &f{msg}"
+  toggled:
+    on: "{prefix}&7Has &cdesactivado &7los mensajes privados."
+    off: "{prefix}&7Has &aactivado &7los mensajes privados."
+    cant-send: "&cNo se pudo enviar el mensaje a {player} porque tiene desactivados los mensajes privados."
+reply:
+  usage: "&cUsa: /r <mensaje>"
+  cantSend: "&cNo puedes enviar mensajes a este jugador."
+  noPlayer: "&cNo hablaste con nadie ultimamente."
+  format:
+    player: "&7[&bTú &7-> &b{player}&7] &f{msg}"
+    other: "&7[&b{player} &7-> &bTú&7] &f{msg}"
+
+socialspy:
+  enabled: "&aActivaste socialspy."
+  disabled: "&aDesactivaste socialspy"
+  msg: "&8[&a{player} -> {other}&8] : &f{msg}"
+
+cmds:
+  proxyutils:
+    help: |-
+      {center}&f&m ============&f {prefix}&aUso &f&m============ &a
+      &7  - &e/proxyutils reload
+      &7  - &e/proxyutils setmaxplayers <cantidad>
+      &7  - &e/proxyutils setplayerlimit <cantidad>
+      &7  - &e/proxyutils setonlinemode <true/false>
+      {center}&f&m ======================================= &a
+    reload: '{prefix}&a¡Archivos reiniciados correctamente!'
+    setonlinemode:
+      already: '{prefix}&c¡El modo de conexión ya está en {status}!'
+      usage: '&cUsa: /proxyutils setonlinemode <true/false>'
+      premium: '{prefix}&7¡Ahora solo se aceptarán jugadores &epremium&7!'
+      no-premium: '{prefix}&7¡Ahora solo se aceptarán jugadores &cno premium&7!'
+    setmaxplayers:
+      usage: '&cUsa: /proxyutils setmaxplayers <cantidad>'
+      success: '{prefix}&a¡Se estableció la cantidad máxima de jugadores a {amount}!'
+      notNumber: '&c¡La cantidad debe ser un número!'
+    setplayerlimit:
+      usage: '&cUsa: /proxyutils setplayerlimit <cantidad>'
+      success: '{prefix}&a¡Se estableció la cantidad límite de jugadores a {amount}!'
+      notNumber: '&c¡La cantidad debe ser un número!'
+  ping:
+    response: '{prefix}&fTienes un ping de &e{ping}&fms.'
+    response-other: '{prefix}&fEl ping de {player} es de &e{ping}&fms.'
+  proxytp:
+    help: |-
+      {center}&f&m ============&f {prefix}&aUso &f&m============ &a
+      &7  &f» &7/ptp <server> &f- Go to proxy server.
+      &7  &f» &7/ptp <player> <server> &f- Send player to server.
+      &7  &f» &7/ptp <server> <server> &f- Send players of server to another server.
+      &7  &f» &7/ptp all <server> &f- Send all players to server.
+      &7  &f» &7/ptp <rank> <server> &f- Send players with specific rank to server.
+      {center}&f&m ======================================= &a
+    notExist: '{prefix}&cThat server doesn''t exists!'
+    tp: '{prefix}&aYou''ve been moved to %server%'
+    summon: |-
+      &7
+      &a You've summoned &e{amount} &aplayers
+      &a to &b{server}&a.
+      &7
+  maintenance:
+    help: |-
+      {center}&f&m ============&f {prefix}&aUso &f&m============ &a
+      &7  &f» &7/maintenance &f- Show this help page.
+      &7  &f» &7/maintenance toggle&f- Activate/Deactivate maintenance mode.
+      &7  &f» &7/maintenance toggle <server>&f- Maintenance mode on specific server.
+      &7  &f» &7/maintenance list&f- Get a list of servers in maintenance mode.
+      &7  &f» &7/maintenance whitelist add <nick>&f- Add player nick to whitelist.
+      &7  &f» &7/maintenance whitelist remove <nick>&f- Remove nick of whitelist.
+      {center}&f&m ======================================= &a
+    enabled: '{prefix}&7Maintenance mode &aenabled&7!'
+    disabled: '{prefix}&7Maintenance mode &cdisabled&7!'
+    servers:
+      notFound: '{prefix}&cThat server doesn''t exists!'
+      enabled: '{prefix}&7Maintenance mode &aenabled&7 in &b{server}&7!'
+      disabled: '{prefix}&7Maintenance mode &cdisabled&7 in &b{server}&7!'
+      list: '{prefix}&7Servers in maintenance mode: &b{servers}'
+      empty: '{prefix}&cThere are no servers in maintenance mode.'
+    already: '{prefix}&c{name} is already whitelisted!'
+    not-found: '{prefix}&c{name} is not whitelisted!'
+    added: '{prefix}&aSuccessfully added {name} to maintenance whitelist!'
+    removed: '{prefix}&cSuccessfully removed {name} of maintenance whitelist!'
+
+
+staffchat:
+  join: '{staff-prefix}&a• &f%luckperms_prefix%{player} &fentró a la network.'
+  leave: '{staff-prefix}&c• &f%luckperms_prefix%{player} &fsalió de la network.'
+  toggled-reminder: '{staff-prefix}&c• &fRecuerda que tienes el chat rápido activado. Ten cuidado.'
+  hided-reminder: '{staff-prefix}&c• &fRecuerda que tienes el chat desactivado. Usa &b/sc hide &fpara mostrarlo de nuevo.'
+  cmd:
+    toggled: '&b&lSC &e• &fHas %status% &fel chat de staff.'
+    hide:
+      enabled: '&b&lSC &c• &fHas ocultado el chat. Para activarlo de nuevo, ejecuta el mismo comando.'
+      disabled: '&b&lSC &a• &fHas reactivado el chat de staff.'
+
+stream:
+  usage: '{frozz}&c¡Debes escribir una dirección URL!'
+  cooldown: '{frozz}&c¡Necesitas esperar {time}!'
+  incorrect-url: '{frozz}&c¡Debes escribir una url CORRECTA!'
+  invalid-platform: |-
+    &c¡Ups! Esa plataforma no es válida.
+    &a
+    &fPlataformas disponibles:
+    &e• &5Twitch
+    &a
+  msg: |-
+    &a
+    {center}&f==========================================
+    {center}&a¡{luckperms_prefix}{player} &aestá en vivo!
+    {center}&e{url}
+    {center}&f==========================================
+    &a
+
+abps:
+  user: '&c¡Ups! Parece que ese comando no existe :/.'
+  admin: '{prefix}&c{luckperms_prefix}{player} &fintentó ejecutar el comando &d{command} &fen &e{server}&f.'

@@ -2,3 +2,7 @@ name: FrozzCore
 version: '${project.version}'
 main: me.thejokerdev.frozzcore.BungeeMain
 description: FrozzMC's Core plugin.
+author: SpreenStudio
+
+softDepends:
+  - LiteBans

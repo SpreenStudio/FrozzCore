@@ -1,0 +1,9 @@
+name: discord
+aliases:
+  - dc
+
+#Set 'none' to avoid this permission.
+permission: none
+
+actions:
+  - '[msg]{frozz}&7Nuestro discord es:{component}text: discord.gg/rvKSMUFxB9,click:OPEN_URL:{https}discord.gg/rvKSMUFxB9,color:RED,hover:&7Clic para ir abrir el enlace.'

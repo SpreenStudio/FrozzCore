@@ -1,13 +1,170 @@
+placeholders:
+  - '{frozz}|&c&lS&f&lP &8» &7'
+  - '{spreen}|&c&lS&f&lP &8» &7'
+  - '{staff-prefix}|&c&lS&f&lC&7 '
+  - '{network}|&c&lStats&f&lPvP'
 settings:
-  prefix: '&b&lFrozzMC &8&l» &7'
-
-modules:
-  discord: true
-
-discord:
-  token: 'PASTE YOUR TOKEN HERE'
-  guild: ''
-  settings:
-    player-info:
-      channel: 'INSERT ID'
-      msg: '👥 | Jugando: {online}/{max}'
+  name-mode: prefix
+  proxyName: proxy-1
+  player-limit: 300
+  online-mode: true
+  debug: true
+  join-message:
+    enabled: true
+    message:
+      - ''
+      - ''
+      - ''
+      - ''
+      - ''
+      - ''
+      - '{center}¡Bienvenido {luckperms_prefix}{player}&f a &cStats&fPvP!'
+      - ''
+      - '{center}Te recordamos que aún estamos en &efase beta&f,'
+      - '{center}y podrían encontrarse &b&nbugs&f en las modalidades.'
+      - '{center}Por favor, si encuentras algo mal, repórtalo'
+      - '{center}en el discord oficial: &9discord.gg/spreen'
+      - '{center}'
+      - '{center}Puedes usar el canal &b&o#bugs-minecraft&f para'
+      - '{center}reportarlo. ¡Gracias por tus aportes!'
+      - ''
+staffchat:
+  format: '{staff-prefix}&7• &f%luckperms_prefix%{player} &b▸ &f'
+  format-console: '{staff-prefix}&7• &7(&eConsola&7) &b▸ &f'
+  symbol:
+    enabled: true
+    id: '#'
+unban-list: {}
+server-groups:
+  Lobby:
+    display-name: Lobbies Generales
+    regex: lobby-.*
+  SkyWars:
+    display-name: Modalidad de SkyWars
+    regex: sky-wars-.*
+  ArenaPvP:
+    display-name: Modalidad de ArenaPvP
+    regex: arena-pvp-.*
+  UHC:
+    display-name: Modalidad de UHC
+    regex: uhc-.*
+redis:
+  host: 127.0.0.1
+  port: 6379
+  config:
+    maxConnections: 50
+    useSSL: false
+  auth:
+    password: 'uqqVbwm/XOY'
+stream:
+  enabled: true
+  time: 300
+  sound: NOTE_PLING
+  aliases:
+    - directo
+    - live
+  platforms:
+    twitch:
+      name: '&5Twitch'
+      links:
+        - twitch.tv
+motd:
+  favicon:
+    - '{dataFolder}/icons/test2.png'
+  enabled: true
+  max-players: 500
+  mode: sequential
+  hex-list:
+    - "&7                 &cStats&fPvP  &7[1.7.10 - 1.20.1]&r\n&7         &f&oUsing 1.16+? We recommend 1.7 or 1.8."
+  list:
+    - "&7                 &cStats&fPvP  &7[1.7.10 - 1.20.1]&r\n&7                 &f&oSkyWars&7\
+    \ • &f&oArenaPvP&7 • &f&oUHC  "
+maintenance:
+  favicon:
+    - '{dataFolder}/icons/test2.png'
+  enabled: false
+  kick-msg: '&cLamentamos los inconvenientes, el servidor se encuentra en mantenimiento.'
+  whitelist:
+    - badendingg
+    - j0keer
+    - faviomc19
+    - itz_leviking02x_
+    - daryela
+    - spreendmc
+    - imeluan
+    - kissinger
+    - arikimaori_
+    - tiscari
+    - moscapower
+    - lokonazo1
+    - schiso
+    - amsack_
+    - magaly96
+    - conterstine
+    - abaaakun
+    - idktomy
+    - shawdqnk
+    - robersigg
+    - aaaaylin
+    - damonkey728
+    - zarkos7
+    - jossyg45
+    - elshami
+    - ferussj
+  servers: []
+  motds:
+    - |-
+      &7                 &cStats&fPvP  &7[1.7.10 - 1.20.1]&r
+      &7                     &f&oAbrimos en breves...
+    - "&7                 &cStats&fPvP  &7[1.7.10 - 1.20.1]&r\n&7                  \
+    \       &f&oComing soon...      "
+announces:
+  enabled: true
+  delay: 600
+  blacklist-servers:
+    - BuildTeam
+  mode: sequential
+  bypass: proxyutils.announces.bypass
+  list:
+    - |-
+      &f{bypass}
+      &f      Te recordamos que aún estamos en &efase beta&f,
+      &f     y podrían encontrarse &b&nbugs&f en las modalidades.
+      &f       Por favor, si encuentras algo mal, repórtalo
+      &f          en el discord oficial: &9discord.gg/spreen
+      &f
+      &f       Puedes usar el canal &b&o#bugs-minecraft&f para
+      &f           reportarlo. ¡Gracias por tus aportes!
+      &f
+abps:
+  enabled: true
+  blocked-commands:
+    - about
+    - bukkit:about
+    - bukkit:help
+    - bukkit:?
+    - bukkit:me
+    - bukkit:pl
+    - bukkit:plugins
+    - bukkit:ver
+    - bukkit:version
+    - help
+    - icanhasbukkit
+    - info
+    - '?'
+    - /calc
+    - /eval
+    - //eval
+    - //calc
+    - calc
+    - eval
+    - pl
+    - plugins
+    - plugin
+    - ver
+    - version
+    - lp
+    - luckperms
+    - lpb
+    - luckpermsbungee
+    - //

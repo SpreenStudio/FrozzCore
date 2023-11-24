@@ -1,0 +1,10 @@
+settings:
+  enabled: false
+  allow-fill: false
+  limit: 200
+
+message:
+  not-slot-available: '&cLo sentimos, no hay cupo disponible para que entres al servidor.'
+
+list:
+  - SpreenDMC

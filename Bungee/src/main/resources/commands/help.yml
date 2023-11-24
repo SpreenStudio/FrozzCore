@@ -1,0 +1,13 @@
+name: help
+aliases:
+  - 'minecraft:help'
+  - 'bukkit:?'
+  - 'bukkit:help'
+  - '?'
+
+#Set 'none' to avoid this permission.
+permission: none
+
+actions:
+  - '[msg]{frozz}&f¿Necesitas ayuda? Utiliza &e/discord&f para ir a nuestro discord y buscar ayuda.'
+  - '[sound]NOTE_PLING,1.0,1.0'

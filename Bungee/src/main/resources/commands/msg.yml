@@ -1,0 +1,12 @@
+name: minecraft:tell
+aliases:
+  - minecraft:msg
+  - minecraft:whisper
+  - whisper
+  - w
+
+#Set 'none' to avoid this permission.
+permission: none
+
+actions:
+  - '[msg]{prefix}&cUsa /msg por favor.'

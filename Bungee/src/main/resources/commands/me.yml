@@ -1,0 +1,11 @@
+name: me
+aliases:
+  - minecraft:me
+  - minecraft:about
+  - bukkit:about
+
+#Set 'none' to avoid this permission.
+permission: none
+
+actions:
+  - '[msg]{prefix}&cError 404.'
