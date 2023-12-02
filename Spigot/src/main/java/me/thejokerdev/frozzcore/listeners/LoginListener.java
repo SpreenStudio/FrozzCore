@@ -21,10 +21,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class ConnectionListener implements Listener {
+public class LoginListener implements Listener {
     private final SpigotMain plugin;
 
-    public ConnectionListener(SpigotMain plugin) {
+    public LoginListener(SpigotMain plugin) {
         this.plugin = plugin;
     }
     @Getter private final List<String> ignoreVisibilityPlayers = new ArrayList<>();

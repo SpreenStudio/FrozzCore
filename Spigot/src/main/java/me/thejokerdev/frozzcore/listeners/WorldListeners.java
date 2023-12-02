@@ -31,10 +31,10 @@ public class WorldListeners implements Listener {
 
         if (spawnExists && plugin.getClassManager().getUtils().isWorldProtected(w, Modules.JOINTP)) {
             if (plugin.getSpawn().getWorld().equals(w)) {
-                plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, plugin.getSpawn());
+                plugin.getClassManager().getLoginListener().spawnRandomLoc(p, plugin.getSpawn());
             }
         } else if (plugin.getClassManager().getUtils().isWorldProtected(w, Modules.JOINTP)) {
-            plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, w.getSpawnLocation());
+            plugin.getClassManager().getLoginListener().spawnRandomLoc(p, w.getSpawnLocation());
         }
 
         if (plugin.getClassManager().getUtils().isWorldProtected(w, Modules.ITEMS)) {
@@ -42,7 +42,7 @@ public class WorldListeners implements Listener {
         }
 
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            plugin.getClassManager().getConnectionListener().checkVisibility(p);
+            plugin.getClassManager().getLoginListener().checkVisibility(p);
             if (plugin.getConfig().getBoolean("settings.perWorld")) {
                 for (Player t : Bukkit.getOnlinePlayers()) {
                     if (t != p) {
@@ -63,7 +63,7 @@ public class WorldListeners implements Listener {
                 if (!plugin.getUtils().isWorldProtected(t.getWorld(), Modules.JOINMESSAGES)) {
                     continue;
                 }
-                String str = plugin.getClassManager().getConnectionListener().getJoinMessage(p);
+                String str = plugin.getClassManager().getLoginListener().getJoinMessage(p);
                 if (str != null) {
                     plugin.getClassManager().getUtils().sendMessage(t, str);
                 }

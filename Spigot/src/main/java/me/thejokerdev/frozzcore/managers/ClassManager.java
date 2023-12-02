@@ -30,7 +30,7 @@ public class ClassManager {
     private LinkedChatManager linkedChatManager;
     private EasterEggManager easterEggManager;
 
-    private ConnectionListener connectionListener;
+    private LoginListener loginListener;
     private ScoreBoard scoreBoard;
 
     /* Utils */
@@ -69,9 +69,9 @@ public class ClassManager {
         utils = new Utils(plugin);
 
         scoreBoard = new ScoreBoard(plugin);
-        connectionListener = new ConnectionListener(plugin);
+        loginListener = new LoginListener(plugin);
 
-        regListener(connectionListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin), new PluginListener(plugin));
+        regListener(loginListener, new WorldListeners(plugin), new ItemEvents(plugin), new DoubleJump(plugin), new JumpPadsListener(plugin), new PluginListener(plugin));
     }
 
     public void init() {

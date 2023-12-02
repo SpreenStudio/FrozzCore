@@ -356,7 +356,7 @@ public class Utils {
         }
         user.setVisibilityType(type);
 
-        plugin.getClassManager().getConnectionListener().checkVisibility(p);
+        plugin.getClassManager().getLoginListener().checkVisibility(p);
     }
 
     public FileUtils getFile(String file){

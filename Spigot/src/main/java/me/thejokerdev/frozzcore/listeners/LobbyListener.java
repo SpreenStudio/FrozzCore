@@ -141,7 +141,7 @@ public class LobbyListener implements Listener {
         Player p = e.getPlayer();
         World w = p.getWorld();
         if (plugin.getUtils().isWorldProtected(w, Modules.LOBBY) && plugin.getConfig().getBoolean("lobby.respawn")){
-            plugin.getClassManager().getConnectionListener().spawnRandomLoc(p, plugin.getSpawn() !=null ? plugin.getSpawn() : w.getSpawnLocation());
+            plugin.getClassManager().getLoginListener().spawnRandomLoc(p, plugin.getSpawn() !=null ? plugin.getSpawn() : w.getSpawnLocation());
             if (plugin.getUtils().isWorldProtected(w, Modules.ITEMS) && plugin.getConfig().getBoolean("items.onRespawn")){
                 plugin.getClassManager().getPlayerManager().getUser(p).getItemsManager().setItems();
             }
