@@ -47,7 +47,7 @@ public class FrozzCoreAPI {
         return plugin.getUtils().formatMSG(null, file.getString(key));
     }
 
-    public void broadcast(Collection<Player> players, String section, String key) {
+    public void broadcast(Collection<Player> players, String section, String key, Object... placeholders) {
         List<Lang> files = plugin.getClassManager().getLangManager().getSection(section);
         HashMap<String, String> map = new HashMap<>();
         for (Lang file : files) {
@@ -64,7 +64,7 @@ public class FrozzCoreAPI {
             if (msg==null) {
                 continue;
             }
-            plugin.getUtils().sendMessage(p, msg);
+            user.sendMSGWithObjets(msg, placeholders);
         }
     }
 
@@ -75,6 +75,6 @@ public class FrozzCoreAPI {
 
     public void sendMSG(Player player, String section, String key){
         FUser user = getUser(player);
-        plugin.getUtils().sendMessage(player, getTranslation(user.getPlayer(), section, key));
+        user.sendMSGWithObjets(getTranslation(user.getPlayer(), section, key));
     }
 }
