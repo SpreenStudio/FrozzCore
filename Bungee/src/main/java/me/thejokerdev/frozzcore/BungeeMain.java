@@ -121,7 +121,9 @@ public final class BungeeMain extends Plugin {
 
         webhookManager = new WebhookManager(this);
 
-        cloudEvents = new CloudEvents(this);
+        if (getProxy().getPluginManager().getPlugin("Cloud") != null) {
+            cloudEvents = new CloudEvents(this);
+        }
 
         checkServers();
 

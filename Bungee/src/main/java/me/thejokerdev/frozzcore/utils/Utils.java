@@ -285,6 +285,7 @@ public class Utils {
         format = plugin.getUtils().getMSG(p, format).getText();
 
         String webhook = ChatColor.stripColor(msg);
+        webhook = '`'+webhook+'`';
         plugin.getWebhookManager().getStaff().setMessage("**"+ChatColor.stripColor(format)+"**" + webhook).setEmbed(false).execute();
 
         msg = getMSG(p, format+msg).getText();

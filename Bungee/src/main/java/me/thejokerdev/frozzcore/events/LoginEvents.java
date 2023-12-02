@@ -67,6 +67,7 @@ public class LoginEvents implements Listener {
     @EventHandler
     public void onJoin(PostLoginEvent event) {
         final ProxiedPlayer player = event.getPlayer();
+        if (!plugin.getRedis().isActive()) return;
         plugin.getProxy().getScheduler().runAsync(plugin, new RedisCallable<Void>(plugin) {
             protected Void call(Jedis jedis) {
                 Pipeline pipeline = jedis.pipelined();
@@ -81,6 +82,7 @@ public class LoginEvents implements Listener {
     @EventHandler
     public void onQuit(PlayerDisconnectEvent event) {
         final ProxiedPlayer player = event.getPlayer();
+        if (!plugin.getRedis().isActive()) return;
         plugin.getProxy().getScheduler().runAsync(plugin, new RedisCallable<Void>(plugin) {
             protected Void call(Jedis jedis) {
                 Pipeline pipeline = jedis.pipelined();
@@ -94,6 +96,7 @@ public class LoginEvents implements Listener {
 
     @EventHandler
     public void onServerChange(final ServerConnectedEvent event) {
+        if (!plugin.getRedis().isActive()) return;
         plugin.getProxy().getScheduler().runAsync(plugin, new RedisCallable<Void>(plugin) {
             protected Void call(Jedis jedis) {
                 jedis.hset("player:data:" + event.getPlayer().getUniqueId(), "server", event.getServer().getInfo().getName());
