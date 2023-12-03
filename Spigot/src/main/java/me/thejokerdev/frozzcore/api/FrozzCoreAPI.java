@@ -11,10 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FrozzCoreAPI {
-    private static final SpigotMain plugin = SpigotMain.getPlugin();
+    private static SpigotMain plugin;
 
-    public static SpigotMain getPlugin() {
+    public SpigotMain getPlugin() {
         return plugin;
+    }
+
+    public FrozzCoreAPI() {
+        plugin = SpigotMain.getPlugin();
     }
 
     public static String getPrefix() {
@@ -30,7 +34,7 @@ public class FrozzCoreAPI {
     }
 
     public String getTranslation(Player p, String section, String key){
-        FileUtils file = plugin.getClassManager().getLangManager().getLanguageOfSection(section, getLang(p)).getFile();
+        FileUtils file = getLangFile(getLang(p), section);
         if (file.get(key)==null) {
             String msg = plugin.getClassManager().getUtils().getMSG("keyNotFound").replace("{key}", key);
             return plugin.getUtils().formatMSG(p, msg);
@@ -38,8 +42,12 @@ public class FrozzCoreAPI {
         return plugin.getUtils().formatMSG(p, file.getString(key));
     }
 
+    public FileUtils getLangFile(String lang, String section) {
+        return plugin.getClassManager().getLangManager().getLanguageOfSection(section, lang).getFile();
+    }
+
     public String getTranslation(String lang, String section, String key){
-        FileUtils file = plugin.getClassManager().getLangManager().getLanguageOfSection(section, lang).getFile();
+        FileUtils file = getLangFile(lang, section);
         if (file.get(key)==null) {
             String msg = plugin.getClassManager().getUtils().getMSG("keyNotFound").replace("{key}", key);
             return plugin.getUtils().formatMSG(null, msg);
@@ -49,6 +57,8 @@ public class FrozzCoreAPI {
 
     public void broadcast(Collection<Player> players, String section, String key, Object... placeholders) {
         List<Lang> files = plugin.getClassManager().getLangManager().getSection(section);
+        int i = 1;
+        i++;
         HashMap<String, String> map = new HashMap<>();
         for (Lang file : files) {
             String msg = file.getFile().getString(key);
@@ -57,6 +67,7 @@ public class FrozzCoreAPI {
             }
             map.put(file.getId(), msg);
         }
+        i++;
 
         for (Player p : players) {
             FUser user = getUser(p);
@@ -66,6 +77,8 @@ public class FrozzCoreAPI {
             }
             user.sendMSGWithObjets(msg, placeholders);
         }
+        plugin.console("Debug #"+i);
+        i++;
     }
 
     public void sendMSG(Player player, String section, String key, Object... objects){

@@ -9,8 +9,8 @@ public class ExampleClass {
         api = new FrozzCoreAPI();
 
         /* ==| Send message to J0keer using translation |== */
-        Player p = FrozzCoreAPI.getPlugin().getServer().getPlayer("J0keer");
-        api.sendMSG(p, "general", "general.testMessage", p.getName());
+        Player p = api.getPlugin().getServer().getPlayer("J0keer");
+        api.sendMSG(p, "example", "general.testMessage", p.getName());
         //Message sended!
     }
 }

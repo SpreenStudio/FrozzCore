@@ -43,7 +43,7 @@ public class EasterEggManager {
 
     private void registerEasterEggsConfig() {
         FileConfiguration config = SpigotMain.getPlugin().getConfig();
-        List<String> list = Arrays.asList("ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
+        List<String> list = Collections.singletonList("ewogICJ0aW1lc3RhbXAiIDogMTY5ODU5MDQxNjkxNCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJZdW5hbWkyNyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83NjMyODQ4NWM4ODA1NzUzMDdkYmIwMjMzODdmYjY1MTQwMmNjZDg2MDc1YzgwNmM4NTgzNWZlMzYyMzc0ODgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==");
         if (!config.contains("eastereggs.textures")) {
             config.set("eastereggs.textures", list);
             SpigotMain.getPlugin().saveDefaultConfig();

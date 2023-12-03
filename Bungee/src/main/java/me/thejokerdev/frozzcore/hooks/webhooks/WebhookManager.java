@@ -9,7 +9,7 @@ public class WebhookManager {
     private final BungeeMain plugin;
     private final FileUtils fileUtils;
 
-    private HashMap<String, WebHook> webhooks = new HashMap<>();
+    private final HashMap<String, WebHook> webhooks = new HashMap<>();
 
     public WebhookManager(BungeeMain plugin) {
         this.plugin = plugin;
