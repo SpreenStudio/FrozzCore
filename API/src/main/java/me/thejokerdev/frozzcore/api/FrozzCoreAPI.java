@@ -13,7 +13,10 @@ import java.util.List;
 public class FrozzCoreAPI {
     private static SpigotMain plugin;
 
-    public SpigotMain getPlugin() {
+    public static SpigotMain getPlugin() {
+        if (plugin==null) {
+            plugin = SpigotMain.getPlugin();
+        }
         return plugin;
     }
 
@@ -57,8 +60,6 @@ public class FrozzCoreAPI {
 
     public void broadcast(Collection<Player> players, String section, String key, Object... placeholders) {
         List<Lang> files = plugin.getClassManager().getLangManager().getSection(section);
-        int i = 1;
-        i++;
         HashMap<String, String> map = new HashMap<>();
         for (Lang file : files) {
             String msg = file.getFile().getString(key);
@@ -67,8 +68,6 @@ public class FrozzCoreAPI {
             }
             map.put(file.getId(), msg);
         }
-        i++;
-
         for (Player p : players) {
             FUser user = getUser(p);
             String msg = map.get(user.getLang());
@@ -77,8 +76,6 @@ public class FrozzCoreAPI {
             }
             user.sendMSGWithObjets(msg, placeholders);
         }
-        plugin.console("Debug #"+i);
-        i++;
     }
 
     public void sendMSG(Player player, String section, String key, Object... objects){
