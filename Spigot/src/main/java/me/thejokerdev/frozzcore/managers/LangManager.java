@@ -9,7 +9,6 @@ import me.thejokerdev.frozzcore.type.Lang;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class LangManager {
     private final SpigotMain plugin;
@@ -36,15 +35,16 @@ public class LangManager {
         langFolder = new File(plugin.getDataFolder()+"/lang/");
     }
 
-    public LangManager init(){
-        LanguageType languageType;
+    public void init(){
+        LanguageType languageType = LanguageType.REMOTE;
         try {
             languageType = LanguageType.valueOf(plugin.getConfig().getString("settings.languages.type"));
-        } catch (Exception e){
-            languageType = LanguageType.LOCAL;
+        } catch (Exception ignored){
         }
         if (languageType == LanguageType.LOCAL){
             langFolder = new File(plugin.getConfig().getString("settings.languages.path", "/root/storage/languages/"));
+        } else {
+            langFolder = new File(plugin.getDataFolder()+"/lang/");
         }
         languages = new LinkedHashMap<>();
         settings = new LinkedHashMap<>();
@@ -58,20 +58,19 @@ public class LangManager {
         if (languageType == LanguageType.REMOTE || langFolder.listFiles().length == 0) {
             if (!getFromWeb()) {
                 error = "&cCan't download files from github repository.";
-                return this;
+                return;
             }
         }
 
         if (Objects.requireNonNull(langFolder.listFiles()).length == 0){
             error = "&cAny file downloaded.";
-            return this;
+            return;
         }
 
         loadFiles();
 
         running = true;
         updated = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-        return this;
     }
 
     public void loadFiles(){

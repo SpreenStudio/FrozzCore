@@ -23,7 +23,8 @@ public class EasterEggManager {
     private final String server;
 
     public EasterEggManager(SpigotMain plugin) {
-        this.server = CloudAPI.getBukkitAPI().getThisServer().getGroup().getName();
+        boolean isCloud = plugin.getServerManager()!=null;
+        this.server = isCloud ? CloudAPI.getBukkitAPI().getThisServer().getGroup().getName() : Bukkit.getServerName();
 
         Data data = plugin.getClassManager().getDataManager().getData();
 

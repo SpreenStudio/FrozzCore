@@ -45,7 +45,7 @@ public final class SpigotMain extends JavaPlugin {
 
     private String serverId;
     private String serverName;
-    int tries = 0;
+    int tries = 1;
 
     private ServerManager serverManager;
 
@@ -94,11 +94,11 @@ public final class SpigotMain extends JavaPlugin {
                         return;
                     }
                     if (redis.isActive()) {
-                        init();
                         classManager.initAfterStart();
                         Bukkit.getPluginManager().callEvent(new RedisInitEvent(plugin, redis));
                     } else {
                         getServer().getScheduler().runTaskLater(SpigotMain.this, this, 20);
+                        console("{prefix}&cRedis not connected, trying to connect... ("+tries+"/3)");
                         tries++;
                     }
                 }
@@ -108,6 +108,9 @@ public final class SpigotMain extends JavaPlugin {
                 @Override
                 public void run() {
                     loaded = true;
+                    if (redis.isActive()) {
+                        init();
+                    }
                 }
             }.runTaskLater(this, 20L * 5);
         } else {

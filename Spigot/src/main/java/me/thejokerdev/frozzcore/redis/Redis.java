@@ -34,12 +34,10 @@ public class Redis {
 
         try {
             plugin.console("{prefix}&eConectando a redis...");
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                stablishConnection(section, pool -> {
-                    this.pool = pool;
-                    this.active = true;
-                    plugin.console("{prefix}&aConectado a redis.");
-                });
+            stablishConnection(section, pool -> {
+                this.pool = pool;
+                this.active = true;
+                plugin.console("{prefix}&aConectado a redis.");
             });
         } catch (Exception var5) {
             plugin.console("{prefix}&cError al conectar a redis.");
@@ -56,7 +54,7 @@ public class Redis {
         boolean hasPassword = !section.getString("auth.password", "").isEmpty();
         if (hasPassword) {
             config.setTestOnBorrow(true);
-            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 0, section.getString("auth.password", ""), 30000);
+            pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 30000, section.getString("auth.password", ""), 0);
         } else {
             pool = new JedisPool(config, section.getString("host", "localhost"), section.getInt("port", 6379), 30000);
         }
@@ -68,7 +66,7 @@ public class Redis {
     }
 
     public void write(String json) {
-        this.write(database, json);
+        getRedisManager().publish(database, json);
     }
 
     public void addServer(String name, String ip, String port){
@@ -80,36 +78,4 @@ public class Redis {
         String msg = (new RedisMessage(plugin, RedisKey.SERVER_REMOVE)).setParam("name", name).toJSON();
         write(msg);
     }
-
-    public void write(String channel, String json) {
-        try {
-            Jedis jedis = this.pool.getResource();
-            Throwable var4 = null;
-
-            try {
-                jedis.publish(channel, json);
-            } catch (Throwable var14) {
-                var4 = var14;
-                throw var14;
-            } finally {
-                if (jedis != null) {
-                    if (var4 != null) {
-                        try {
-                            jedis.close();
-                        } catch (Throwable var13) {
-                            var4.addSuppressed(var13);
-                        }
-                    } else {
-                        jedis.close();
-                    }
-                }
-
-            }
-
-        } catch (JedisConnectionException var16) {
-            plugin.getLogger().log(Level.SEVERE, "Unable to get connection from pool - did your Redis server go away?", var16);
-            throw new RuntimeException("Unable to publish channel message", var16);
-        }
-    }
-
 }

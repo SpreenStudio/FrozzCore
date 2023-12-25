@@ -90,6 +90,9 @@ public class PapiExpansion extends PlaceholderExpansion {
                 }
                 return String.valueOf(i);
             }
+            if (plugin.getServerId() != null) {
+                return plugin.getServerId();
+            }
             return plugin.getServerName();
         }
         if (params.equals("jump")){
