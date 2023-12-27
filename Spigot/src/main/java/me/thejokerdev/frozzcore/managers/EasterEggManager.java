@@ -86,7 +86,7 @@ public class EasterEggManager {
 
     public void addEaster(Player player, Location location) {
         if (!checkEasterEgg(location)) {
-            sendMessage(player, "not_egg");
+            //sendMessage(player, "not_egg");
             return;
         }
 
