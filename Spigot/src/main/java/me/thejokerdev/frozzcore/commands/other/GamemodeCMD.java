@@ -95,130 +95,132 @@ public class GamemodeCMD extends CustomCMD {
             }
             return true;
         }
-        if (args.length == 2){
-            if (!sender.hasPermission(getPermission()+".others")){
-                getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
-                return true;
-            }
-            args[1] = args[1].replace("@a", "all");
-            args[1] = args[1].replace("*", "all");
-            Player target = getPlugin().getServer().getPlayer(args[1]);
-            if (target == null && !args[1].equalsIgnoreCase("all")){
-                getPlugin().getClassManager().getUtils().sendMessage(sender, "playerNotExist");
-                return true;
-            }
-            String mode = args[0];
-            mode = mode.toLowerCase().replace("c", "1").replace("a", "2").replace("s", "0").replace("sp", "3");
-            String msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.other");
-            String msg_mode;
-            if (mode.equalsIgnoreCase("0") || mode.equalsIgnoreCase("survival")){
-                if (args[1].equalsIgnoreCase("all")){
-                    msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
-                    for (Player online : getPlugin().getServer().getOnlinePlayers()){
-                        String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
-                        msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.SURVIVAL"));
-                        online.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                        if (getPlugin().getClassManager().getPlayerManager().getUser(online).getAllowFlight() == ModifierStatus.ON){
-                            online.setAllowFlight(true);
-                            online.setFlying(true);
-                        }
-                        getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
+        if (!sender.hasPermission(getPermission() + ".others")) {
+            getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
+            return true;
+        }
+        args[1] = args[1].replace("@a", "all");
+        args[1] = args[1].replace("*", "all");
+        Player target = getPlugin().getServer().getPlayer(args[1]);
+        if (target == null && !args[1].equalsIgnoreCase("all")){
+            getPlugin().getClassManager().getUtils().sendMessage(sender, "playerNotExist");
+            return true;
+        }
+        String mode = args[0];
+        boolean silent = args.length == 3 && args[2].equalsIgnoreCase("-s");
+        mode = mode.toLowerCase().replace("c", "1").replace("a", "2").replace("s", "0").replace("sp", "3");
+        String msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.other");
+        String msg_mode;
+        if (mode.equalsIgnoreCase("0") || mode.equalsIgnoreCase("survival")){
+            if (args[1].equalsIgnoreCase("all")){
+                msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
+                for (Player online : getPlugin().getServer().getOnlinePlayers()){
+                    String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
+                    msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.SURVIVAL"));
+                    online.setGameMode(org.bukkit.GameMode.SURVIVAL);
+                    if (getPlugin().getClassManager().getPlayerManager().getUser(online).getAllowFlight() == ModifierStatus.ON){
+                        online.setAllowFlight(true);
+                        online.setFlying(true);
                     }
-                    msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SURVIVAL");
-                    msg = msg.replace("{mode}", msg_mode);
-                    getPlugin().getUtils().sendMessage(sender, msg);
-                    return true;
-                }
-                target.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                if (user.getAllowFlight() == ModifierStatus.ON){
-                    target.setAllowFlight(true);
-                    target.setFlying(true);
+                    if (silent)continue;
+                    getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
                 }
                 msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SURVIVAL");
                 msg = msg.replace("{mode}", msg_mode);
-                msg = msg.replace("{player}", target.getName());
                 getPlugin().getUtils().sendMessage(sender, msg);
                 return true;
             }
-            if (mode.equalsIgnoreCase("1") || mode.equalsIgnoreCase("creative")){
-                if (args[1].equalsIgnoreCase("all")){
-                    msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
-                    for (Player online : getPlugin().getServer().getOnlinePlayers()){
-                        String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
-                        msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.CREATIVE"));
-                        online.setGameMode(org.bukkit.GameMode.CREATIVE);
-                        online.setAllowFlight(true);
-                        online.setFlying(true);
-                        getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
-                    }
-                    msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.CREATIVE");
-                    msg = msg.replace("{mode}", msg_mode);
-                    getPlugin().getUtils().sendMessage(sender, msg);
-                    return true;
-                }
-                target.setGameMode(org.bukkit.GameMode.CREATIVE);
+            target.setGameMode(org.bukkit.GameMode.SURVIVAL);
+            if (user.getAllowFlight() == ModifierStatus.ON){
                 target.setAllowFlight(true);
                 target.setFlying(true);
+            }
+            msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SURVIVAL");
+            msg = msg.replace("{mode}", msg_mode);
+            msg = msg.replace("{player}", target.getName());
+            getPlugin().getUtils().sendMessage(sender, msg);
+            return true;
+        }
+        if (mode.equalsIgnoreCase("1") || mode.equalsIgnoreCase("creative")){
+            if (args[1].equalsIgnoreCase("all")){
+                msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
+                for (Player online : getPlugin().getServer().getOnlinePlayers()){
+                    String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
+                    msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.CREATIVE"));
+                    online.setGameMode(org.bukkit.GameMode.CREATIVE);
+                    online.setAllowFlight(true);
+                    online.setFlying(true);
+                    if (silent)continue;
+                    getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
+                }
                 msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.CREATIVE");
                 msg = msg.replace("{mode}", msg_mode);
-                msg = msg.replace("{player}", target.getName());
                 getPlugin().getUtils().sendMessage(sender, msg);
                 return true;
             }
-            if (mode.equalsIgnoreCase("2") || mode.equalsIgnoreCase("adventure")){
-                if (args[1].equalsIgnoreCase("all")){
-                    msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
-                    for (Player online : getPlugin().getServer().getOnlinePlayers()){
-                        String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
-                        msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.ADVENTURE"));
-                        online.setGameMode(org.bukkit.GameMode.ADVENTURE);
-                        if (getPlugin().getClassManager().getPlayerManager().getUser(online).getAllowFlight() == ModifierStatus.ON){
-                            online.setAllowFlight(true);
-                            online.setFlying(true);
-                        }
-                        getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
+            target.setGameMode(org.bukkit.GameMode.CREATIVE);
+            target.setAllowFlight(true);
+            target.setFlying(true);
+            msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.CREATIVE");
+            msg = msg.replace("{mode}", msg_mode);
+            msg = msg.replace("{player}", target.getName());
+            getPlugin().getUtils().sendMessage(sender, msg);
+            return true;
+        }
+        if (mode.equalsIgnoreCase("2") || mode.equalsIgnoreCase("adventure")){
+            if (args[1].equalsIgnoreCase("all")){
+                msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
+                for (Player online : getPlugin().getServer().getOnlinePlayers()){
+                    String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
+                    msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.ADVENTURE"));
+                    online.setGameMode(org.bukkit.GameMode.ADVENTURE);
+                    if (getPlugin().getClassManager().getPlayerManager().getUser(online).getAllowFlight() == ModifierStatus.ON){
+                        online.setAllowFlight(true);
+                        online.setFlying(true);
                     }
-                    msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.ADVENTURE");
-                    msg = msg.replace("{mode}", msg_mode);
-                    getPlugin().getUtils().sendMessage(sender, msg);
-                    return true;
-                }
-                target.setGameMode(org.bukkit.GameMode.ADVENTURE);
-                if (user.getAllowFlight() == ModifierStatus.ON){
-                    target.setAllowFlight(true);
-                    target.setFlying(true);
+                    if (silent)continue;
+                    getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
                 }
                 msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.ADVENTURE");
                 msg = msg.replace("{mode}", msg_mode);
-                msg = msg.replace("{player}", target.getName());
                 getPlugin().getUtils().sendMessage(sender, msg);
                 return true;
             }
-            if (mode.equalsIgnoreCase("3") || mode.equalsIgnoreCase("spectator")){
-                if (args[1].equalsIgnoreCase("all")){
-                    msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
-                    for (Player online : getPlugin().getServer().getOnlinePlayers()){
-                        String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
-                        msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.SPECTATOR"));
-                        online.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                        online.setAllowFlight(true);
-                        online.setFlying(true);
-                        getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
-                    }
-                    msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SPECTATOR");
-                    msg = msg.replace("{mode}", msg_mode);
-                    getPlugin().getUtils().sendMessage(sender, msg);
-                    return true;
-                }
-                target.setGameMode(org.bukkit.GameMode.SPECTATOR);
+            target.setGameMode(org.bukkit.GameMode.ADVENTURE);
+            if (user.getAllowFlight() == ModifierStatus.ON){
                 target.setAllowFlight(true);
                 target.setFlying(true);
+            }
+            msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.ADVENTURE");
+            msg = msg.replace("{mode}", msg_mode);
+            msg = msg.replace("{player}", target.getName());
+            getPlugin().getUtils().sendMessage(sender, msg);
+            return true;
+        }
+        if (mode.equalsIgnoreCase("3") || mode.equalsIgnoreCase("spectator")){
+            if (args[1].equalsIgnoreCase("all")){
+                msg = getPlugin().getClassManager().getUtils().getLangMSG(p, "commands.gamemode.success.all");
+                for (Player online : getPlugin().getServer().getOnlinePlayers()){
+                    String msg2 = getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.success.self");
+                    msg2 = msg2.replace("{mode}", getPlugin().getClassManager().getUtils().getLangMSG(online, "commands.gamemode.modes.SPECTATOR"));
+                    online.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                    online.setAllowFlight(true);
+                    online.setFlying(true);
+                    if (silent)continue;
+                    getPlugin().getClassManager().getUtils().sendMessage(online, msg2);
+                }
                 msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SPECTATOR");
                 msg = msg.replace("{mode}", msg_mode);
-                msg = msg.replace("{player}", target.getName());
                 getPlugin().getUtils().sendMessage(sender, msg);
                 return true;
             }
+            target.setGameMode(org.bukkit.GameMode.SPECTATOR);
+            target.setAllowFlight(true);
+            target.setFlying(true);
+            msg_mode = getPlugin().getUtils().getLangMSG(p, "commands.gamemode.modes.SPECTATOR");
+            msg = msg.replace("{mode}", msg_mode);
+            msg = msg.replace("{player}", target.getName());
+            getPlugin().getUtils().sendMessage(sender, msg);
             return true;
         }
         return true;

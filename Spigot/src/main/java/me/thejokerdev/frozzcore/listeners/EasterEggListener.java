@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.listeners;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.thejokerdev.frozzcore.SpigotMain;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,7 +25,7 @@ public class EasterEggListener implements Listener {
 
         Block block = event.getClickedBlock();
 
-        if(!block.getType().equals(Material.SKULL))
+        if(!block.getType().equals(XMaterial.PLAYER_HEAD.parseMaterial()))
             return;
 
         event.setCancelled(true);

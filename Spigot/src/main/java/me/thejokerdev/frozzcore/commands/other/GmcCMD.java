@@ -38,7 +38,8 @@ public class GmcCMD extends CustomCMD {
             getPlugin().getUtils().sendMessage(player, msg);
             return true;
         }
-        if (args.length == 1){
+        if (args.length > 0){
+            boolean silent = args.length > 1 && args[1].equalsIgnoreCase("-s");
             if (!sender.hasPermission(getPermission() + ".others")){
                 getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
                 return true;
@@ -58,7 +59,7 @@ public class GmcCMD extends CustomCMD {
                 msg = getPlugin().getClassManager().getUtils().getLangMSG(target, "commands.gamemode.success.self");
                 msg_mode = getPlugin().getUtils().getLangMSG(target, "commands.gamemode.modes.CREATIVE");
                 msg = msg.replace("{mode}", msg_mode);
-                getPlugin().getUtils().sendMessage(target, msg);
+                if (!silent) getPlugin().getUtils().sendMessage(target, msg);
 
                 msg = getPlugin().getClassManager().getUtils().getLangMSG(sender, "commands.gamemode.success.other");
                 msg_mode = getPlugin().getUtils().getLangMSG(sender, "commands.gamemode.modes.CREATIVE");
@@ -75,6 +76,7 @@ public class GmcCMD extends CustomCMD {
                     msg = getPlugin().getClassManager().getUtils().getLangMSG(player, "commands.gamemode.success.self");
                     msg_mode = getPlugin().getUtils().getLangMSG(player, "commands.gamemode.modes.CREATIVE");
                     msg = msg.replace("{mode}", msg_mode);
+                    if (silent) continue;
                     getPlugin().getUtils().sendMessage(player, msg);
                 }
                 msg = getPlugin().getClassManager().getUtils().getLangMSG(sender, "commands.gamemode.success.all");
