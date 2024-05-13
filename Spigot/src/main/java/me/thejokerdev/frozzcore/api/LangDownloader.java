@@ -40,7 +40,7 @@ public class LangDownloader {
         boolean si = true;
         JsonParser parser = new JsonParser();
         try {
-            String url = "https://api.github.com/repositories/{Username}/{Repository}/contents/{Folder}";
+            String url = "https://api.github.com/repos/{Username}/{Repository}/contents/{Folder}";
             url = url.replace("{Username}", plugin.getConfig().getString("settings.languages.downloader.user"));
             url = url.replace("{Repository}", plugin.getConfig().getString("settings.languages.downloader.repo"));
             url = url.replace("{Folder}", folder);
