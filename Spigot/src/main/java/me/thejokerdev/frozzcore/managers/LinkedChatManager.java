@@ -40,12 +40,15 @@ public class LinkedChatManager {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("from", getServerName());
                 jsonObject.put("player", player.getName());
-                jsonObject.put("format", format);
                 jsonObject.put("message", message);
                 jsonObject.put("server-groups", groupListArray);
 
+                //fix double %% in format
+                jsonObject.put("format", format.replace("%%", "%"));
+
                 plugin.getRedis().getRedisManager().setWithExpire(jsonObject.toString(), new JSONObject().toString(), RedisKey.LINKED_CHAT.getExpire());
                 plugin.getRedis().getRedisManager().publish(RedisKey.LINKED_CHAT.getID(), jsonObject.toString());
+                plugin.debug("LinkedChat message sent: " + jsonObject);
             }
         }.runTaskAsynchronously(plugin);
     }
@@ -55,7 +58,7 @@ public class LinkedChatManager {
         {
             JSONObject jsonMessage = new JSONObject(message);
             String from = jsonMessage.getString("from");
-            //String playerName = jsonMessage.getString("player");
+            String playerName = jsonMessage.getString("player");
             String format = jsonMessage.getString("format");
             //String playerMessage = jsonMessage.getString("message");
             JSONArray serverGroupsArray = jsonMessage.getJSONArray("server-groups");
@@ -65,19 +68,29 @@ public class LinkedChatManager {
                 serverGroupsList.add(serverGroupsArray.get(i).toString());
             }
 
-            if(from.equalsIgnoreCase(getServerName()) || !serverGroupsList.contains(getServerGroupname())) return;
+            plugin.debug("Received message: "+ jsonMessage);
+            plugin.debug("This server group: "+getServerGroupname());
+            plugin.debug("This server name: "+getServerName());
 
-            plugin.getServer().getConsoleSender().sendMessage(format);
-            for(Player player : Bukkit.getOnlinePlayers())
-                player.sendMessage(format);
+            if(plugin.getServer().getPlayer(playerName)!=null || !serverGroupsList.contains(getServerGroupname())) return;
+
+            serverGroupsList.forEach(plugin::debug);
+
+            if (serverGroupsList.contains(getServerGroupname())) {
+                plugin.debug("Sent message");
+                plugin.getServer().getConsoleSender().sendMessage(format);
+                for(Player player : Bukkit.getOnlinePlayers())
+                    player.sendMessage(format);
+            }
         });
     }
 
     private String getServerName(){
-        return Bukkit.getServerName();
+        return Bukkit.getName();
     }
 
     private String getServerGroupname(){
-        return CloudAPI.getUniversalAPI().getServer(getServerName()).getGroup().getName();
+        boolean existsCloud = plugin.getServer().getPluginManager().isPluginEnabled("Cloud");
+        return existsCloud ? CloudAPI.getUniversalAPI().getServer(getServerName()).getGroup().getName() : file.getString("group", "");
     }
 }

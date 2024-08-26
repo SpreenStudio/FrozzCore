@@ -13,6 +13,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class LobbyListener implements Listener {
     private final SpigotMain plugin;
@@ -74,11 +75,16 @@ public class LobbyListener implements Listener {
             return;
         }
         if (e.getCause() == EntityDamageEvent.DamageCause.VOID && plugin.getUtils().isWorldProtected(w, Modules.VOIDTP)) {
-            if (w == plugin.getSpawn().getWorld()){
-                e.getEntity().teleport(plugin.getSpawn());
-            } else {
-                e.getEntity().teleport(w.getSpawnLocation());
-            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (w == plugin.getSpawn().getWorld()){
+                        e.getEntity().teleport(plugin.getSpawn());
+                    } else {
+                        e.getEntity().teleport(w.getSpawnLocation());
+                    }
+                }
+            }.runTaskLater(plugin, 1L);
             e.setCancelled(true);
         }
         if (plugin.getUtils().isWorldProtected(w, Modules.LOBBY)){

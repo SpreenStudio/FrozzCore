@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/API/FrozzCore-API.iml" filepath="$PROJECT_DIR$/API/FrozzCore-API.iml" />
       <module fileurl="file://$PROJECT_DIR$/Bungee/FrozzCore-Bungee.iml" filepath="$PROJECT_DIR$/Bungee/FrozzCore-Bungee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spigot/FrozzCore-Spigot.iml" filepath="$PROJECT_DIR$/Spigot/FrozzCore-Spigot.iml" />
     </modules>
   </component>
 </project>

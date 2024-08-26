@@ -66,6 +66,7 @@ public class MenusManager implements Listener {
         } else {
             plugin.debug("Customs menu folder doesn't exist!");
         }
+        getPlugin().getClassManager().getPlayerManager().getUser(p).getItemsManager().reloadItems();
     }
 
     public HashMap<String, Menu> getPlayerMenus(Player var0) {
@@ -120,6 +121,11 @@ public class MenusManager implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent var1) {
 
+        try {
+            //var1.getHand()=
+        } catch (Exception e){
+            return;
+        }
         for (Menu var3 : getPlayerMenus((Player) var1.getWhoClicked()).values()) {
             if (var1.getView().getTitle().equals(var3.getTitle()) && var1.getCurrentItem() != null) {
                 var1.setCancelled(true);

@@ -94,6 +94,7 @@ public class ClassManager {
         if (plugin.getRedis() != null) {
             if (isModuleEnabled("linked-chat")) {
                 linkedChatManager = new LinkedChatManager(plugin);
+                plugin.debug("LinkedChat enabled");
             } else {
                 plugin.getLogger().severe("disabled linked-chat");
             }

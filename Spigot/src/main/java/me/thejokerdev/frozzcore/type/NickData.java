@@ -56,7 +56,13 @@ public class NickData {
         NickAPI.resetGameProfileName(player);
         NickAPI.refreshPlayer(player);
 
-        boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+        boolean isGame;
+        try {
+            Class.forName("studio.spreen.statsspigot.StatsSpigot");
+            isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+        } catch (ClassNotFoundException e) {
+            isGame = false;
+        }
 
         if (isGame) return;
 
@@ -79,7 +85,13 @@ public class NickData {
 
         player.setPlayerListName(name);
 
-        boolean isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+        boolean isGame;
+        try {
+            Class.forName("studio.spreen.statsspigot.StatsSpigot");
+            isGame = StatsSpigot.INSTANCE.getConfig().isGameServer();
+        } catch (ClassNotFoundException e) {
+            isGame = false;
+        }
 
         if (isGame) return;
         startNickTask();

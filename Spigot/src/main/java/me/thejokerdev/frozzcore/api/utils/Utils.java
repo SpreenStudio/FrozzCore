@@ -301,7 +301,7 @@ public class Utils {
                 if (item.isDead()){
                     cancel();
                 } else {
-                    item.getLocation().getWorld().playEffect(item.getLocation(), Effect.HAPPY_VILLAGER, 0);
+                    item.getLocation().getWorld().playEffect(item.getLocation(), Effect.VILLAGER_PLANT_GROW, 0);
                 }
                 if (item.getVelocity().getX() == 0.0D || item.getVelocity().getY() == 0.0D || item.getVelocity().getZ() == 0.0D) {
                     Player player = (Player)item.getPassenger();

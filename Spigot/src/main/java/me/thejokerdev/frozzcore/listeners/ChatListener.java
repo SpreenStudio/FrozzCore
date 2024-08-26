@@ -50,6 +50,7 @@ public class ChatListener implements Listener {
         }
 
         // Add to format the message
+        format = PlaceholderAPI.setPlaceholders(player, format);
         format += message;
 
         event.setFormat(format.replace("%", "%%"));
@@ -60,16 +61,16 @@ public class ChatListener implements Listener {
             event.getRecipients().addAll(getRecipients(player.getWorld()));
         }
 
-        publishToRedis(event);
+        publishToRedis(player, event.getFormat(), event.getMessage());
     }
 
     public List<Player> getRecipients(World world) {
         return world.getPlayers();
     }
 
-    private void publishToRedis(AsyncPlayerChatEvent e) {
+    private void publishToRedis(Player player, String format, String message) {
         if (plugin.getRedis() != null && plugin.getClassManager().getLinkedChatManager() != null)
-            plugin.getClassManager().getLinkedChatManager().sendMessage(e.getPlayer(), e.getFormat(), e.getMessage());
+            plugin.getClassManager().getLinkedChatManager().sendMessage(player, format, message);
     }
 
     private boolean isPerWorldSettingEnabled() {

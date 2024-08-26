@@ -174,7 +174,7 @@ public class ItemEvents implements Listener {
                     return;
                 }
                 Location loc = arrow.getLocation();
-                loc.getWorld().playEffect(loc, Effect.HAPPY_VILLAGER, 1);
+                //loc.getWorld().playEffect(loc, Effect.VILLAGER_PLANT_GROW, 1);
                 i--;
             }
         }.runTaskTimer(plugin, 0L, 1L);
@@ -218,7 +218,9 @@ public class ItemEvents implements Listener {
         }
         if (e.getNewGameMode() != GameMode.CREATIVE) {
             FUser player = plugin.getClassManager().getPlayerManager().getUser(e.getPlayer());
-            player.getItemsManager().reloadItems();
+            try {
+                player.getItemsManager().reloadItems();
+            } catch (Exception ignored) {}
         }
     }
 

@@ -29,17 +29,17 @@ public class GamemodeCMD extends CustomCMD {
             getPlugin().getClassManager().getUtils().sendMessage(sender, "noPermission");
             return true;
         }
-        if (!(sender instanceof Player)) {
-            getPlugin().getClassManager().getUtils().sendMessage(sender, "onlyPlayers");
-            return true;
-        }
-        Player p = (Player) sender;
-        FUser user = getPlugin().getClassManager().getPlayerManager().getUser(p);
+        Player p = sender instanceof Player ? (Player) sender : null;
+        FUser user = p == null ? null : getPlugin().getClassManager().getPlayerManager().getUser(p);
         if (args.length == 0){
             getPlugin().getClassManager().getUtils().sendMessage(sender, "commands.gamemode.usage");
             return true;
         }
         if (args.length == 1){
+            if (p == null || user == null){
+                getPlugin().getClassManager().getUtils().sendMessage(sender, "onlyPlayer");
+                return true;
+            }
             String mode = args[0];
             if (mode.equalsIgnoreCase("c")){
                 mode = "creative";

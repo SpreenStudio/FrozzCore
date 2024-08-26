@@ -1,13 +1,12 @@
 package me.thejokerdev.frozzcore.type;
 
+import com.cryptomorin.xseries.SkullUtils;
 import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import lombok.Getter;
 import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.api.utils.MinecraftVersion;
-import me.thejokerdev.frozzcore.api.utils.SkullUtils;
 import me.thejokerdev.frozzcore.api.utils.Utils;
 import me.thejokerdev.frozzcore.managers.ItemsManager;
 import org.bukkit.Bukkit;
@@ -20,7 +19,6 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.MaterialData;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -282,10 +280,10 @@ public class SimpleItem {
         this.glowing = glowing;
         if (glowing) {
             this.addFlag(flag);
-            this.addEnchantment(XEnchantment.DURABILITY);
+            this.addEnchantment(XEnchantment.UNBREAKING);
         } else {
             this.removeFlag(flag);
-            this.removeEnchantment(XEnchantment.DURABILITY);
+            this.removeEnchantment(XEnchantment.UNBREAKING);
         }
 
         return this;
@@ -380,22 +378,26 @@ public class SimpleItem {
             if (player!=null){
                 skinTexture = PlaceholderAPI.setPlaceholders(player.getPlayer(), skinTexture);
             }
+            ItemStack secItem = XMaterial.PLAYER_HEAD.parseItem();
+            ItemMeta secMeta = secItem.getItemMeta();
             if (skinTexture.startsWith("base-")) {
                 skinTexture = skinTexture.replace("base-", "");
-                item = (SkullUtils.getHead(skinTexture));
+                SkullUtils.applySkin(secMeta, skinTexture);
             } else if (skinTexture.startsWith("uuid-")) {
                 skinTexture = skinTexture.replace("uuid-", "");
                 UUID uuid = UUID.fromString(skinTexture);
-                item = (SkullUtils.getHead(uuid));
+                SkullUtils.applySkin(secMeta, uuid);
             } else if (skinTexture.startsWith("name-")) {
                 skinTexture = skinTexture.replace("name-", "");
                 OfflinePlayer pf = Bukkit.getOfflinePlayer(skinTexture);
-                item = (SkullUtils.getHead(pf));
+                SkullUtils.applySkin(secMeta, pf);
             } else if (skinTexture.startsWith("url-")) {
                 skinTexture = skinTexture.replace("url-", "");
                 skinTexture = "http://textures.minecraft.net/texture/" + skinTexture;
-                item = (SkullUtils.getHead(skinTexture));
+                SkullUtils.applySkin(secMeta, skinTexture);
             }
+            secItem.setItemMeta(secMeta);
+            item = secItem;
         }
         if (meta instanceof FireworkEffectMeta && fireworkEffectMeta != null) {
             item.setItemMeta(fireworkEffectMeta);
@@ -419,7 +421,7 @@ public class SimpleItem {
         if (unbreakable){
             ItemMeta meta1 = item.getItemMeta();
             if (!MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_18_R2)){
-                meta1.spigot().setUnbreakable(unbreakable);
+                meta1.setUnbreakable(true);
             }
             item.setItemMeta(meta1);
         }

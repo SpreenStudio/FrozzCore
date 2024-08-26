@@ -1,5 +1,6 @@
 package me.thejokerdev.frozzcore.managers;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -24,7 +25,7 @@ public class EasterEggManager {
 
     public EasterEggManager(SpigotMain plugin) {
         boolean isCloud = plugin.getServerManager()!=null;
-        this.server = isCloud ? CloudAPI.getBukkitAPI().getThisServer().getGroup().getName() : Bukkit.getServerName();
+        this.server = isCloud ? CloudAPI.getBukkitAPI().getThisServer().getGroup().getName() : Bukkit.getName();
 
         Data data = plugin.getClassManager().getDataManager().getData();
 
@@ -245,13 +246,13 @@ public class EasterEggManager {
 
     public void placePlayerHeadWithTextureValue(Location location) {
         Block block = location.getBlock();
-        if (block.getType() != Material.SKULL)
-            block.setType(Material.SKULL);
+        if (block.getType() != XMaterial.PLAYER_HEAD.parseMaterial())
+            block.setType(XMaterial.PLAYER_HEAD.parseMaterial());
 
         Skull skull = (Skull)block.getState();
         skull.setSkullType(SkullType.PLAYER);
 
-        skull.setSkullTexture(getRandomEasterEggTexture());
+        //set texture
     }
 
     private static void sendMessage(Player player, String path, Object... args) {

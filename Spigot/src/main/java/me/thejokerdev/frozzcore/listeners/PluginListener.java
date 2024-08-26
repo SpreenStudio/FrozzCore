@@ -73,7 +73,7 @@ public class PluginListener implements Listener {
                 plugin.getClassManager().getMenusManager().loadMenus(user.getPlayer());
                 user.getItemsManager().reloadItems();
             }
-        }.runTaskLaterAsynchronously(plugin, 5L);
+        }.runTaskLater(plugin, 5L);
         user.saveData(false);
     }
 }

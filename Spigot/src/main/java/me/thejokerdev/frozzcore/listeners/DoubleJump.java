@@ -3,6 +3,7 @@ package me.thejokerdev.frozzcore.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cryptomorin.xseries.XSound;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.enums.ModifierStatus;
 import me.thejokerdev.frozzcore.enums.Modules;
@@ -66,7 +67,7 @@ public class DoubleJump implements Listener {
             p.setFlying(false);
            
             p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(1.5).setY(1));
-            p.playSound(p.getLocation(), Sound.BAT_TAKEOFF, 1.0f, -5.0f);
+            XSound.ENTITY_BAT_TAKEOFF.play(p);
            
             p.setFallDistance(100);
 

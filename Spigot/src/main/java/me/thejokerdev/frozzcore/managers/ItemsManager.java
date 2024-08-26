@@ -163,7 +163,7 @@ public class ItemsManager {
         if (hasMetaData){
             item.setMetaData(section.getString("metadata"));
             if (item.getMetaData().equals("tpbow")){
-                item.addEnchantment(XEnchantment.ARROW_INFINITE, 1);
+                item.addEnchantment(XEnchantment.INFINITY, 1);
             }
         }
         if (hasAmount){

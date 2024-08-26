@@ -58,7 +58,7 @@ public class CMDManager implements CommandExecutor, TabCompleter {
                 customCommands.put("nick", new NickCMD(plugin));
             }
             //customCommands.put("coins", new CoinsCMD(plugin));
-
+            customCommands.put("speed", new SpeedCMD(plugin));
 
             customCommands.values().forEach(CustomCMD::register);
         }

@@ -116,7 +116,7 @@ public final class SpigotMain extends JavaPlugin {
         } else {
             // REDIS: DISABLED >>
             try {
-                serverName = getServer().getServerName();
+                serverName = getServer().getName();
                 if (serverManager != null) {
                     serverName = getServerManager().getActualServer().getName();
                 }
