@@ -29,6 +29,7 @@ public class ClassManager {
     private NametagHandler nametagHandler;
     private LinkedChatManager linkedChatManager;
     private EasterEggManager easterEggManager;
+    private WarpManager warpManager;
 
     private LoginListener loginListener;
     private ScoreBoard scoreBoard;
@@ -47,6 +48,7 @@ public class ClassManager {
         playerManager = new PlayerManager(plugin);
         dataManager = new DataManager(plugin);
         menusManager = new MenusManager(plugin);
+        warpManager = new WarpManager(plugin);
 
         /* Languages */
         if (isModuleEnabled("languages")) {
@@ -87,6 +89,9 @@ public class ClassManager {
         if(plugin.getConfig().getBoolean("modules.eastereggs")){
             easterEggManager = new EasterEggManager(plugin);
             regListener(new EasterEggListener(plugin));
+        }
+        if (warpManager != null){
+            warpManager.load();
         }
     }
 

@@ -3,6 +3,9 @@ package me.thejokerdev.frozzcore.managers;
 import me.thejokerdev.frozzcore.SpigotMain;
 import me.thejokerdev.frozzcore.commands.admin.*;
 import me.thejokerdev.frozzcore.commands.other.*;
+import me.thejokerdev.frozzcore.commands.other.warp.DelWarpCMD;
+import me.thejokerdev.frozzcore.commands.other.warp.SetWarpCMD;
+import me.thejokerdev.frozzcore.commands.other.warp.WarpCMD;
 import me.thejokerdev.frozzcore.commands.user.LangCMD;
 import me.thejokerdev.frozzcore.commands.user.OpenCMD;
 import me.thejokerdev.frozzcore.enums.SenderType;
@@ -59,6 +62,10 @@ public class CMDManager implements CommandExecutor, TabCompleter {
             }
             //customCommands.put("coins", new CoinsCMD(plugin));
             customCommands.put("speed", new SpeedCMD(plugin));
+
+            customCommands.put("warp", new WarpCMD(plugin));
+            customCommands.put("setwarp", new SetWarpCMD(plugin));
+            customCommands.put("delwarp", new DelWarpCMD(plugin));
 
             customCommands.values().forEach(CustomCMD::register);
         }

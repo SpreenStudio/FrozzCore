@@ -72,7 +72,7 @@ settings:
   tpEveryJoin: true
   debug: false
   languages:
-    type: LOCAL #LOCAL or REMOTE
+    type: REMOTE #LOCAL or REMOTE
     path: '/root/storage/languages/'
     default: es_ES
     downloader:

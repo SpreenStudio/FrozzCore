@@ -309,6 +309,12 @@ public class FileUtils {
         return this.config.getConfigurationSection(path);
     }
 
+    public ConfigurationSection createSection(String path) {
+        ConfigurationSection section = this.config.createSection(path);
+        this.save();
+        return section;
+    }
+
     public Set<String> getKeys(boolean deep) {
         return this.config.getKeys(deep);
     }
